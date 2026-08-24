@@ -6,6 +6,10 @@ requires-python = ">=3.11"
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+addopts = "-m \"not network\""
+markers = [
+    "network: hits the live Fiscal Data API; excluded by default, run explicitly with -m network",
+]
 
 [tool.mypy]
 python_version = "3.11"

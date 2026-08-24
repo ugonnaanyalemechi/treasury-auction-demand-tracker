@@ -20,6 +20,13 @@ Run the test suite:
 pytest
 ```
 
+This excludes the network canary test, which hits the live Fiscal Data API and is
+run deliberately rather than as part of the normal suite:
+
+```bash
+pytest -m network
+```
+
 Run type checking:
 
 ```bash
