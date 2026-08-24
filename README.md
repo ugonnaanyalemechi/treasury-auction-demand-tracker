@@ -11,7 +11,7 @@ Set up a local environment:
 ```bash
 python -m venv .venv
 .venv/Scripts/activate   # on macOS/Linux: source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -r requirements-dev.txt
 ```
 
 Run the test suite:

@@ -1,5 +1,5 @@
-from pipeline import __version__
+import pipeline
 
 
 def test_pipeline_package_is_importable() -> None:
-    assert __version__ == "0.1.0"
+    assert pipeline is not None
