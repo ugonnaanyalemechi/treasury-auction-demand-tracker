@@ -10,5 +10,5 @@ def write_dataset(dataset: dict[str, Any], path: str | Path) -> None:
 
     # Prevents case where file written to disk is half-written due to failure
     tmp_path = destination.with_name(destination.name + ".tmp")
-    tmp_path.write_text(json.dumps(dataset, indent=2))
+    tmp_path.write_text(json.dumps(dataset, indent=2), encoding="utf-8")
     tmp_path.replace(destination)
