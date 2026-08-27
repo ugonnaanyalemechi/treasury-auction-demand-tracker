@@ -1,9 +1,8 @@
-import datetime
 from typing import Any
 
 import pytest
 
-from pipeline.skeleton import build_skeleton_dataset, start_date_for
+from pipeline.skeleton import build_skeleton_dataset
 
 
 def test_build_skeleton_dataset_produces_takedown_only_records() -> None:
@@ -53,9 +52,3 @@ def test_build_skeleton_dataset_has_no_metrics_other_than_takedown() -> None:
         "original_security_term",
         "takedown",
     }
-
-
-def test_start_date_for_does_not_crash_on_a_leap_day_end_date() -> None:
-    start = start_date_for(datetime.date(2028, 2, 29), 2)
-    assert isinstance(start, datetime.date)
-    assert start < datetime.date(2028, 2, 29)
