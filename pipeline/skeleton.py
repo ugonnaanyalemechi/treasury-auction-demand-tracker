@@ -13,8 +13,7 @@ from pipeline.fetch import fetch_auctions_page
 from pipeline.metrics import compute_takedown
 from pipeline.write import write_dataset
 
-# Five years are fetched so trailing-window scores are warm on day one, even
-# though only 24 months are displayed. See SPEC.md, "Data source".
+# To obtain previous auction records from 5 years ago
 _HISTORY_DAYS = 365 * 5
 
 
