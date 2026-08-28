@@ -1,0 +1,456 @@
+{
+  "generated_at": "2026-08-28T04:21:44.100473+00:00",
+  "row_count": 90,
+  "auctions": [
+    {
+      "auction_date": "2021-09-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.12321051626440525
+    },
+    {
+      "auction_date": "2021-09-23",
+      "original_security_term": "10-Year",
+      "takedown": 0.12678562010211078
+    },
+    {
+      "auction_date": "2021-10-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.1119999778947412
+    },
+    {
+      "auction_date": "2021-11-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.15178342456557606
+    },
+    {
+      "auction_date": "2021-11-18",
+      "original_security_term": "10-Year",
+      "takedown": 0.10189373559818682
+    },
+    {
+      "auction_date": "2021-12-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.13358763777565857
+    },
+    {
+      "auction_date": "2022-01-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.1660546502652071
+    },
+    {
+      "auction_date": "2022-01-20",
+      "original_security_term": "10-Year",
+      "takedown": 0.14929224810158911
+    },
+    {
+      "auction_date": "2022-02-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.07439113272244975
+    },
+    {
+      "auction_date": "2022-03-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.13736849692564615
+    },
+    {
+      "auction_date": "2022-03-24",
+      "original_security_term": "10-Year",
+      "takedown": 0.10593164785256176
+    },
+    {
+      "auction_date": "2022-04-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.1865269305125397
+    },
+    {
+      "auction_date": "2022-05-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.11477766523190049
+    },
+    {
+      "auction_date": "2022-05-19",
+      "original_security_term": "10-Year",
+      "takedown": 0.1781198112502965
+    },
+    {
+      "auction_date": "2022-06-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.17027551215108117
+    },
+    {
+      "auction_date": "2022-07-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.20690507000709363
+    },
+    {
+      "auction_date": "2022-07-21",
+      "original_security_term": "10-Year",
+      "takedown": 0.15763096687927136
+    },
+    {
+      "auction_date": "2022-08-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.09913119996499659
+    },
+    {
+      "auction_date": "2022-09-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.19802318564246466
+    },
+    {
+      "auction_date": "2022-09-22",
+      "original_security_term": "10-Year",
+      "takedown": 0.07859947757547238
+    },
+    {
+      "auction_date": "2022-10-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.19689458349751027
+    },
+    {
+      "auction_date": "2022-11-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.24343542863396567
+    },
+    {
+      "auction_date": "2022-11-17",
+      "original_security_term": "10-Year",
+      "takedown": 0.09444932751132414
+    },
+    {
+      "auction_date": "2022-12-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.2182527824902424
+    },
+    {
+      "auction_date": "2023-01-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.1504998405642314
+    },
+    {
+      "auction_date": "2023-01-19",
+      "original_security_term": "10-Year",
+      "takedown": 0.07558761592030014
+    },
+    {
+      "auction_date": "2023-02-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.05342806905207071
+    },
+    {
+      "auction_date": "2023-03-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.17709164035357652
+    },
+    {
+      "auction_date": "2023-03-23",
+      "original_security_term": "10-Year",
+      "takedown": 0.10893962454334517
+    },
+    {
+      "auction_date": "2023-04-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.1711628628429786
+    },
+    {
+      "auction_date": "2023-05-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.13026287259488978
+    },
+    {
+      "auction_date": "2023-05-18",
+      "original_security_term": "10-Year",
+      "takedown": 0.0769998978468022
+    },
+    {
+      "auction_date": "2023-06-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.17786275914117225
+    },
+    {
+      "auction_date": "2023-07-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.12378949179209948
+    },
+    {
+      "auction_date": "2023-07-20",
+      "original_security_term": "10-Year",
+      "takedown": 0.014705854498322657
+    },
+    {
+      "auction_date": "2023-08-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.09471456657728987
+    },
+    {
+      "auction_date": "2023-09-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.13737126490337867
+    },
+    {
+      "auction_date": "2023-09-21",
+      "original_security_term": "10-Year",
+      "takedown": 0.0675524108308177
+    },
+    {
+      "auction_date": "2023-10-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.18704765710579335
+    },
+    {
+      "auction_date": "2023-11-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.15000445887452066
+    },
+    {
+      "auction_date": "2023-11-21",
+      "original_security_term": "10-Year",
+      "takedown": 0.13551957167917034
+    },
+    {
+      "auction_date": "2023-12-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.17251340441044152
+    },
+    {
+      "auction_date": "2024-01-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.1511663731604492
+    },
+    {
+      "auction_date": "2024-01-18",
+      "original_security_term": "10-Year",
+      "takedown": 0.0318152682609911
+    },
+    {
+      "auction_date": "2024-02-07",
+      "original_security_term": "10-Year",
+      "takedown": 0.12927736405963822
+    },
+    {
+      "auction_date": "2024-03-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.1703047295040818
+    },
+    {
+      "auction_date": "2024-03-21",
+      "original_security_term": "10-Year",
+      "takedown": 0.11937683247200344
+    },
+    {
+      "auction_date": "2024-04-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.23904171008803246
+    },
+    {
+      "auction_date": "2024-05-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.15670321496285874
+    },
+    {
+      "auction_date": "2024-05-23",
+      "original_security_term": "10-Year",
+      "takedown": 0.1400061171246559
+    },
+    {
+      "auction_date": "2024-06-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.11562713836647241
+    },
+    {
+      "auction_date": "2024-07-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.1151177149404353
+    },
+    {
+      "auction_date": "2024-07-18",
+      "original_security_term": "10-Year",
+      "takedown": 0.07909556473459432
+    },
+    {
+      "auction_date": "2024-08-07",
+      "original_security_term": "10-Year",
+      "takedown": 0.1782412040723882
+    },
+    {
+      "auction_date": "2024-09-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.10227620014551846
+    },
+    {
+      "auction_date": "2024-09-19",
+      "original_security_term": "10-Year",
+      "takedown": 0.06558632044299668
+    },
+    {
+      "auction_date": "2024-10-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.13899999108974417
+    },
+    {
+      "auction_date": "2024-11-05",
+      "original_security_term": "10-Year",
+      "takedown": 0.14660427818220012
+    },
+    {
+      "auction_date": "2024-11-21",
+      "original_security_term": "10-Year",
+      "takedown": 0.14048799947185928
+    },
+    {
+      "auction_date": "2024-12-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.10492063222181709
+    },
+    {
+      "auction_date": "2025-01-07",
+      "original_security_term": "10-Year",
+      "takedown": 0.15592881583714
+    },
+    {
+      "auction_date": "2025-01-23",
+      "original_security_term": "10-Year",
+      "takedown": 0.10071845266232725
+    },
+    {
+      "auction_date": "2025-02-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.14757271736478494
+    },
+    {
+      "auction_date": "2025-03-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.13050753891627007
+    },
+    {
+      "auction_date": "2025-03-20",
+      "original_security_term": "10-Year",
+      "takedown": 0.0936527170192935
+    },
+    {
+      "auction_date": "2025-04-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.10674173059629397
+    },
+    {
+      "auction_date": "2025-05-06",
+      "original_security_term": "10-Year",
+      "takedown": 0.08895593734316297
+    },
+    {
+      "auction_date": "2025-05-22",
+      "original_security_term": "10-Year",
+      "takedown": 0.11861773985742148
+    },
+    {
+      "auction_date": "2025-06-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.08931998831969383
+    },
+    {
+      "auction_date": "2025-07-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.10845350075610194
+    },
+    {
+      "auction_date": "2025-07-24",
+      "original_security_term": "10-Year",
+      "takedown": 0.05333644622047307
+    },
+    {
+      "auction_date": "2025-08-06",
+      "original_security_term": "10-Year",
+      "takedown": 0.16101809404456327
+    },
+    {
+      "auction_date": "2025-09-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.04199997361540119
+    },
+    {
+      "auction_date": "2025-09-18",
+      "original_security_term": "10-Year",
+      "takedown": 0.17753183649899465
+    },
+    {
+      "auction_date": "2025-10-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.09074920638184776
+    },
+    {
+      "auction_date": "2025-11-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.10415861509071397
+    },
+    {
+      "auction_date": "2025-11-20",
+      "original_security_term": "10-Year",
+      "takedown": 0.14756470810582
+    },
+    {
+      "auction_date": "2025-12-09",
+      "original_security_term": "10-Year",
+      "takedown": 0.08785181360004767
+    },
+    {
+      "auction_date": "2026-01-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.05836081986545182
+    },
+    {
+      "auction_date": "2026-01-22",
+      "original_security_term": "10-Year",
+      "takedown": 0.12130182793741373
+    },
+    {
+      "auction_date": "2026-02-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.13323082390837218
+    },
+    {
+      "auction_date": "2026-03-11",
+      "original_security_term": "10-Year",
+      "takedown": 0.12692761322202561
+    },
+    {
+      "auction_date": "2026-03-19",
+      "original_security_term": "10-Year",
+      "takedown": 0.07483222423878329
+    },
+    {
+      "auction_date": "2026-04-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.10774787826102257
+    },
+    {
+      "auction_date": "2026-05-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.11940464136293348
+    },
+    {
+      "auction_date": "2026-05-21",
+      "original_security_term": "10-Year",
+      "takedown": 0.11089469306788431
+    },
+    {
+      "auction_date": "2026-06-10",
+      "original_security_term": "10-Year",
+      "takedown": 0.09444038219383635
+    },
+    {
+      "auction_date": "2026-07-08",
+      "original_security_term": "10-Year",
+      "takedown": 0.07762579368857538
+    },
+    {
+      "auction_date": "2026-07-23",
+      "original_security_term": "10-Year",
+      "takedown": 0.097949519145261
+    },
+    {
+      "auction_date": "2026-08-12",
+      "original_security_term": "10-Year",
+      "takedown": 0.08566204924076047
+    }
+  ]
+}
