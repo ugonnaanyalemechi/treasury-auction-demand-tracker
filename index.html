@@ -1,57 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Treasury Auction Demand Tracker (placeholder)</title>
-</head>
-<body>
-<h1>Treasury Auction Demand Tracker</h1>
-<p>
-  This is a placeholder page proving the pipeline's data.json is fetchable
-  and renderable. The real, design-driven UI arrives in later tickets.
-</p>
-<p id="status">Loading data.json&hellip;</p>
-<table id="auctions" border="1" cellpadding="4" hidden>
-  <thead>
-    <tr>
-      <th>Auction date</th>
-      <th>Original security term</th>
-      <th>Takedown</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <head>
+    <meta charset="utf-8" />
+    <title>Treasury Auction Demand Tracker (placeholder)</title>
+  </head>
+  <body>
+    <h1>Treasury Auction Demand Tracker</h1>
+    <p>
+      This is a placeholder page proving the pipeline's data.json is fetchable
+      and renderable. The real, design-driven UI arrives in later tickets.
+    </p>
+    <p id="status">Loading data.json&hellip;</p>
+    <table id="auctions" border="1" cellpadding="4" hidden>
+      <thead>
+        <tr>
+          <th>Auction date</th>
+          <th>Original security term</th>
+          <th>Takedown</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-<script>
-const status = document.getElementById("status");
-const table = document.getElementById("auctions");
+    <script>
+      const status = document.getElementById("status");
+      const table = document.getElementById("auctions");
 
-fetch("data.json")
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("HTTP " + response.status);
-    }
-    return response.json();
-  })
-  .then((dataset) => {
-    status.textContent =
-      "Generated at " + dataset.generated_at + " — " + dataset.row_count + " auctions.";
+      fetch("data.json")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+          }
+          return response.json();
+        })
+        .then((dataset) => {
+          status.textContent =
+            "Generated at " +
+            dataset.generated_at +
+            " — " +
+            dataset.row_count +
+            " auctions.";
 
-    const tbody = table.querySelector("tbody");
-    for (const auction of dataset.auctions) {
-      const row = document.createElement("tr");
-      for (const value of [auction.auction_date, auction.original_security_term, auction.takedown]) {
-        const cell = document.createElement("td");
-        cell.textContent = value;
-        row.appendChild(cell);
-      }
-      tbody.appendChild(row);
-    }
-    table.hidden = false;
-  })
-  .catch((error) => {
-    status.textContent = "Failed to load data.json: " + error.message;
-  });
-</script>
-</body>
+          const tbody = table.querySelector("tbody");
+          for (const auction of dataset.auctions) {
+            const row = document.createElement("tr");
+            for (const value of [
+              auction.auction_date,
+              auction.original_security_term,
+              auction.takedown,
+            ]) {
+              const cell = document.createElement("td");
+              cell.textContent = value;
+              row.appendChild(cell);
+            }
+            tbody.appendChild(row);
+          }
+          table.hidden = false;
+        })
+        .catch((error) => {
+          status.textContent = "Failed to load data.json: " + error.message;
+        });
+    </script>
+  </body>
 </html>
