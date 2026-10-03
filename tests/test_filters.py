@@ -3,7 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from pipeline.filters import filter_included_securities
+from pipeline.filters import exclude_floating_rate_notes, filter_included_securities
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
 
@@ -54,3 +54,28 @@ def test_bills_notes_and_bonds_pass_through() -> None:
 
     assert {a["cusip"] for a in result} == expected_cusips
     assert {a["security_type"] for a in result} <= {"Bill", "Note", "Bond"}
+
+
+def test_floating_rate_records_are_excluded() -> None:
+    auctions = _load_auctions()
+    frn_cusips = {a["cusip"] for a in auctions if a["floating_rate"] == "Yes"}
+    assert frn_cusips, "fixture is expected to contain at least one FRN auction"
+
+    result = exclude_floating_rate_notes(auctions)
+
+    assert not any(a["cusip"] in frn_cusips for a in result)
+    assert all(a["floating_rate"] == "No" for a in result)
+
+
+def test_two_year_series_contains_only_fixed_rate_auctions() -> None:
+    auctions = _load_auctions()
+    two_year = [a for a in auctions if a["original_security_term"] == "2-Year"]
+    assert any(
+        a["floating_rate"] == "Yes" for a in two_year
+    ), "fixture is expected to contain a 2-Year FRN sharing the 2-Year term"
+    assert any(a["floating_rate"] == "No" for a in two_year)
+
+    result = exclude_floating_rate_notes(two_year)
+
+    assert result
+    assert all(a["floating_rate"] == "No" for a in result)
