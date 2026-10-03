@@ -17,3 +17,10 @@ _KNOWN_AUCTION = {
 
 def test_compute_takedown_matches_hand_computed_ratio_for_a_known_auction() -> None:
     assert compute_takedown(_KNOWN_AUCTION) == pytest.approx(0.14695401334464608)
+
+
+def test_compute_takedown_is_invariant_to_soma_accepted() -> None:
+    without_soma = {**_KNOWN_AUCTION, "soma_accepted": "0"}
+    with_soma = {**_KNOWN_AUCTION, "soma_accepted": "15631526200"}
+
+    assert compute_takedown(with_soma) == compute_takedown(without_soma)
