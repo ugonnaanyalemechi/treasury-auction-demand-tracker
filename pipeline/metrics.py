@@ -39,3 +39,15 @@ def compute_deviation(
     if stdev == 0:
         return None
     return (compute_takedown(auction) - statistics.mean(takedowns)) / stdev
+
+
+def compute_bid_dispersion(auction: dict[str, Any]) -> float:
+    """Spread between an auction's high and median-or-average rate, in bp.
+
+    Bills are quoted on a discount rate; notes and bonds on a yield.
+    """
+    if auction["security_type"] == "Bill":
+        high, average = auction["high_discnt_rate"], auction["avg_med_discnt_rate"]
+    else:
+        high, average = auction["high_yield"], auction["avg_med_yield"]
+    return (float(high) - float(average)) * 100

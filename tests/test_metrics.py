@@ -5,7 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from pipeline.metrics import compute_deviation, compute_takedown
+from pipeline.metrics import (
+    compute_bid_dispersion,
+    compute_deviation,
+    compute_takedown,
+)
 
 _FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
 
@@ -114,3 +118,24 @@ def test_deviation_is_none_when_trailing_window_has_no_variance() -> None:
     current = _auction("2025-01-01", "30")
 
     assert compute_deviation(current, [*prior, current]) is None
+
+
+def _first_fixture_auction(security_type: str) -> dict[str, str]:
+    payload = json.loads(_FIXTURE_PATH.read_text(encoding="utf-8"))
+    return next(a for a in payload["data"] if a["security_type"] == security_type)
+
+
+def test_bid_dispersion_for_a_coupon_uses_yields_in_basis_points() -> None:
+    note = _first_fixture_auction("Note")
+    # high_yield 4.0730 - avg_med_yield 3.989000 = 0.084 percentage points.
+    assert note["avg_med_discnt_rate"] == "null"
+
+    assert compute_bid_dispersion(note) == pytest.approx(8.4)
+
+
+def test_bid_dispersion_for_a_bill_uses_discount_rates_in_basis_points() -> None:
+    bill = _first_fixture_auction("Bill")
+    # high_discnt_rate 3.715 - avg_med_discnt_rate 3.69 = 0.025 percentage points.
+    assert bill["avg_med_yield"] == "null"
+
+    assert compute_bid_dispersion(bill) == pytest.approx(2.5)
