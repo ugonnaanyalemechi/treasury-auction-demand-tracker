@@ -1,456 +1,967 @@
 {
-  "generated_at": "2026-09-06T17:49:18.709977+00:00",
-  "row_count": 90,
+  "generated_at": "2026-10-05T01:56:47.278884+00:00",
+  "row_count": 60,
   "auctions": [
     {
-      "auction_date": "2021-09-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.12321051626440525
-    },
-    {
-      "auction_date": "2021-09-23",
-      "original_security_term": "10-Year",
-      "takedown": 0.12678562010211078
-    },
-    {
+      "cusip": "91282CCS8",
       "auction_date": "2021-10-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.1119999778947412
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1119999778947412,
+      "deviation": null,
+      "bid_dispersion": 4.400000000000004,
+      "primary_dealer_accepted": "4256000000",
+      "comp_accepted": "37982884300",
+      "noncomp_accepted": "17123200",
+      "allocation_pctage": "60.170000",
+      "bid_to_cover_ratio": "2.580000",
+      "soma_accepted": "2859183300"
     },
     {
+      "cusip": "91282CDJ7",
       "auction_date": "2021-11-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.15178342456557606
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.15178342456557606,
+      "deviation": null,
+      "bid_dispersion": 7.399999999999984,
+      "primary_dealer_accepted": "5919555000",
+      "comp_accepted": "38978888200",
+      "noncomp_accepted": "21121300",
+      "allocation_pctage": "66.220000",
+      "bid_to_cover_ratio": "2.350000",
+      "soma_accepted": "22559777600"
     },
     {
-      "auction_date": "2021-11-18",
-      "original_security_term": "10-Year",
-      "takedown": 0.10189373559818682
-    },
-    {
+      "cusip": "91282CDJ7",
       "auction_date": "2021-12-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.13358763777565857
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.13358763777565857,
+      "deviation": null,
+      "bid_dispersion": 6.800000000000006,
+      "primary_dealer_accepted": "4809155000",
+      "comp_accepted": "35983170000",
+      "noncomp_accepted": "16830300",
+      "allocation_pctage": "24.620000",
+      "bid_to_cover_ratio": "2.430000",
+      "soma_accepted": "5308392900"
     },
     {
+      "cusip": "91282CDJ7",
       "auction_date": "2022-01-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.1660546502652071
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1660546502652071,
+      "deviation": null,
+      "bid_dispersion": 7.100000000000017,
+      "primary_dealer_accepted": "5977970000",
+      "comp_accepted": "35992396200",
+      "noncomp_accepted": "7619400",
+      "allocation_pctage": "23.990000",
+      "bid_to_cover_ratio": "2.510000",
+      "soma_accepted": "5776154500"
     },
     {
-      "auction_date": "2022-01-20",
-      "original_security_term": "10-Year",
-      "takedown": 0.14929224810158911
-    },
-    {
+      "cusip": "91282CDY4",
       "auction_date": "2022-02-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.07439113272244975
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.07439113272244975,
+      "deviation": null,
+      "bid_dispersion": 5.099999999999993,
+      "primary_dealer_accepted": "2752472000",
+      "comp_accepted": "36977598400",
+      "noncomp_accepted": "22402800",
+      "allocation_pctage": "29.340000",
+      "bid_to_cover_ratio": "2.680000",
+      "soma_accepted": "22383595900"
     },
     {
+      "cusip": "91282CDY4",
       "auction_date": "2022-03-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.13736849692564615
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.13736849692564615,
+      "deviation": null,
+      "bid_dispersion": 7.999999999999985,
+      "primary_dealer_accepted": "4670532000",
+      "comp_accepted": "33991365000",
+      "noncomp_accepted": "8657600",
+      "allocation_pctage": "93.720000",
+      "bid_to_cover_ratio": "2.470000",
+      "soma_accepted": "5712666700"
     },
     {
-      "auction_date": "2022-03-24",
-      "original_security_term": "10-Year",
-      "takedown": 0.10593164785256176
-    },
-    {
+      "cusip": "91282CDY4",
       "auction_date": "2022-04-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.1865269305125397
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1865269305125397,
+      "deviation": null,
+      "bid_dispersion": 10.000000000000009,
+      "primary_dealer_accepted": "6341930000",
+      "comp_accepted": "33990122000",
+      "noncomp_accepted": "9955000",
+      "allocation_pctage": "66.580000",
+      "bid_to_cover_ratio": "2.430000",
+      "soma_accepted": "8110501600"
     },
     {
+      "cusip": "91282CEP2",
       "auction_date": "2022-05-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.11477766523190049
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.11477766523190049,
+      "deviation": null,
+      "bid_dispersion": 9.299999999999997,
+      "primary_dealer_accepted": "4132000000",
+      "comp_accepted": "35949055600",
+      "noncomp_accepted": "50979700",
+      "allocation_pctage": "75.080000",
+      "bid_to_cover_ratio": "2.490000",
+      "soma_accepted": "25194106800"
     },
     {
-      "auction_date": "2022-05-19",
-      "original_security_term": "10-Year",
-      "takedown": 0.1781198112502965
-    },
-    {
+      "cusip": "91282CEP2",
       "auction_date": "2022-06-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.17027551215108117
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.17027551215108117,
+      "deviation": null,
+      "bid_dispersion": 7.999999999999963,
+      "primary_dealer_accepted": "5619095000",
+      "comp_accepted": "32980790000",
+      "noncomp_accepted": "19228200",
+      "allocation_pctage": "42.580000",
+      "bid_to_cover_ratio": "2.410000",
+      "soma_accepted": "1940376000"
     },
     {
+      "cusip": "91282CEP2",
       "auction_date": "2022-07-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.20690507000709363
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.20690507000709363,
+      "deviation": null,
+      "bid_dispersion": 10.999999999999988,
+      "primary_dealer_accepted": "6827870000",
+      "comp_accepted": "32988390000",
+      "noncomp_accepted": "11623000",
+      "allocation_pctage": "4.700000",
+      "bid_to_cover_ratio": "2.340000",
+      "soma_accepted": "4206097400"
     },
     {
-      "auction_date": "2022-07-21",
-      "original_security_term": "10-Year",
-      "takedown": 0.15763096687927136
-    },
-    {
+      "cusip": "91282CFF3",
       "auction_date": "2022-08-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.09913119996499659
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.09913119996499659,
+      "deviation": null,
+      "bid_dispersion": 6.499999999999995,
+      "primary_dealer_accepted": "3469593000",
+      "comp_accepted": "34972143000",
+      "noncomp_accepted": "27867100",
+      "allocation_pctage": "63.470000",
+      "bid_to_cover_ratio": "2.530000",
+      "soma_accepted": "22136928300"
     },
     {
+      "cusip": "91282CFF3",
       "auction_date": "2022-09-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.19802318564246466
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.19802318564246466,
+      "deviation": null,
+      "bid_dispersion": 8.999999999999986,
+      "primary_dealer_accepted": "6336744000",
+      "comp_accepted": "31981829000",
+      "noncomp_accepted": "18181400",
+      "allocation_pctage": "4.320000",
+      "bid_to_cover_ratio": "2.370000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2022-09-22",
-      "original_security_term": "10-Year",
-      "takedown": 0.07859947757547238
-    },
-    {
+      "cusip": "91282CFF3",
       "auction_date": "2022-10-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.19689458349751027
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.19689458349751027,
+      "deviation": 1.2345399497490337,
+      "bid_dispersion": 8.000000000000007,
+      "primary_dealer_accepted": "6300632500",
+      "comp_accepted": "31985066500",
+      "noncomp_accepted": "14963100",
+      "allocation_pctage": "41.090000",
+      "bid_to_cover_ratio": "2.340000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CFV8",
       "auction_date": "2022-11-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.24343542863396567
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.24343542863396567,
+      "deviation": 2.142039624718575,
+      "bid_dispersion": 9.600000000000009,
+      "primary_dealer_accepted": "8520247500",
+      "comp_accepted": "34879130000",
+      "noncomp_accepted": "120900800",
+      "allocation_pctage": "32.290000",
+      "bid_to_cover_ratio": "2.230000",
+      "soma_accepted": "12273670600"
     },
     {
-      "auction_date": "2022-11-17",
-      "original_security_term": "10-Year",
-      "takedown": 0.09444932751132414
-    },
-    {
+      "cusip": "91282CFV8",
       "auction_date": "2022-12-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.2182527824902424
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.2182527824902424,
+      "deviation": 1.1612746791868964,
+      "bid_dispersion": 8.999999999999986,
+      "primary_dealer_accepted": "6984090000",
+      "comp_accepted": "31952660000",
+      "noncomp_accepted": "47344400",
+      "allocation_pctage": "16.090000",
+      "bid_to_cover_ratio": "2.310000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CFV8",
       "auction_date": "2023-01-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.1504998405642314
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1504998405642314,
+      "deviation": -0.333863356005976,
+      "bid_dispersion": 7.600000000000007,
+      "primary_dealer_accepted": "4816000000",
+      "comp_accepted": "31971531000",
+      "noncomp_accepted": "28502900",
+      "allocation_pctage": "71.800000",
+      "bid_to_cover_ratio": "2.530000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2023-01-19",
-      "original_security_term": "10-Year",
-      "takedown": 0.07558761592030014
-    },
-    {
+      "cusip": "91282CGM7",
       "auction_date": "2023-02-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.05342806905207071
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.05342806905207071,
+      "deviation": -2.1859948400220395,
+      "bid_dispersion": 6.300000000000017,
+      "primary_dealer_accepted": "1870000000",
+      "comp_accepted": "34884868400",
+      "noncomp_accepted": "115460700",
+      "allocation_pctage": "88.240000",
+      "bid_to_cover_ratio": "2.660000",
+      "soma_accepted": "13677585300"
     },
     {
+      "cusip": "91282CGM7",
       "auction_date": "2023-03-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.17709164035357652
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.17709164035357652,
+      "deviation": 0.22545714271255035,
+      "bid_dispersion": 9.600000000000009,
+      "primary_dealer_accepted": "5666940000",
+      "comp_accepted": "31963511800",
+      "noncomp_accepted": "36530600",
+      "allocation_pctage": "42.840000",
+      "bid_to_cover_ratio": "2.350000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2023-03-23",
-      "original_security_term": "10-Year",
-      "takedown": 0.10893962454334517
-    },
-    {
+      "cusip": "91282CGM7",
       "auction_date": "2023-04-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.1711628628429786
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1711628628429786,
+      "deviation": 0.058983817325013066,
+      "bid_dispersion": 9.10000000000002,
+      "primary_dealer_accepted": "5477215000",
+      "comp_accepted": "31949495000",
+      "noncomp_accepted": "50524800",
+      "allocation_pctage": "66.260000",
+      "bid_to_cover_ratio": "2.360000",
+      "soma_accepted": "2045988800"
     },
     {
+      "cusip": "91282CHC8",
       "auction_date": "2023-05-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.13026287259488978
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.13026287259488978,
+      "deviation": -0.6690262593874444,
+      "bid_dispersion": 8.499999999999996,
+      "primary_dealer_accepted": "4559215000",
+      "comp_accepted": "34950234000",
+      "noncomp_accepted": "49877000",
+      "allocation_pctage": "70.700000",
+      "bid_to_cover_ratio": "2.450000",
+      "soma_accepted": "9535486500"
     },
     {
-      "auction_date": "2023-05-18",
-      "original_security_term": "10-Year",
-      "takedown": 0.0769998978468022
-    },
-    {
+      "cusip": "91282CHC8",
       "auction_date": "2023-06-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.17786275914117225
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.17786275914117225,
+      "deviation": 0.18629554190171946,
+      "bid_dispersion": 7.699999999999996,
+      "primary_dealer_accepted": "5691610000",
+      "comp_accepted": "31981695000",
+      "noncomp_accepted": "18314600",
+      "allocation_pctage": "61.150000",
+      "bid_to_cover_ratio": "2.360000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CHC8",
       "auction_date": "2023-07-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.12378949179209948
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.12378949179209948,
+      "deviation": -0.8403072719761687,
+      "bid_dispersion": 8.20000000000003,
+      "primary_dealer_accepted": "3961265000",
+      "comp_accepted": "31963359600",
+      "noncomp_accepted": "36650600",
+      "allocation_pctage": "29.620000",
+      "bid_to_cover_ratio": "2.530000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2023-07-20",
-      "original_security_term": "10-Year",
-      "takedown": 0.014705854498322657
-    },
-    {
+      "cusip": "91282CHT1",
       "auction_date": "2023-08-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.09471456657728987
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.09471456657728987,
+      "deviation": -1.2566145288295099,
+      "bid_dispersion": 7.699999999999996,
+      "primary_dealer_accepted": "3599155500",
+      "comp_accepted": "37866146900",
+      "noncomp_accepted": "133873900",
+      "allocation_pctage": "9.470000",
+      "bid_to_cover_ratio": "2.560000",
+      "soma_accepted": "14216289500"
     },
     {
+      "cusip": "91282CHT1",
       "auction_date": "2023-09-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.13737126490337867
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.13737126490337867,
+      "deviation": -0.4448781113479543,
+      "bid_dispersion": 5.999999999999961,
+      "primary_dealer_accepted": "4808000000",
+      "comp_accepted": "34921465200",
+      "noncomp_accepted": "78576500",
+      "allocation_pctage": "86.570000",
+      "bid_to_cover_ratio": "2.520000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2023-09-21",
-      "original_security_term": "10-Year",
-      "takedown": 0.0675524108308177
-    },
-    {
+      "cusip": "91282CHT1",
       "auction_date": "2023-10-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.18704765710579335
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.18704765710579335,
+      "deviation": 0.5833470325287671,
+      "bid_dispersion": 8.000000000000007,
+      "primary_dealer_accepted": "6546677800",
+      "comp_accepted": "34915937800",
+      "noncomp_accepted": "84114600",
+      "allocation_pctage": "92.260000",
+      "bid_to_cover_ratio": "2.500000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CJJ1",
       "auction_date": "2023-11-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.15000445887452066
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.15000445887452066,
+      "deviation": -0.10352945479239721,
+      "bid_dispersion": 7.899999999999974,
+      "primary_dealer_accepted": "6000179000",
+      "comp_accepted": "39731221000",
+      "noncomp_accepted": "268783300",
+      "allocation_pctage": "35.970000",
+      "bid_to_cover_ratio": "2.450000",
+      "soma_accepted": "761192300"
     },
     {
-      "auction_date": "2023-11-21",
-      "original_security_term": "10-Year",
-      "takedown": 0.13551957167917034
-    },
-    {
+      "cusip": "91282CJJ1",
       "auction_date": "2023-12-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.17251340441044152
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.17251340441044152,
+      "deviation": 0.5624510985385098,
+      "bid_dispersion": 7.200000000000006,
+      "primary_dealer_accepted": "6383000000",
+      "comp_accepted": "36888008000",
+      "noncomp_accepted": "112015400",
+      "allocation_pctage": "22.950000",
+      "bid_to_cover_ratio": "2.530000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CJJ1",
       "auction_date": "2024-01-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.1511663731604492
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1511663731604492,
+      "deviation": 0.1870819145386973,
+      "bid_dispersion": 6.700000000000017,
+      "primary_dealer_accepted": "5593157500",
+      "comp_accepted": "36919215500",
+      "noncomp_accepted": "80795700",
+      "allocation_pctage": "44.070000",
+      "bid_to_cover_ratio": "2.560000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2024-01-18",
-      "original_security_term": "10-Year",
-      "takedown": 0.0318152682609911
-    },
-    {
+      "cusip": "91282CJZ5",
       "auction_date": "2024-02-07",
-      "original_security_term": "10-Year",
-      "takedown": 0.12927736405963822
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.12927736405963822,
+      "deviation": -0.3710769017459734,
+      "bid_dispersion": 5.600000000000005,
+      "primary_dealer_accepted": "5429656000",
+      "comp_accepted": "41818857500",
+      "noncomp_accepted": "181194400",
+      "allocation_pctage": "19.640000",
+      "bid_to_cover_ratio": "2.560000",
+      "soma_accepted": "3106210100"
     },
     {
+      "cusip": "91282CJZ5",
       "auction_date": "2024-03-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.1703047295040818
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1703047295040818,
+      "deviation": 0.7210921685757667,
+      "bid_dispersion": 6.6000000000000725,
+      "primary_dealer_accepted": "6641885200",
+      "comp_accepted": "38924270200",
+      "noncomp_accepted": "75734200",
+      "allocation_pctage": "31.120000",
+      "bid_to_cover_ratio": "2.510000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2024-03-21",
-      "original_security_term": "10-Year",
-      "takedown": 0.11937683247200344
-    },
-    {
+      "cusip": "91282CJZ5",
       "auction_date": "2024-04-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.23904171008803246
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.23904171008803246,
+      "deviation": 3.26758898087001,
+      "bid_dispersion": 9.499999999999975,
+      "primary_dealer_accepted": "9322650000",
+      "comp_accepted": "38916968000",
+      "noncomp_accepted": "83129500",
+      "allocation_pctage": "54.100000",
+      "bid_to_cover_ratio": "2.340000",
+      "soma_accepted": "643180900"
     },
     {
+      "cusip": "91282CKQ3",
       "auction_date": "2024-05-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.15670321496285874
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.15670321496285874,
+      "deviation": 0.03806275112343838,
+      "bid_dispersion": 6.099999999999994,
+      "primary_dealer_accepted": "6581536000",
+      "comp_accepted": "41835384000",
+      "noncomp_accepted": "164622200",
+      "allocation_pctage": "0.480000",
+      "bid_to_cover_ratio": "2.490000",
+      "soma_accepted": "5278978600"
     },
     {
-      "auction_date": "2024-05-23",
-      "original_security_term": "10-Year",
-      "takedown": 0.1400061171246559
-    },
-    {
+      "cusip": "91282CKQ3",
       "auction_date": "2024-06-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.11562713836647241
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.11562713836647241,
+      "deviation": -1.1448495594167867,
+      "bid_dispersion": 6.400000000000006,
+      "primary_dealer_accepted": "4509473000",
+      "comp_accepted": "38918545500",
+      "noncomp_accepted": "81580800",
+      "allocation_pctage": "43.690000",
+      "bid_to_cover_ratio": "2.670000",
+      "soma_accepted": "1261474200"
     },
     {
+      "cusip": "91282CKQ3",
       "auction_date": "2024-07-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.1151177149404353
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.1151177149404353,
+      "deviation": -0.9835820151968734,
+      "bid_dispersion": 5.799999999999983,
+      "primary_dealer_accepted": "4489600000",
+      "comp_accepted": "38932816800",
+      "noncomp_accepted": "67262400",
+      "allocation_pctage": "1.160000",
+      "bid_to_cover_ratio": "2.580000",
+      "soma_accepted": "6336488000"
     },
     {
-      "auction_date": "2024-07-18",
-      "original_security_term": "10-Year",
-      "takedown": 0.07909556473459432
-    },
-    {
+      "cusip": "91282CLF6",
       "auction_date": "2024-08-07",
-      "original_security_term": "10-Year",
-      "takedown": 0.1782412040723882
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.1782412040723882,
+      "deviation": 0.6931709373373265,
+      "bid_dispersion": 7.200000000000006,
+      "primary_dealer_accepted": "7486140000",
+      "comp_accepted": "41874806900",
+      "noncomp_accepted": "125246000",
+      "allocation_pctage": "91.610000",
+      "bid_to_cover_ratio": "2.320000",
+      "soma_accepted": "7987363300"
     },
     {
+      "cusip": "91282CLF6",
       "auction_date": "2024-09-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.10227620014551846
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.10227620014551846,
+      "deviation": -1.6254569236148833,
+      "bid_dispersion": 4.300000000000015,
+      "primary_dealer_accepted": "3988772000",
+      "comp_accepted": "38933491900",
+      "noncomp_accepted": "66510000",
+      "allocation_pctage": "74.430000",
+      "bid_to_cover_ratio": "2.640000",
+      "soma_accepted": "372677600"
     },
     {
-      "auction_date": "2024-09-19",
-      "original_security_term": "10-Year",
-      "takedown": 0.06558632044299668
-    },
-    {
+      "cusip": "91282CLF6",
       "auction_date": "2024-10-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.13899999108974417
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.13899999108974417,
+      "deviation": -0.4383860110880778,
+      "bid_dispersion": 5.799999999999983,
+      "primary_dealer_accepted": "5421000000",
+      "comp_accepted": "38928454500",
+      "noncomp_accepted": "71548000",
+      "allocation_pctage": "99.310000",
+      "bid_to_cover_ratio": "2.480000",
+      "soma_accepted": "535264800"
     },
     {
+      "cusip": "91282CLW9",
       "auction_date": "2024-11-05",
-      "original_security_term": "10-Year",
-      "takedown": 0.14660427818220012
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.14660427818220012,
+      "deviation": -0.1359650311271272,
+      "bid_dispersion": 5.700000000000038,
+      "primary_dealer_accepted": "6157382000",
+      "comp_accepted": "41821963300",
+      "noncomp_accepted": "178052500",
+      "allocation_pctage": "47.220000",
+      "bid_to_cover_ratio": "2.580000",
+      "soma_accepted": "10207143200"
     },
     {
-      "auction_date": "2024-11-21",
-      "original_security_term": "10-Year",
-      "takedown": 0.14048799947185928
-    },
-    {
+      "cusip": "91282CLW9",
       "auction_date": "2024-12-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.10492063222181709
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.10492063222181709,
+      "deviation": -1.260438412466605,
+      "bid_dispersion": 4.499999999999993,
+      "primary_dealer_accepted": "4091907500",
+      "comp_accepted": "38928648400",
+      "noncomp_accepted": "71378700",
+      "allocation_pctage": "33.390000",
+      "bid_to_cover_ratio": "2.700000",
+      "soma_accepted": "279312900"
     },
     {
+      "cusip": "91282CLW9",
       "auction_date": "2025-01-07",
-      "original_security_term": "10-Year",
-      "takedown": 0.15592881583714
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.15592881583714,
+      "deviation": 0.26654069230578226,
+      "bid_dispersion": 5.499999999999972,
+      "primary_dealer_accepted": "6081224800",
+      "comp_accepted": "38879694200",
+      "noncomp_accepted": "120312100",
+      "allocation_pctage": "97.580000",
+      "bid_to_cover_ratio": "2.530000",
+      "soma_accepted": "8569799900"
     },
     {
-      "auction_date": "2025-01-23",
-      "original_security_term": "10-Year",
-      "takedown": 0.10071845266232725
-    },
-    {
+      "cusip": "91282CMM0",
       "auction_date": "2025-02-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.14757271736478494
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.14757271736478494,
+      "deviation": 0.03859247948948579,
+      "bid_dispersion": 7.200000000000006,
+      "primary_dealer_accepted": "6198055000",
+      "comp_accepted": "41770656300",
+      "noncomp_accepted": "229349600",
+      "allocation_pctage": "32.110000",
+      "bid_to_cover_ratio": "2.480000",
+      "soma_accepted": "11537954800"
     },
     {
+      "cusip": "91282CMM0",
       "auction_date": "2025-03-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.13050753891627007
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.13050753891627007,
+      "deviation": -0.44852225122547973,
+      "bid_dispersion": 4.499999999999993,
+      "primary_dealer_accepted": "5089809000",
+      "comp_accepted": "38912640600",
+      "noncomp_accepted": "87474200",
+      "allocation_pctage": "95.260000",
+      "bid_to_cover_ratio": "2.590000",
+      "soma_accepted": "661046900"
     },
     {
-      "auction_date": "2025-03-20",
-      "original_security_term": "10-Year",
-      "takedown": 0.0936527170192935
-    },
-    {
+      "cusip": "91282CMM0",
       "auction_date": "2025-04-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.10674173059629397
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.10674173059629397,
+      "deviation": -0.995865566142345,
+      "bid_dispersion": 9.499999999999975,
+      "primary_dealer_accepted": "4162929500",
+      "comp_accepted": "38903827000",
+      "noncomp_accepted": "96191800",
+      "allocation_pctage": "59.990000",
+      "bid_to_cover_ratio": "2.670000",
+      "soma_accepted": "6509490900"
     },
     {
+      "cusip": "91282CNC1",
       "auction_date": "2025-05-06",
-      "original_security_term": "10-Year",
-      "takedown": 0.08895593734316297
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.08895593734316297,
+      "deviation": -1.806846018885819,
+      "bid_dispersion": 6.099999999999994,
+      "primary_dealer_accepted": "3736150000",
+      "comp_accepted": "41852615000",
+      "noncomp_accepted": "147392100",
+      "allocation_pctage": "92.860000",
+      "bid_to_cover_ratio": "2.600000",
+      "soma_accepted": "14825704800"
     },
     {
-      "auction_date": "2025-05-22",
-      "original_security_term": "10-Year",
-      "takedown": 0.11861773985742148
-    },
-    {
+      "cusip": "91282CNC1",
       "auction_date": "2025-06-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.08931998831969383
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.08931998831969383,
+      "deviation": -1.452614679305877,
+      "bid_dispersion": 4.300000000000015,
+      "primary_dealer_accepted": "3483480000",
+      "comp_accepted": "38875284000",
+      "noncomp_accepted": "124721100",
+      "allocation_pctage": "30.580000",
+      "bid_to_cover_ratio": "2.520000",
+      "soma_accepted": "701370600"
     },
     {
+      "cusip": "91282CNC1",
       "auction_date": "2025-07-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.10845350075610194
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.10845350075610194,
+      "deviation": -0.5964246410529069,
+      "bid_dispersion": 5.200000000000049,
+      "primary_dealer_accepted": "4229690000",
+      "comp_accepted": "38897801100",
+      "noncomp_accepted": "102230900",
+      "allocation_pctage": "94.680000",
+      "bid_to_cover_ratio": "2.610000",
+      "soma_accepted": "4614613500"
     },
     {
-      "auction_date": "2025-07-24",
-      "original_security_term": "10-Year",
-      "takedown": 0.05333644622047307
-    },
-    {
+      "cusip": "91282CNT4",
       "auction_date": "2025-08-06",
-      "original_security_term": "10-Year",
-      "takedown": 0.16101809404456327
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.16101809404456327,
+      "deviation": 1.257058541968989,
+      "bid_dispersion": 5.999999999999961,
+      "primary_dealer_accepted": "6762778000",
+      "comp_accepted": "41857544000",
+      "noncomp_accepted": "142568100",
+      "allocation_pctage": "52.850000",
+      "bid_to_cover_ratio": "2.350000",
+      "soma_accepted": "14253705400"
     },
     {
+      "cusip": "91282CNT4",
       "auction_date": "2025-09-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.04199997361540119
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.04199997361540119,
+      "deviation": -3.113523680397733,
+      "bid_dispersion": 4.700000000000015,
+      "primary_dealer_accepted": "1638000000",
+      "comp_accepted": "38881412000",
+      "noncomp_accepted": "118612500",
+      "allocation_pctage": "81.530000",
+      "bid_to_cover_ratio": "2.650000",
+      "soma_accepted": "0"
     },
     {
-      "auction_date": "2025-09-18",
-      "original_security_term": "10-Year",
-      "takedown": 0.17753183649899465
-    },
-    {
+      "cusip": "91282CNT4",
       "auction_date": "2025-10-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.09074920638184776
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.09074920638184776,
+      "deviation": -0.7925180939639378,
+      "bid_dispersion": 5.700000000000038,
+      "primary_dealer_accepted": "3539221000",
+      "comp_accepted": "38921677000",
+      "noncomp_accepted": "78344500",
+      "allocation_pctage": "78.380000",
+      "bid_to_cover_ratio": "2.480000",
+      "soma_accepted": "723968800"
     },
     {
+      "cusip": "91282CPJ4",
       "auction_date": "2025-11-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.10415861509071397
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.10415861509071397,
+      "deviation": -0.29166691641091885,
+      "bid_dispersion": 4.600000000000026,
+      "primary_dealer_accepted": "4374668000",
+      "comp_accepted": "41857012200",
+      "noncomp_accepted": "143047000",
+      "allocation_pctage": "97.520000",
+      "bid_to_cover_ratio": "2.430000",
+      "soma_accepted": "6541567900"
     },
     {
-      "auction_date": "2025-11-20",
-      "original_security_term": "10-Year",
-      "takedown": 0.14756470810582
-    },
-    {
+      "cusip": "91282CPJ4",
       "auction_date": "2025-12-09",
-      "original_security_term": "10-Year",
-      "takedown": 0.08785181360004767
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.08785181360004767,
+      "deviation": -0.683268280700914,
+      "bid_dispersion": 5.499999999999972,
+      "primary_dealer_accepted": "3426225000",
+      "comp_accepted": "38904926000",
+      "noncomp_accepted": "95122600",
+      "allocation_pctage": "70.500000",
+      "bid_to_cover_ratio": "2.550000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CPJ4",
       "auction_date": "2026-01-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.05836081986545182
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.05836081986545182,
+      "deviation": -1.4890101119365458,
+      "bid_dispersion": 4.800000000000004,
+      "primary_dealer_accepted": "2276072500",
+      "comp_accepted": "38924042800",
+      "noncomp_accepted": "75966200",
+      "allocation_pctage": "93.910000",
+      "bid_to_cover_ratio": "2.550000",
+      "soma_accepted": "11351931000"
     },
     {
-      "auction_date": "2026-01-22",
-      "original_security_term": "10-Year",
-      "takedown": 0.12130182793741373
-    },
-    {
+      "cusip": "91282CPZ8",
       "auction_date": "2026-02-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.13323082390837218
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.13323082390837218,
+      "deviation": 0.9433163974173941,
+      "bid_dispersion": 6.699999999999928,
+      "primary_dealer_accepted": "5595700000",
+      "comp_accepted": "41834683000",
+      "noncomp_accepted": "165357500",
+      "allocation_pctage": "6.200000",
+      "bid_to_cover_ratio": "2.390000",
+      "soma_accepted": "11900865300"
     },
     {
+      "cusip": "91282CPZ8",
       "auction_date": "2026-03-11",
-      "original_security_term": "10-Year",
-      "takedown": 0.12692761322202561
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.12692761322202561,
+      "deviation": 0.8308068261930429,
+      "bid_dispersion": 5.6999999999999496,
+      "primary_dealer_accepted": "4950180000",
+      "comp_accepted": "38926836500",
+      "noncomp_accepted": "73187800",
+      "allocation_pctage": "24.680000",
+      "bid_to_cover_ratio": "2.450000",
+      "soma_accepted": "9831900"
     },
     {
-      "auction_date": "2026-03-19",
-      "original_security_term": "10-Year",
-      "takedown": 0.07483222423878329
-    },
-    {
+      "cusip": "91282CPZ8",
       "auction_date": "2026-04-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.10774787826102257
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.10774787826102257,
+      "deviation": 0.24805016216268286,
+      "bid_dispersion": 5.19999999999996,
+      "primary_dealer_accepted": "4202167500",
+      "comp_accepted": "38921968500",
+      "noncomp_accepted": "78033800",
+      "allocation_pctage": "38.890000",
+      "bid_to_cover_ratio": "2.430000",
+      "soma_accepted": "6916045100"
     },
     {
+      "cusip": "91282CQQ7",
       "auction_date": "2026-05-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.11940464136293348
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.11940464136293348,
+      "deviation": 0.6094716624426095,
+      "bid_dispersion": 5.499999999999972,
+      "primary_dealer_accepted": "5015000000",
+      "comp_accepted": "41869018000",
+      "noncomp_accepted": "131024400",
+      "allocation_pctage": "22.000000",
+      "bid_to_cover_ratio": "2.400000",
+      "soma_accepted": "9972748700"
     },
     {
-      "auction_date": "2026-05-21",
-      "original_security_term": "10-Year",
-      "takedown": 0.11089469306788431
-    },
-    {
+      "cusip": "91282CQQ7",
       "auction_date": "2026-06-10",
-      "original_security_term": "10-Year",
-      "takedown": 0.09444038219383635
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.09444038219383635,
+      "deviation": -0.24778254449203407,
+      "bid_dispersion": 5.799999999999983,
+      "primary_dealer_accepted": "3683175000",
+      "comp_accepted": "38914680400",
+      "noncomp_accepted": "85320600",
+      "allocation_pctage": "71.340000",
+      "bid_to_cover_ratio": "2.570000",
+      "soma_accepted": "0"
     },
     {
+      "cusip": "91282CQQ7",
       "auction_date": "2026-07-08",
-      "original_security_term": "10-Year",
-      "takedown": 0.07762579368857538
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.07762579368857538,
+      "deviation": -0.7859300759032187,
+      "bid_dispersion": 4.999999999999982,
+      "primary_dealer_accepted": "3027415300",
+      "comp_accepted": "38923847700",
+      "noncomp_accepted": "76272700",
+      "allocation_pctage": "40.290000",
+      "bid_to_cover_ratio": "2.590000",
+      "soma_accepted": "4055754800"
     },
     {
-      "auction_date": "2026-07-23",
-      "original_security_term": "10-Year",
-      "takedown": 0.097949519145261
-    },
-    {
+      "cusip": "91282CRF0",
       "auction_date": "2026-08-12",
-      "original_security_term": "10-Year",
-      "takedown": 0.08566204924076047
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": false,
+      "takedown": 0.08566204924076047,
+      "deviation": -0.44543130062396163,
+      "bid_dispersion": 5.299999999999994,
+      "primary_dealer_accepted": "3597810000",
+      "comp_accepted": "41821613600",
+      "noncomp_accepted": "178432300",
+      "allocation_pctage": "65.270000",
+      "bid_to_cover_ratio": "2.530000",
+      "soma_accepted": "10623511200"
+    },
+    {
+      "cusip": "91282CRF0",
+      "auction_date": "2026-09-09",
+      "security_type": "Note",
+      "tenor": "10-Year",
+      "reopening": true,
+      "takedown": 0.04299995589748113,
+      "deviation": -1.901007231569501,
+      "bid_dispersion": 6.49999999999995,
+      "primary_dealer_accepted": "1677000000",
+      "comp_accepted": "38901890000",
+      "noncomp_accepted": "98150000",
+      "allocation_pctage": "89.250000",
+      "bid_to_cover_ratio": "2.710000",
+      "soma_accepted": "0"
     }
-  ]
+  ],
+  "upcoming": []
 }
