@@ -15,7 +15,7 @@
       <thead>
         <tr>
           <th>Auction date</th>
-          <th>Original security term</th>
+          <th>Tenor</th>
           <th>Takedown</th>
         </tr>
       </thead>
@@ -46,7 +46,7 @@
             const row = document.createElement("tr");
             for (const value of [
               auction.auction_date,
-              auction.original_security_term,
+              auction.tenor,
               auction.takedown,
             ]) {
               const cell = document.createElement("td");
