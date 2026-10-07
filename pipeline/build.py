@@ -14,9 +14,6 @@ def build_dataset(
     raw_payload: dict[str, Any], previous_dataset: Dataset | None = None
 ) -> Dataset:
     """Turn a raw Fiscal Data auctions payload into the published dataset.
-
-    previous_dataset is accepted for the validation guards (#18-#21) and is
-    not used yet.
     """
     in_scope = exclude_floating_rate_notes(
         filter_included_securities(raw_payload["data"])

@@ -1,5 +1,8 @@
 from typing import Any
 
+from pipeline.filters import exclude_floating_rate_notes, filter_included_securities
+from pipeline.unheld import split_unheld_auctions
+
 ROW_COUNT_TOLERANCE = 0.20
 
 
@@ -19,3 +22,90 @@ def check_row_count(
             f"by more than {ROW_COUNT_TOLERANCE:.0%}"
         )
     return None
+
+
+NULL_RATE_TOLERANCE = 0.05
+
+# Fields read by the filters, which run before anything is split or scored.
+_FILTER_FIELDS = (
+    "inflation_index_security",
+    "cash_management_bill_cmb",
+    "floating_rate",
+)
+# Fields every held auction must carry a value for.
+_COMMON_FIELDS = (
+    "cusip",
+    "auction_date",
+    "security_type",
+    "original_security_term",
+    "reopening",
+    "primary_dealer_accepted",
+    "comp_accepted",
+    "noncomp_accepted",
+    "soma_accepted",
+    "allocation_pctage",
+    "bid_to_cover_ratio",
+    "total_accepted",
+    "offering_amt",
+)
+# Bills are quoted on a discount rate, notes and bonds on a yield, so the
+# other pair is legitimately null and must not count against the null rate.
+_BILL_FIELDS = ("high_discnt_rate", "avg_med_discnt_rate")
+_COUPON_FIELDS = ("high_yield", "avg_med_yield")
+
+
+def _is_null(value: Any) -> bool:
+    return value is None or value == "null" or value == ""
+
+
+def _absent_field_problems(auctions: list[dict[str, Any]]) -> list[str]:
+    all_fields = (*_FILTER_FIELDS, *_COMMON_FIELDS, *_BILL_FIELDS, *_COUPON_FIELDS)
+    return [
+        f"field {field!r} is absent from the source data"
+        for field in all_fields
+        if any(field not in auction for auction in auctions)
+    ]
+
+
+def _held_in_scope(auctions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    held, _ = split_unheld_auctions(
+        exclude_floating_rate_notes(filter_included_securities(auctions))
+    )
+    return held
+
+
+def _null_rate_problems(held: list[dict[str, Any]]) -> list[str]:
+    bills = [a for a in held if a["security_type"] == "Bill"]
+    coupons = [a for a in held if a["security_type"] != "Bill"]
+    checks = [
+        *((field, held) for field in _COMMON_FIELDS),
+        *((field, bills) for field in _BILL_FIELDS),
+        *((field, coupons) for field in _COUPON_FIELDS),
+    ]
+    problems = []
+    for field, applicable in checks:
+        if not applicable:
+            continue
+        null_rate = sum(_is_null(a[field]) for a in applicable) / len(applicable)
+        if null_rate > NULL_RATE_TOLERANCE:
+            problems.append(
+                f"field {field!r} is null on {null_rate:.0%} of held auctions, "
+                f"above the {NULL_RATE_TOLERANCE:.0%} tolerance"
+            )
+    return problems
+
+
+def check_required_fields(auctions: list[dict[str, Any]]) -> list[str]:
+    """Describe every depended-upon field that is absent or too often null.
+
+    Takes the raw auction records. A field counts as absent if any record
+    lacks the key; the null rate is measured over held, in-scope auctions
+    that the field applies to.
+    """
+    absent = _absent_field_problems(auctions)
+    if absent:
+        return absent
+    held = _held_in_scope(auctions)
+    if not held:
+        return ["no held, in-scope auctions in the source data"]
+    return _null_rate_problems(held)
