@@ -2,7 +2,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from pipeline.validation import check_required_fields, check_row_count
+from pipeline.validation import (
+    check_newest_auction_date,
+    check_required_fields,
+    check_row_count,
+)
 
 
 def _dataset(row_count: int) -> dict[str, Any]:
@@ -36,7 +40,36 @@ def test_no_previous_dataset_means_nothing_to_compare() -> None:
     assert check_row_count(_dataset(60), _dataset(0)) is None
 
 
-FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
+def _dataset_newest(*auction_dates: str) -> dict[str, Any]:
+    return {
+        "row_count": len(auction_dates),
+        "auctions": [{"auction_date": d} for d in auction_dates],
+    }
+
+
+def test_newest_auction_date_unchanged_or_advanced_passes() -> None:
+    previous = _dataset_newest("2025-01-07", "2025-02-04")
+
+    assert check_newest_auction_date(_dataset_newest("2025-01-07", "2025-02-04"), previous) is None
+    assert check_newest_auction_date(_dataset_newest("2025-01-07", "2025-03-04"), previous) is None
+
+
+def test_newest_auction_date_regression_is_flagged() -> None:
+    previous = _dataset_newest("2025-01-07", "2025-02-04")
+
+    problem = check_newest_auction_date(_dataset_newest("2025-01-07", "2025-01-21"), previous)
+
+    assert problem is not None
+    assert "2025-01-21" in problem and "2025-02-04" in problem
+
+
+def test_newest_auction_date_has_nothing_to_compare_without_both_sides() -> None:
+    assert check_newest_auction_date(_dataset_newest("2025-01-07"), None) is None
+    assert check_newest_auction_date(_dataset_newest(), _dataset_newest("2025-01-07")) is None
+    assert check_newest_auction_date(_dataset_newest("2025-01-07"), _dataset_newest()) is None
+
+
+FIXTURE_PATH =Path(__file__).parent / "fixtures" / "auctions_sample.json"
 
 
 def _fixture_auctions() -> list[dict[str, Any]]:

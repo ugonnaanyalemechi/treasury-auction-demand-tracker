@@ -24,6 +24,32 @@ def check_row_count(
     return None
 
 
+def check_newest_auction_date(
+    dataset: dict[str, Any], previous_dataset: dict[str, Any] | None
+) -> str | None:
+    """Describe the problem if the newest auction date went backwards.
+
+    Returns None when the newest date held or advanced, or when either dataset
+    has no auctions to compare.
+    """
+    if previous_dataset is None:
+        return None
+    current = _newest_auction_date(dataset)
+    previous = _newest_auction_date(previous_dataset)
+    if current is None or previous is None:
+        return None
+    if current < previous:
+        return (
+            f"newest auction date {current} is older than previous run's {previous}"
+        )
+    return None
+
+
+def _newest_auction_date(dataset: dict[str, Any]) -> str | None:
+    # ISO dates, so string order is date order.
+    return max((a["auction_date"] for a in dataset["auctions"]), default=None)
+
+
 NULL_RATE_TOLERANCE = 0.05
 
 # Fields read by the filters, which run before anything is split or scored.
