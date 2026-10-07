@@ -6,6 +6,10 @@ from pipeline.unheld import split_unheld_auctions
 ROW_COUNT_TOLERANCE = 0.20
 
 
+class DatasetValidationError(Exception):
+    """Raised when a built dataset fails a guard and must not be published."""
+
+
 def check_row_count(
     dataset: dict[str, Any], previous_dataset: dict[str, Any] | None
 ) -> str | None:

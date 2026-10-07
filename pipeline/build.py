@@ -6,6 +6,12 @@ from pipeline.grouping import group_by_original_term
 from pipeline.metrics import compute_bid_dispersion, compute_deviation, compute_takedown
 from pipeline.passthrough import passthrough_fields
 from pipeline.unheld import split_unheld_auctions
+from pipeline.validation import (
+    DatasetValidationError,
+    check_newest_auction_date,
+    check_required_fields,
+    check_row_count,
+)
 
 Dataset = dict[str, Any]
 
@@ -15,6 +21,10 @@ def build_dataset(
 ) -> Dataset:
     """Turn a raw Fiscal Data auctions payload into the published dataset.
     """
+    field_problems = check_required_fields(raw_payload["data"])
+    if field_problems:
+        raise DatasetValidationError("; ".join(field_problems))
+
     in_scope = exclude_floating_rate_notes(
         filter_included_securities(raw_payload["data"])
     )
@@ -27,12 +37,24 @@ def build_dataset(
     ]
     records.sort(key=lambda record: (record["auction_date"], record["cusip"]))
 
-    return {
+    dataset = {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "row_count": len(records),
         "auctions": records,
         "upcoming": upcoming,
     }
+
+    problems = [
+        problem
+        for problem in (
+            check_row_count(dataset, previous_dataset),
+            check_newest_auction_date(dataset, previous_dataset),
+        )
+        if problem
+    ]
+    if problems:
+        raise DatasetValidationError("; ".join(problems))
+    return dataset
 
 
 def _build_record(

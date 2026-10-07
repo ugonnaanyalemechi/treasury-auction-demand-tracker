@@ -6,6 +6,7 @@ import pytest
 
 from pipeline.build import build_dataset
 from pipeline.metrics import compute_bid_dispersion, compute_deviation, compute_takedown
+from pipeline.validation import DatasetValidationError
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
 
@@ -144,3 +145,41 @@ def test_deviation_is_null_for_tenors_with_under_twelve_priors_and_scored_after(
     assert scored["SYNTH12"] is None
     assert scored["SYNTH13"] == pytest.approx(compute_deviation(current, history))
     assert scored["SYNTH13"] is not None
+
+
+def test_row_count_guard_failure_raises_instead_of_returning_a_dataset() -> None:
+    payload = _fixture_payload()
+    healthy = build_dataset(payload)
+    previous = {**healthy, "row_count": healthy["row_count"] * 3}
+
+    with pytest.raises(DatasetValidationError, match="row_count"):
+        build_dataset(payload, previous)
+
+
+def test_newest_auction_date_guard_failure_raises() -> None:
+    payload = _fixture_payload()
+    healthy = build_dataset(payload)
+    previous = {
+        **healthy,
+        "auctions": [
+            *healthy["auctions"],
+            {**healthy["auctions"][0], "auction_date": "2999-01-01"},
+        ],
+    }
+
+    with pytest.raises(DatasetValidationError, match="newest auction date"):
+        build_dataset(payload, previous)
+
+
+def test_required_field_guard_failure_raises_before_building() -> None:
+    payload = _fixture_payload()
+    healthy = build_dataset(payload)
+    degraded = {
+        "data": [
+            {k: v for k, v in auction.items() if k != "primary_dealer_accepted"}
+            for auction in payload["data"]
+        ]
+    }
+
+    with pytest.raises(DatasetValidationError, match="primary_dealer_accepted"):
+        build_dataset(degraded, healthy)
