@@ -1,10 +1,20 @@
 import datetime
+import json
+from pathlib import Path
 from typing import Any
 
 import pytest
 import requests
 
-from pipeline.fetch import AUCTIONS_QUERY_URL, fetch_auctions_page
+from pipeline.build import build_dataset
+from pipeline.fetch import (
+    AUCTIONS_QUERY_URL,
+    REQUESTED_FIELDS,
+    fetch_auctions_full,
+    fetch_auctions_page,
+)
+
+FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
 
 
 class _FakeResponse:
@@ -94,3 +104,61 @@ def test_fetch_auctions_page_network_canary() -> None:
     record = result["data"][0]
     assert record["original_security_term"] == "10-Year"
     assert "auction_date" in record
+
+
+def test_fetch_auctions_full_requests_five_years_across_all_tenors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[dict[str, Any]] = []
+
+    def fake_get(url: str, **kwargs: Any) -> _FakeResponse:
+        calls.append({"url": url, "params": kwargs["params"]})
+        return _FakeResponse({"data": [], "meta": {}})
+
+    monkeypatch.setattr(requests, "get", fake_get)
+
+    fetch_auctions_full(datetime.date(2026, 10, 7))
+
+    assert len(calls) == 1
+    assert calls[0]["url"] == AUCTIONS_QUERY_URL
+    assert calls[0]["params"]["filter"] == (
+        "auction_date:gte:2021-10-08,auction_date:lte:2026-10-07"
+    )
+
+
+def test_fetch_auctions_full_requests_exactly_the_fields_the_transform_needs(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    def fake_get(url: str, **kwargs: Any) -> _FakeResponse:
+        captured["params"] = kwargs["params"]
+        return _FakeResponse({"data": [], "meta": {}})
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    fetch_auctions_full(datetime.date(2026, 10, 7))
+    requested = set(captured["params"]["fields"].split(","))
+
+    full = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+    trimmed = {
+        "data": [{k: v for k, v in a.items() if k in requested} for a in full["data"]]
+    }
+    assert requested < set(full["data"][0]), "must be a strict subset of the record"
+
+    expected = build_dataset(full)
+    actual = build_dataset(trimmed)
+    expected.pop("generated_at")
+    actual.pop("generated_at")
+    assert actual == expected
+
+
+@pytest.mark.network
+def test_fetch_auctions_full_network_canary() -> None:
+    result = fetch_auctions_full(datetime.date.today())
+
+    assert result["meta"]["total-pages"] == 1, "five years no longer fits one page"
+    assert {a["original_security_term"] for a in result["data"]} >= {
+        "17-Week",
+        "10-Year",
+    }
+    assert set(result["data"][0]) == set(REQUESTED_FIELDS)
