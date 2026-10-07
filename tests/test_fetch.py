@@ -9,9 +9,11 @@ import requests
 from pipeline.build import build_dataset
 from pipeline.fetch import (
     AUCTIONS_QUERY_URL,
+    DEBT_TO_PENNY_URL,
     REQUESTED_FIELDS,
     fetch_auctions_full,
     fetch_auctions_page,
+    fetch_debt_to_penny,
 )
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
@@ -162,3 +164,56 @@ def test_fetch_auctions_full_network_canary() -> None:
         "10-Year",
     }
     assert set(result["data"][0]) == set(REQUESTED_FIELDS)
+
+
+def test_fetch_debt_to_penny_requests_only_the_latest_record(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    def fake_get(url: str, **kwargs: Any) -> _FakeResponse:
+        captured["url"] = url
+        captured["params"] = kwargs["params"]
+        return _FakeResponse({"data": [{}], "meta": {}})
+
+    monkeypatch.setattr(requests, "get", fake_get)
+
+    fetch_debt_to_penny()
+
+    assert captured["url"] == DEBT_TO_PENNY_URL
+    assert captured["params"] == {
+        "fields": "record_date,tot_pub_debt_out_amt",
+        "sort": "-record_date",
+        "page[size]": 1,
+    }
+
+
+def test_fetch_debt_to_penny_returns_the_figure_with_its_as_of_date(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    record = {"record_date": "2026-10-05", "tot_pub_debt_out_amt": "40249104431078.48"}
+    monkeypatch.setattr(
+        requests, "get", lambda *a, **kw: _FakeResponse({"data": [record]})
+    )
+
+    assert fetch_debt_to_penny() == record
+
+
+def test_fetch_debt_to_penny_propagates_http_errors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        requests, "get", lambda *a, **kw: _FakeResponse({}, status_code=500)
+    )
+
+    with pytest.raises(requests.HTTPError):
+        fetch_debt_to_penny()
+
+
+@pytest.mark.network
+def test_fetch_debt_to_penny_network_canary() -> None:
+    record = fetch_debt_to_penny()
+
+    assert set(record) == {"record_date", "tot_pub_debt_out_amt"}
+    assert datetime.date.fromisoformat(record["record_date"]) <= datetime.date.today()
+    assert float(record["tot_pub_debt_out_amt"]) > 0

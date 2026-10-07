@@ -69,3 +69,23 @@ def fetch_auctions_page(
     response.raise_for_status()
     payload: dict[str, Any] = response.json()
     return payload
+
+
+DEBT_TO_PENNY_URL = (
+    "https://api.fiscaldata.treasury.gov/services/api/fiscal_service"
+    "/v2/accounting/od/debt_to_penny"
+)
+
+
+def fetch_debt_to_penny() -> dict[str, Any]:
+    """Retrieve the latest total-public-debt record from Fiscal Data, unmodified."""
+    params: dict[str, str | int] = {
+        "fields": "record_date,tot_pub_debt_out_amt",
+        "sort": "-record_date",
+        "page[size]": 1,
+    }
+    response = requests.get(DEBT_TO_PENNY_URL, params=params, timeout=30)
+    response.raise_for_status()
+    payload: dict[str, Any] = response.json()
+    record: dict[str, Any] = payload["data"][0]
+    return record
