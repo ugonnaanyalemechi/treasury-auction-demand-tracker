@@ -1,15 +1,17 @@
-name: Manual data refresh
+name: Refresh data
 
 on:
+  schedule:
+    - cron: "0 23 * * 1-5"
   workflow_dispatch:
-    inputs:
-      tenor:
-        description: 'original_security_term to fetch, e.g. "10-Year"'
-        required: true
-        default: "10-Year"
 
 permissions:
   contents: write
+
+# A rerun waits for the one in flight rather than racing it to push.
+concurrency:
+  group: refresh
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -23,17 +25,15 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Run skeleton pipeline
-        env:
-          TENOR: ${{ inputs.tenor }}
-        run: python -m pipeline.skeleton "$TENOR"
+      # Exits non-zero if a validation guard fails, which skips the commit
+      # below and leaves the previous data.json live.
+      - name: Build data.json
+        run: python -m pipeline.refresh
 
       - name: Commit data.json
-        env:
-          TENOR: ${{ inputs.tenor }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git diff --staged --quiet || git commit -m "Update data.json ($TENOR)"
+          git diff --staged --quiet || git commit -m "Refresh data.json"
           git push
