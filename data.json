@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T20:11:27.152627+00:00",
+  "generated_at": "2026-10-08T02:20:57.238670+00:00",
   "row_count": 1824,
   "auctions": [
     {
@@ -29187,9 +29187,22 @@
       "soma_accepted": "926290200"
     }
   ],
-  "upcoming": [],
+  "upcoming": [
+    {
+      "auction_date": "2026-10-08",
+      "offering_amt": "110000000000"
+    },
+    {
+      "auction_date": "2026-10-08",
+      "offering_amt": "105000000000"
+    },
+    {
+      "auction_date": "2026-10-08",
+      "offering_amt": "22000000000"
+    }
+  ],
   "debt": {
-    "total_public_debt_outstanding": "$40,249,104,431,078.48",
-    "as_of": "2026-10-05"
+    "total_public_debt_outstanding": "$40,273,024,579,219.17",
+    "as_of": "2026-10-06"
   }
 }
