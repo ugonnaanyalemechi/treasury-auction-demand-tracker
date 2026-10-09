@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-08T02:20:57.238670+00:00",
-  "row_count": 1824,
+  "generated_at": "2026-10-09T02:38:30.916340+00:00",
+  "row_count": 1827,
   "auctions": [
     {
       "cusip": "912796K73",
@@ -29185,24 +29185,59 @@
       "allocation_pctage": "57.600000",
       "bid_to_cover_ratio": "2.770000",
       "soma_accepted": "926290200"
-    }
-  ],
-  "upcoming": [
-    {
-      "auction_date": "2026-10-08",
-      "offering_amt": "110000000000"
     },
     {
+      "cusip": "912797VW4",
       "auction_date": "2026-10-08",
-      "offering_amt": "105000000000"
+      "security_type": "Bill",
+      "tenor": "17-Week",
+      "reopening": true,
+      "takedown": 0.34711137534952585,
+      "deviation": 0.2408249858572765,
+      "bid_dispersion": 6.999999999999984,
+      "primary_dealer_accepted": "37488125000",
+      "comp_accepted": "102496755000",
+      "noncomp_accepted": "5503522900",
+      "allocation_pctage": "50.050000",
+      "bid_to_cover_ratio": "2.400000",
+      "soma_accepted": "9348480900"
     },
     {
+      "cusip": "912797WE3",
       "auction_date": "2026-10-08",
-      "offering_amt": "22000000000"
+      "security_type": "Bill",
+      "tenor": "17-Week",
+      "reopening": true,
+      "takedown": 0.23096786359577354,
+      "deviation": -1.4488849979485514,
+      "bid_dispersion": 2.499999999999991,
+      "primary_dealer_accepted": "23789855000",
+      "comp_accepted": "101590657500",
+      "noncomp_accepted": "1410057100",
+      "allocation_pctage": "8.930000",
+      "bid_to_cover_ratio": "2.770000",
+      "soma_accepted": "8923549900"
+    },
+    {
+      "cusip": "912810UW6",
+      "auction_date": "2026-10-08",
+      "security_type": "Bond",
+      "tenor": "30-Year",
+      "reopening": true,
+      "takedown": 0.0677499608897953,
+      "deviation": -0.9970764177849774,
+      "bid_dispersion": 5.100000000000016,
+      "primary_dealer_accepted": "1490500000",
+      "comp_accepted": "21939603600",
+      "noncomp_accepted": "60409100",
+      "allocation_pctage": "26.770000",
+      "bid_to_cover_ratio": "2.540000",
+      "soma_accepted": "522522600"
     }
   ],
+  "upcoming": [],
   "debt": {
-    "total_public_debt_outstanding": "$40,273,024,579,219.17",
-    "as_of": "2026-10-06"
+    "total_public_debt_outstanding": "$40,284,036,147,367.19",
+    "as_of": "2026-10-07"
   }
 }
