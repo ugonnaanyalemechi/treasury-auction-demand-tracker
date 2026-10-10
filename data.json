@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T02:38:30.916340+00:00",
+  "generated_at": "2026-10-10T01:58:15.624758+00:00",
   "row_count": 1827,
   "auctions": [
     {
@@ -29237,7 +29237,7 @@
   ],
   "upcoming": [],
   "debt": {
-    "total_public_debt_outstanding": "$40,284,036,147,367.19",
-    "as_of": "2026-10-07"
+    "total_public_debt_outstanding": "$40,305,316,210,829.72",
+    "as_of": "2026-10-08"
   }
 }
