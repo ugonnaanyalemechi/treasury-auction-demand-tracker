@@ -11,6 +11,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from pipeline.grouping import tenor_of
+
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "auctions_sample.json"
 
 
@@ -61,8 +63,8 @@ def test_fixture_contains_a_tenor_with_fewer_than_twelve_auctions() -> None:
     auctions = _load_auctions()
     counts: dict[str, int] = {}
     for auction in auctions:
-        term = auction["original_security_term"]
-        counts[term] = counts.get(term, 0) + 1
+        tenor = tenor_of(auction)
+        counts[tenor] = counts.get(tenor, 0) + 1
 
     assert counts
     assert any(count < 12 for count in counts.values())
@@ -71,6 +73,15 @@ def test_fixture_contains_a_tenor_with_fewer_than_twelve_auctions() -> None:
 def test_fixture_contains_a_reopening() -> None:
     auctions = _load_auctions()
     assert any(a["reopening"] == "Yes" for a in auctions)
+
+
+def test_fixture_contains_a_bill_sold_on_a_longer_bills_cusip() -> None:
+    auctions = _load_auctions()
+    assert any(
+        a["security_type"] == "Bill"
+        and a["security_term"] != a["original_security_term"]
+        for a in auctions
+    )
 
 
 def test_fixture_contains_a_bill_and_a_coupon_security() -> None:

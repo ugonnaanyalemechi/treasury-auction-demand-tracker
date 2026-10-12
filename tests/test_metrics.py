@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from pipeline.grouping import tenor_of
 from pipeline.metrics import (
     compute_bid_dispersion,
     compute_deviation,
@@ -41,6 +42,7 @@ def _auction(date: str, dealer: str, tenor: str = "10-Year") -> dict[str, str]:
     return {
         "cusip": f"CUSIP{tenor}{date}",
         "auction_date": date,
+        "security_type": "Note",
         "original_security_term": tenor,
         "primary_dealer_accepted": dealer,
         "comp_accepted": "100",
@@ -94,6 +96,32 @@ def test_deviation_ignores_other_tenors_and_later_auctions() -> None:
     )
 
 
+def _bill(date: str, dealer: str, auctioned: str) -> dict[str, str]:
+    # Every bill here sits on a CUSIP first issued as a 17-Week.
+    return {
+        **_auction(date, dealer),
+        "cusip": f"CUSIP{auctioned}{date}",
+        "security_type": "Bill",
+        "original_security_term": "17-Week",
+        "security_term": auctioned,
+    }
+
+
+def test_deviation_scores_a_bill_only_against_bills_of_the_term_auctioned() -> None:
+    four_week = [
+        _bill(f"2024-{month:02d}-01", str(10 + month), "4-Week")
+        for month in range(1, 13)
+    ]
+    seventeen_week = [
+        _bill(f"2024-{month:02d}-02", "40", "17-Week") for month in range(1, 13)
+    ]
+    current = _bill("2025-01-01", "30", "4-Week")
+
+    assert compute_deviation(
+        current, [*four_week, *seventeen_week, current]
+    ) == compute_deviation(current, [*four_week, current])
+
+
 def test_deviation_is_none_with_fewer_than_twelve_prior_auctions() -> None:
     prior = _history(11)
     current = _auction("2025-01-01", "30")
@@ -104,12 +132,12 @@ def test_deviation_is_none_with_fewer_than_twelve_prior_auctions() -> None:
 def test_deviation_is_none_for_fixture_tenors_with_under_twelve_auctions() -> None:
     payload = json.loads(_FIXTURE_PATH.read_text(encoding="utf-8"))
     auctions = payload["data"]
-    tenor_counts = Counter(a["original_security_term"] for a in auctions)
+    tenor_counts = Counter(tenor_of(a) for a in auctions)
     under_twelve = [t for t, n in tenor_counts.items() if n < 12]
     assert under_twelve, "fixture is expected to contain a tenor with under twelve auctions"
 
     for auction in auctions:
-        if auction["original_security_term"] in under_twelve:
+        if tenor_of(auction) in under_twelve:
             assert compute_deviation(auction, auctions) is None
 
 

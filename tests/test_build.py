@@ -76,7 +76,7 @@ def test_records_carry_values_computed_from_the_source_auction() -> None:
         if r["cusip"] == source["cusip"] and r["auction_date"] == source["auction_date"]
     )
 
-    assert record["tenor"] == source["original_security_term"]
+    assert record["tenor"] == source["security_term"]
     assert record["security_type"] == "Bill"
     assert record["reopening"] == (source["reopening"] == "Yes")
     assert record["takedown"] == compute_takedown(source)
@@ -97,6 +97,29 @@ def test_out_of_scope_and_unheld_auctions_are_absent_from_the_records() -> None:
     dataset = build_dataset(payload)
 
     assert not any(r["cusip"] in out_of_scope for r in dataset["auctions"])
+
+
+def test_bills_are_labelled_by_the_bill_auctioned_and_coupons_by_original_term() -> None:
+    dataset = build_dataset(_fixture_payload())
+
+    tenors = {r["tenor"] for r in dataset["auctions"]}
+
+    assert tenors == {
+        "4-Week",
+        "6-Week",
+        "8-Week",
+        "13-Week",
+        "17-Week",
+        "26-Week",
+        "52-Week",
+        "2-Year",
+        "3-Year",
+        "5-Year",
+        "7-Year",
+        "10-Year",
+        "20-Year",
+        "30-Year",
+    }
 
 
 def test_two_year_tenor_contains_only_fixed_rate_auctions() -> None:

@@ -67,6 +67,7 @@ _COMMON_FIELDS = (
     "cusip",
     "auction_date",
     "security_type",
+    "security_term",
     "original_security_term",
     "reopening",
     "primary_dealer_accepted",

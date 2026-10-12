@@ -2,7 +2,7 @@ import datetime
 from typing import Any
 
 from pipeline.filters import exclude_floating_rate_notes, filter_included_securities
-from pipeline.grouping import group_by_original_term
+from pipeline.grouping import group_by_tenor, tenor_of
 from pipeline.metrics import compute_bid_dispersion, compute_deviation, compute_takedown
 from pipeline.passthrough import passthrough_fields
 from pipeline.unheld import split_unheld_auctions
@@ -32,7 +32,7 @@ def build_dataset(
 
     records = [
         _build_record(auction, tenor_auctions)
-        for tenor_auctions in group_by_original_term(held).values()
+        for tenor_auctions in group_by_tenor(held).values()
         for auction in tenor_auctions
     ]
     records.sort(key=lambda record: (record["auction_date"], record["cusip"]))
@@ -64,9 +64,7 @@ def _build_record(
         "cusip": auction["cusip"],
         "auction_date": auction["auction_date"],
         "security_type": auction["security_type"],
-        # original_security_term, deliberately not security_term: the latter is
-        # the remaining maturity on a reopening and would fragment one tenor.
-        "tenor": auction["original_security_term"],
+        "tenor": tenor_of(auction),
         "reopening": auction["reopening"] == "Yes",
         "takedown": compute_takedown(auction),
         "deviation": compute_deviation(auction, tenor_auctions),

@@ -13,6 +13,7 @@ REQUESTED_FIELDS = (
     "cusip",
     "auction_date",
     "security_type",
+    "security_term",
     "original_security_term",
     "reopening",
     "inflation_index_security",

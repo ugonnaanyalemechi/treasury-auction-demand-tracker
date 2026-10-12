@@ -15,7 +15,9 @@ A single sale event for a Security, uniquely identified by the pair (CUSIP, auct
 _Avoid_: Sale, Issuance
 
 **Tenor**:
-The maturity bucket a Security belongs to at first issuance — e.g. "10-Year", "17-Week" — taken from `original_security_term`. This is the row label on the heatmap and the grouping key for Deviation. Never taken from `security_term`, which reports the *remaining* time to maturity on a Reopening (e.g. "9-Year 10-Month") and would silently fragment one Tenor into many.
+The maturity bucket an Auction is scored within — e.g. "10-Year", "4-Week". This is the row label on the heatmap and the grouping key for Deviation. Taken from a different field per Security Type, because Reopenings mean opposite things for the two:
+- **Notes and Bonds:** `original_security_term`. On a Reopening, `security_term` reports the *remaining* time to maturity (e.g. "9-Year 10-Month") and would silently fragment one Tenor into many.
+- **Bills:** `security_term`. Treasury routinely sells a short Bill as a Reopening of a longer Bill maturing the same day, so a 4-Week Bill can carry an `original_security_term` of "17-Week". Here `security_term` is the Bill actually auctioned.
 _Avoid_: Term, Maturity, Duration
 
 **Security Type**:

@@ -1,6 +1,8 @@
 import statistics
 from typing import Any
 
+from pipeline.grouping import tenor_of
+
 
 def compute_takedown(auction: dict[str, Any]) -> float:
     """Share of an auction's public demand absorbed by primary dealers."""
@@ -19,14 +21,15 @@ def compute_deviation(
     """Z-score of an auction's takedown against its tenor's trailing window.
 
     The window is the 12 most recent earlier auctions sharing the auction's
-    original_security_term. Returns None, never a partial-window score, when
-    fewer than 12 exist or the window has no variance.
+    tenor_of. Returns None, never a partial-window score, when fewer than 12
+    exist or the window has no variance.
     """
+    tenor = tenor_of(auction)
     prior = sorted(
         (
             a
             for a in auctions
-            if a["original_security_term"] == auction["original_security_term"]
+            if tenor_of(a) == tenor
             and a["auction_date"] < auction["auction_date"]
         ),
         key=lambda a: a["auction_date"],

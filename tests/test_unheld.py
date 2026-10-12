@@ -45,12 +45,12 @@ def test_unheld_auctions_are_carried_with_only_size_and_date() -> None:
 
 def test_unheld_auction_does_not_influence_a_trailing_average() -> None:
     unheld = _fixture_unheld()
-    tenor = unheld["original_security_term"]
-
     def held_auction(date: str, dealer: str) -> dict[str, Any]:
         return {
             "auction_date": date,
-            "original_security_term": tenor,
+            "security_type": unheld["security_type"],
+            "security_term": unheld["security_term"],
+            "original_security_term": unheld["original_security_term"],
             "primary_dealer_accepted": dealer,
             "comp_accepted": "100",
             "noncomp_accepted": "0",
