@@ -1,87 +1,7 @@
 {
-  "generated_at": "2026-10-10T01:58:15.624758+00:00",
-  "row_count": 1827,
+  "generated_at": "2026-10-13T03:15:35.073985+00:00",
+  "row_count": 1822,
   "auctions": [
-    {
-      "cusip": "912796K73",
-      "auction_date": "2021-10-12",
-      "security_type": "Bill",
-      "tenor": "26-Week",
-      "reopening": true,
-      "takedown": 0.38003806466532986,
-      "deviation": null,
-      "bid_dispersion": 0.5000000000000004,
-      "primary_dealer_accepted": "15923680000",
-      "comp_accepted": "41361874100",
-      "noncomp_accepted": "538349800",
-      "allocation_pctage": "15.080000",
-      "bid_to_cover_ratio": "3.460000",
-      "soma_accepted": "6265814300"
-    },
-    {
-      "cusip": "912796P29",
-      "auction_date": "2021-10-12",
-      "security_type": "Bill",
-      "tenor": "26-Week",
-      "reopening": false,
-      "takedown": 0.279820619666628,
-      "deviation": null,
-      "bid_dispersion": 0.4999999999999998,
-      "primary_dealer_accepted": "11696580000",
-      "comp_accepted": "41382715600",
-      "noncomp_accepted": "417563500",
-      "allocation_pctage": "36.110000",
-      "bid_to_cover_ratio": "3.990000",
-      "soma_accepted": "6265814200"
-    },
-    {
-      "cusip": "91282CCS8",
-      "auction_date": "2021-10-12",
-      "security_type": "Note",
-      "tenor": "10-Year",
-      "reopening": true,
-      "takedown": 0.1119999778947412,
-      "deviation": null,
-      "bid_dispersion": 4.400000000000004,
-      "primary_dealer_accepted": "4256000000",
-      "comp_accepted": "37982884300",
-      "noncomp_accepted": "17123200",
-      "allocation_pctage": "60.170000",
-      "bid_to_cover_ratio": "2.580000",
-      "soma_accepted": "2859183300"
-    },
-    {
-      "cusip": "91282CDB4",
-      "auction_date": "2021-10-12",
-      "security_type": "Note",
-      "tenor": "3-Year",
-      "reopening": false,
-      "takedown": 0.36871694533817384,
-      "deviation": null,
-      "bid_dispersion": 4.0000000000000036,
-      "primary_dealer_accepted": "21310005000",
-      "comp_accepted": "57751703700",
-      "noncomp_accepted": "43321100",
-      "allocation_pctage": "7.430000",
-      "bid_to_cover_ratio": "2.360000",
-      "soma_accepted": "4364016700"
-    },
-    {
-      "cusip": "912810SZ2",
-      "auction_date": "2021-10-13",
-      "security_type": "Bond",
-      "tenor": "30-Year",
-      "reopening": true,
-      "takedown": 0.12283321561816836,
-      "deviation": null,
-      "bid_dispersion": 7.899999999999996,
-      "primary_dealer_accepted": "2948000000",
-      "comp_accepted": "23996214400",
-      "noncomp_accepted": "3808600",
-      "allocation_pctage": "64.540000",
-      "bid_to_cover_ratio": "2.360000",
-      "soma_accepted": "1805800000"
-    },
     {
       "cusip": "912796N62",
       "auction_date": "2021-10-14",
@@ -793,7 +713,7 @@
       "tenor": "26-Week",
       "reopening": true,
       "takedown": 0.491278667591446,
-      "deviation": 1.7719283196010696,
+      "deviation": null,
       "bid_dispersion": 1.0000000000000002,
       "primary_dealer_accepted": "27954352500",
       "comp_accepted": "56383507500",
@@ -809,7 +729,7 @@
       "tenor": "26-Week",
       "reopening": false,
       "takedown": 0.4453943339768911,
-      "deviation": 1.072243709371744,
+      "deviation": null,
       "bid_dispersion": 1.5,
       "primary_dealer_accepted": "22269748500",
       "comp_accepted": "49545152500",
@@ -4937,7 +4857,7 @@
       "tenor": "3-Year",
       "reopening": false,
       "takedown": 0.26779868176322774,
-      "deviation": 0.39569226282136644,
+      "deviation": null,
       "bid_dispersion": 7.79999999999994,
       "primary_dealer_accepted": "10685170000",
       "comp_accepted": "39502040000",
@@ -4953,7 +4873,7 @@
       "tenor": "10-Year",
       "reopening": true,
       "takedown": 0.19689458349751027,
-      "deviation": 1.2345399497490337,
+      "deviation": null,
       "bid_dispersion": 8.000000000000007,
       "primary_dealer_accepted": "6300632500",
       "comp_accepted": "31985066500",
@@ -5001,7 +4921,7 @@
       "tenor": "30-Year",
       "reopening": true,
       "takedown": 0.12216387938725383,
-      "deviation": -0.5907109033246721,
+      "deviation": null,
       "bid_dispersion": 8.000000000000007,
       "primary_dealer_accepted": "2198950000",
       "comp_accepted": "17990969000",
@@ -29235,7 +29155,20 @@
       "soma_accepted": "522522600"
     }
   ],
-  "upcoming": [],
+  "upcoming": [
+    {
+      "auction_date": "2026-10-13",
+      "offering_amt": "95000000000"
+    },
+    {
+      "auction_date": "2026-10-13",
+      "offering_amt": "82000000000"
+    },
+    {
+      "auction_date": "2026-10-13",
+      "offering_amt": "95000000000"
+    }
+  ],
   "debt": {
     "total_public_debt_outstanding": "$40,305,316,210,829.72",
     "as_of": "2026-10-08"
