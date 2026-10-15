@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-14T01:28:03.271085+00:00",
-  "row_count": 1823,
+  "generated_at": "2026-10-15T01:02:48.358547+00:00",
+  "row_count": 1824,
   "auctions": [
     {
       "cusip": "912796G45",
@@ -29169,16 +29169,36 @@
       "allocation_pctage": "36.710000",
       "bid_to_cover_ratio": "2.680000",
       "soma_accepted": "5404145600"
+    },
+    {
+      "cusip": "912797WZ6",
+      "auction_date": "2026-10-14",
+      "security_type": "Bill",
+      "tenor": "17-Week",
+      "reopening": false,
+      "takedown": 0.37486354405462224,
+      "deviation": 0.574432842023697,
+      "bid_dispersion": 2.000000000000046,
+      "primary_dealer_accepted": "27777600000",
+      "comp_accepted": "73541490700",
+      "noncomp_accepted": "559073200",
+      "allocation_pctage": "83.690000",
+      "bid_to_cover_ratio": "2.790000",
+      "soma_accepted": "5053976200"
     }
   ],
   "upcoming": [
     {
-      "auction_date": "2026-10-14",
-      "offering_amt": "75000000000"
+      "auction_date": "2026-10-15",
+      "offering_amt": "110000000000"
+    },
+    {
+      "auction_date": "2026-10-15",
+      "offering_amt": "105000000000"
     }
   ],
   "debt": {
-    "total_public_debt_outstanding": "$40,301,480,531,899.65",
-    "as_of": "2026-10-09"
+    "total_public_debt_outstanding": "$40,343,879,238,035.67",
+    "as_of": "2026-10-13"
   }
 }
