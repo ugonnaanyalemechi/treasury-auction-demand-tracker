@@ -1,39 +1,7 @@
 {
-  "generated_at": "2026-10-20T01:20:26.216802+00:00",
-  "row_count": 1823,
+  "generated_at": "2026-10-21T01:05:04.648812+00:00",
+  "row_count": 1821,
   "auctions": [
-    {
-      "cusip": "912796N70",
-      "auction_date": "2021-10-21",
-      "security_type": "Bill",
-      "tenor": "119-Day",
-      "reopening": true,
-      "takedown": 0.41609584845940334,
-      "deviation": null,
-      "bid_dispersion": 0.5000000000000004,
-      "primary_dealer_accepted": "24966048000",
-      "comp_accepted": "59339267800",
-      "noncomp_accepted": "661446200",
-      "allocation_pctage": "79.470000",
-      "bid_to_cover_ratio": "3.520000",
-      "soma_accepted": "3550847800"
-    },
-    {
-      "cusip": "912796P78",
-      "auction_date": "2021-10-21",
-      "security_type": "Bill",
-      "tenor": "119-Day",
-      "reopening": true,
-      "takedown": 0.5236717545415612,
-      "deviation": null,
-      "bid_dispersion": 1.5,
-      "primary_dealer_accepted": "13039490000",
-      "comp_accepted": "24709610000",
-      "noncomp_accepted": "190510900",
-      "allocation_pctage": "49.340000",
-      "bid_to_cover_ratio": "3.230000",
-      "soma_accepted": "1479519900"
-    },
     {
       "cusip": "912796C31",
       "auction_date": "2021-10-25",
@@ -585,7 +553,7 @@
       "tenor": "119-Day",
       "reopening": true,
       "takedown": 0.5315707246126082,
-      "deviation": 0.9407914740704565,
+      "deviation": null,
       "bid_dispersion": 1.0000000000000002,
       "primary_dealer_accepted": "5289190000",
       "comp_accepted": "9235199000",
@@ -601,7 +569,7 @@
       "tenor": "119-Day",
       "reopening": true,
       "takedown": 0.46375849583295453,
-      "deviation": 0.0933815169077523,
+      "deviation": null,
       "bid_dispersion": 0.9999999999999996,
       "primary_dealer_accepted": "11594320000",
       "comp_accepted": "24858670000",
@@ -29183,10 +29151,14 @@
     {
       "auction_date": "2026-10-19",
       "offering_amt": "82000000000"
+    },
+    {
+      "auction_date": "2026-10-21",
+      "offering_amt": "13000000000"
     }
   ],
   "debt": {
-    "total_public_debt_outstanding": "$40,387,508,795,231.67",
-    "as_of": "2026-10-16"
+    "total_public_debt_outstanding": "$40,396,401,120,485.05",
+    "as_of": "2026-10-19"
   }
 }
