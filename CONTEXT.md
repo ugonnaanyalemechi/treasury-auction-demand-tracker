@@ -38,7 +38,7 @@ A Security whose principal is indexed to inflation. Excluded from this project's
 An irregular, short-notice Bill issued outside the regular auction calendar, sometimes for as little as a few days. Excluded from this project's scope.
 
 **Unheld Auction**:
-An Auction that has been announced but not yet held — results fields are absent (represented by the upstream API as the literal string `"null"`, not JSON null). Shown on the site as "upcoming"; never included in Auction records or any Trailing Window calculation.
+An Auction that has been announced but not yet held — results fields are absent (represented by the upstream API as the literal string `"null"`, not JSON null). Shown on the site as "upcoming", published as `{auction_date, tenor, offering_amt}` (tenor per the Tenor definition); never included in Auction records or any Trailing Window calculation.
 _Avoid_: Announced auction (used interchangeably, but "Unheld" is canonical since it's the state that matters for filtering — an Auction can be announced *and* held)
 
 ### Demand Metrics

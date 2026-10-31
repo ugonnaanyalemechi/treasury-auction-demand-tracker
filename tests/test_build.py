@@ -5,6 +5,7 @@ from typing import Any
 import pytest
 
 from pipeline.build import build_dataset
+from pipeline.grouping import tenor_of
 from pipeline.metrics import compute_bid_dispersion, compute_deviation, compute_takedown
 from pipeline.validation import DatasetValidationError
 
@@ -54,7 +55,11 @@ def test_full_fixture_is_assembled_into_the_published_shape() -> None:
     assert dataset["row_count"] == len(in_scope) - len(unheld)
     assert all(set(record) == _RECORD_KEYS for record in dataset["auctions"])
     assert dataset["upcoming"] == [
-        {"auction_date": a["auction_date"], "offering_amt": a["offering_amt"]}
+        {
+            "auction_date": a["auction_date"],
+            "tenor": tenor_of(a),
+            "offering_amt": a["offering_amt"],
+        }
         for a in unheld
     ]
 

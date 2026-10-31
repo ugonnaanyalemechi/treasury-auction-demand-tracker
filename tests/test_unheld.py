@@ -30,17 +30,33 @@ def test_unheld_auctions_never_appear_in_the_held_records() -> None:
     assert len(held) == len(_load_auctions()) - 1
 
 
-def test_unheld_auctions_are_carried_with_only_size_and_date() -> None:
+def test_unheld_auctions_are_carried_with_only_date_tenor_and_size() -> None:
     unheld = _fixture_unheld()
 
     _, upcoming = split_unheld_auctions(_load_auctions())
 
+    # The fixture's unheld auction is a reopened 30-Year bond whose
+    # security_term ("29-Year 11-Month") is the remaining maturity.
     assert upcoming == [
         {
             "auction_date": unheld["auction_date"],
+            "tenor": "30-Year",
             "offering_amt": unheld["offering_amt"],
         }
     ]
+
+
+def test_an_unheld_bill_reports_its_security_term_as_tenor() -> None:
+    bill = {
+        **_fixture_unheld(),
+        "security_type": "Bill",
+        "security_term": "4-Week",
+        "original_security_term": "17-Week",
+    }
+
+    _, upcoming = split_unheld_auctions([bill])
+
+    assert [u["tenor"] for u in upcoming] == ["4-Week"]
 
 
 def test_unheld_auction_does_not_influence_a_trailing_average() -> None:
