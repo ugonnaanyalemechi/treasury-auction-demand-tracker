@@ -2,64 +2,78 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Treasury Auction Demand Tracker (placeholder)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>U.S. Treasury Auction Demand Tracker</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="js/main.js"></script>
   </head>
   <body>
-    <h1>Treasury Auction Demand Tracker</h1>
-    <p>
-      This is a placeholder page proving the pipeline's data.json is fetchable
-      and renderable. The real, design-driven UI arrives in later tickets.
-    </p>
-    <p id="status">Loading data.json&hellip;</p>
-    <table id="auctions" border="1" cellpadding="4" hidden>
-      <thead>
-        <tr>
-          <th>Auction date</th>
-          <th>Tenor</th>
-          <th>Takedown</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <!-- data-state is "loading", "ready" or "error"; js/main.js sets it and
+         style.css decides what is visible in each state. -->
+    <div id="app" data-state="loading">
+      <div id="stale-banner" role="alert" hidden></div>
 
-    <script>
-      const status = document.getElementById("status");
-      const table = document.getElementById("auctions");
+      <header class="site-header">
+        <div class="header-text">
+          <div class="eyebrow">U.S. Treasury Auction Demand Tracker</div>
+          <h1>Which part of the curve is the market not buying?</h1>
+          <p class="lede" data-ready-only>
+            Every Treasury auction is scored by how much primary dealers, the
+            buyers of last resort, were left holding, compared with that
+            tenor's own last 12 auctions. Red means dealers absorbed more than
+            usual: the open market wanted less.
+          </p>
+        </div>
+        <!-- Filled by js/header.js (issue #29) -->
+        <div id="debt" class="debt" data-ready-only></div>
+      </header>
 
-      fetch("data.json")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-          }
-          return response.json();
-        })
-        .then((dataset) => {
-          status.textContent =
-            "Generated at " +
-            dataset.generated_at +
-            " — " +
-            dataset.row_count +
-            " auctions.";
+      <!-- Loading skeleton (design 1g), cells built by js/main.js -->
+      <section id="loading" class="loading" aria-live="polite">
+        <div class="skeleton-bar" style="width: 220px; height: 10px"></div>
+        <div class="skeleton-bar" style="width: 440px; height: 24px"></div>
+        <div id="skeleton-grid" class="skeleton-grid" aria-hidden="true"></div>
+        <div class="loading-note">Loading auction data&hellip;</div>
+      </section>
 
-          const tbody = table.querySelector("tbody");
-          for (const auction of dataset.auctions) {
-            const row = document.createElement("tr");
-            for (const value of [
-              auction.auction_date,
-              auction.tenor,
-              auction.takedown,
-            ]) {
-              const cell = document.createElement("td");
-              cell.textContent = value;
-              row.appendChild(cell);
-            }
-            tbody.appendChild(row);
-          }
-          table.hidden = false;
-        })
-        .catch((error) => {
-          status.textContent = "Failed to load data.json: " + error.message;
-        });
-    </script>
+      <!-- Fetch-failed state (design 1h), filled by js/main.js -->
+      <section id="load-error" class="load-error"></section>
+
+      <noscript>
+        <p class="noscript">This page needs JavaScript to show the data.</p>
+      </noscript>
+
+      <main data-ready-only>
+        <section id="heatmap" class="section" aria-labelledby="heatmap-title">
+          <h2 id="heatmap-title">Dealer takedown deviation by tenor and month</h2>
+          <!-- Filled by js/heatmap.js (issues #31-#34) -->
+        </section>
+
+        <section id="detail" class="section" aria-label="Tenor detail">
+          <!-- Filled by js/detail.js (issues #36-#37) -->
+        </section>
+
+        <div class="section-pair">
+          <section id="upcoming" class="section" aria-labelledby="upcoming-title">
+            <h2 id="upcoming-title">Upcoming auctions</h2>
+            <!-- Filled by js/upcoming.js (issue #38) -->
+          </section>
+          <section id="methodology" class="section" aria-labelledby="methodology-title">
+            <h2 id="methodology-title">Methodology</h2>
+            <!-- Filled by js/methodology.js (issue #39) -->
+          </section>
+        </div>
+      </main>
+
+      <!-- Filled by js/footer.js (issue #30) -->
+      <footer id="footer" class="site-footer" data-ready-only></footer>
+    </div>
   </body>
 </html>

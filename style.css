@@ -1,0 +1,170 @@
+/* Light theme only. Tokens are defined once here and used everywhere below. */
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --ink: #15171c;
+  --ink-2: #3a3e47;
+  --muted: #646a75;
+  --rule: #dedbd3;
+  --grid: #ebe9e3;
+  --chip: #efede7;
+  --warn-bg: #fbefd5;
+  --warn-ink: #6b4500;
+  --warn-rule: #e8c98a;
+
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+a { text-underline-offset: 3px; text-decoration-thickness: 1px; }
+[hidden] { display: none !important; }
+
+.eyebrow {
+  font: 600 11px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0;
+  font: 600 46px/1.06 var(--font-serif);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
+
+/* Header */
+.site-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 64px;
+  align-items: end;
+  padding: 52px 56px 40px;
+  border-bottom: 1px solid var(--rule);
+}
+.header-text { display: flex; flex-direction: column; gap: 16px; }
+.lede {
+  margin: 0;
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.debt { padding-left: 28px; border-left: 1px solid var(--rule); }
+.debt:empty { border-left: 0; }
+
+/* Content sections */
+.section { padding: 40px 56px 44px; }
+.section + .section,
+.section-pair { border-top: 1px solid var(--rule); }
+.section-pair {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 64px;
+  padding-inline: 56px;
+}
+.section-pair > .section { padding-inline: 0; border-top: 0; }
+
+/* Footer */
+.site-footer {
+  padding: 20px 56px;
+  border-top: 1px solid var(--rule);
+  font: 400 12px/1.4 var(--font-mono);
+  color: var(--muted);
+}
+
+/* State switching: what is visible while loading / ready / failed */
+#app[data-state="loading"] [data-ready-only],
+#app[data-state="error"] [data-ready-only] { display: none; }
+#app[data-state="ready"] .loading,
+#app[data-state="loading"] .load-error,
+#app[data-state="ready"] .load-error,
+#app[data-state="error"] .loading { display: none; }
+
+/* Loading skeleton (design 1g), same grid shape as the heatmap */
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 40px 56px 44px;
+}
+.skeleton-bar { max-width: 100%; border-radius: 3px; background: var(--grid); }
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: 76px repeat(24, minmax(0, 1fr));
+  gap: 2px;
+}
+.skeleton-cell { height: 26px; border-radius: 2px; background: var(--grid); }
+.skeleton-cell.is-label { background: transparent; }
+.loading-note { font: 400 12px var(--font-mono); color: var(--muted); }
+
+/* Fetch-failed state (design 1h) */
+.load-error {
+  margin: 40px 56px;
+  padding: 36px 28px;
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+#app[data-state="error"] .load-error { display: flex; }
+.load-error h2 { margin: 0; font-size: 18px; }
+.load-error p { margin: 0; max-width: 400px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.load-error code {
+  font: 400 11.5px var(--font-mono);
+  color: var(--muted);
+  background: var(--chip);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.load-error button {
+  margin-top: 6px;
+  font: 500 13px var(--font-body);
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  cursor: pointer;
+}
+
+/* Stale-data banner container (content comes from js/footer.js, issue #30) */
+#stale-banner {
+  padding: 10px 56px;
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  border-bottom: 1px solid var(--warn-rule);
+  font-size: 13px;
+}
+
+.noscript { padding: 24px 56px; color: var(--ink-2); }
+
+/* Phone width */
+@media (max-width: 760px) {
+  h1 { font-size: 30px; }
+  .site-header { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 32px 16px 24px; }
+  .debt { padding-left: 0; border-left: 0; }
+  .section { padding: 28px 16px 32px; }
+  .section-pair { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 0; }
+  .section-pair > .section { padding-inline: 16px; }
+  .site-footer, #stale-banner, .noscript { padding-inline: 16px; }
+  .loading { padding: 28px 16px; }
+  .skeleton-grid { grid-template-columns: 60px repeat(24, 26px); overflow-x: auto; }
+  .load-error { margin: 24px 16px; padding: 28px 16px; }
+}
