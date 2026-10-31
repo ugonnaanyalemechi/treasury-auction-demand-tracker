@@ -179,3 +179,36 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 @media (max-width: 760px) {
   .debt-big { font-size: 44px; }
 }
+
+/* methodology (#39) */
+.meth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 40px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.meth-item { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.meth-item strong { color: var(--ink); }
+.meth-item code {
+  font: 400 12px/1.5 var(--font-mono);
+  padding: 8px 10px;
+  background: var(--chip);
+  border-radius: 4px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.meth-link { display: inline-block; margin-top: 20px; font-size: 13.5px; color: var(--ink); }
+/* The summary only matters on a phone, where the body can collapse. */
+.meth-details > summary { display: none; }
+@media (max-width: 760px) {
+  .meth-details > summary {
+    display: list-item;
+    cursor: pointer;
+    font: 600 15px var(--font-serif);
+    color: var(--ink);
+  }
+  .meth-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 12px; }
+  .meth-link { margin-top: 16px; }
+}
