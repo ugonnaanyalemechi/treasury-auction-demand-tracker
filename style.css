@@ -169,6 +169,35 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
   .load-error { margin: 24px 16px; padding: 28px 16px; }
 }
 
+/* footer and stale warning (#30) */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 24px;
+}
+.site-footer.is-stale {
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  border-top-color: var(--warn-rule);
+  font-weight: 500;
+}
+#stale-banner:not([hidden]) { display: flex; gap: 12px; align-items: flex-start; line-height: 1.45; }
+#stale-banner .stale-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 11px/1 var(--font-mono);
+}
+#stale-banner .stale-text { display: flex; flex-direction: column; gap: 3px; }
+#stale-banner strong { font-weight: 600; }
+
 /* header debt stat (#29) */
 .debt { display: flex; flex-direction: column; gap: 8px; }
 .debt-label { font-size: 12.5px; font-weight: 500; color: var(--muted); }
