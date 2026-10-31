@@ -168,3 +168,15 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
   .skeleton-grid { grid-template-columns: 60px repeat(24, 26px); overflow-x: auto; }
   .load-error { margin: 24px 16px; padding: 28px 16px; }
 }
+
+/* heatmap table (#31) */
+.hm-wrap { margin-top: 20px; }
+.hm-table { width: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; font-family: "IBM Plex Mono", monospace; }
+.hm-table th { font-weight: 500; font-size: 10.5px; color: var(--muted); text-align: center; }
+.hm-table thead th { vertical-align: top; }
+.hm-table thead th span { display: block; line-height: 1; }
+.hm-table .hm-year { margin-top: 3px; color: var(--ink-2); }
+.hm-table .hm-corner,
+.hm-table tbody th { width: 76px; text-align: left; font-size: 11px; color: var(--ink-2); }
+.hm-cell { height: 26px; padding: 0; text-align: center; font-size: 10px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--grid); }
+.hm-cell.is-empty { background: var(--chip); }
