@@ -285,6 +285,35 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .hm-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 .hm-pick[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 
+/* detail view (#36) */
+#detail { padding-top: 8px; }
+.dt-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px 32px; margin-bottom: 20px; }
+.dt-titleblock { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.dt-title { margin: 0; font: 600 34px/1.1 var(--font-serif); }
+.dt-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 13px; color: var(--muted); }
+.dt-url { font: 400 11px/1 var(--font-mono); padding: 4px 7px; border-radius: 4px; background: var(--chip); color: var(--ink-2); }
+.dt-stats { display: flex; flex-wrap: wrap; gap: 12px 32px; }
+.dt-stat { display: flex; flex-direction: column; gap: 6px; }
+.dt-stat-label { font-size: 12px; color: var(--muted); }
+.dt-stat-val { font: 500 20px/1 var(--font-mono); }
+.dt-chip { align-self: flex-start; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
+.dt-card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 20px 22px 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.dt-card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; }
+.dt-card-title { font-weight: 600; font-size: 14px; }
+.dt-card-note { font-size: 12px; color: var(--muted); }
+.dt-chart { position: relative; width: 100%; min-width: 0; }
+.dt-empty { margin: 0; padding: 24px 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.dt-tip { position: absolute; z-index: 5; width: 200px; transform: translate(-50%, calc(-100% - 12px)); pointer-events: none; background: var(--ink); color: var(--bg); padding: 10px 12px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); }
+.dt-tip-date { font: 500 11.5px/1.2 var(--font-body); opacity: 0.8; }
+.dt-tip-val { font: 600 19px/1.1 var(--font-mono); }
+.dt-tip-sub { font: 400 11.5px/1.35 var(--font-body); opacity: 0.8; }
+.dt-small:empty { display: none; }
+.dt-small { margin-top: 20px; }
+@media (max-width: 760px) {
+  .dt-title { font-size: 28px; }
+  .dt-card { padding: 16px 12px 10px; }
+}
+
 /* heatmap on phones (#33) */
 .hm-short { display: none; }
 @media (max-width: 760px) {
