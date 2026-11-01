@@ -1,16 +1,17 @@
-/* Light theme only. Tokens are defined once here and used everywhere below. */
+/* Dark theme only (no toggle, no light fallback). Tokens are defined once here and used everywhere below. */
 :root {
-  --bg: #f6f5f1;
-  --surface: #ffffff;
-  --ink: #15171c;
-  --ink-2: #3a3e47;
-  --muted: #646a75;
-  --rule: #dedbd3;
-  --grid: #ebe9e3;
-  --chip: #efede7;
-  --warn-bg: #fbefd5;
-  --warn-ink: #6b4500;
-  --warn-rule: #e8c98a;
+  color-scheme: dark;
+  --bg: #111317;
+  --surface: #181b20;
+  --ink: #ecebe6;
+  --ink-2: #c9cbd0;
+  --muted: #979ca6;
+  --rule: #2b2f37;
+  --grid: #23262d;
+  --chip: #22252b;
+  --warn-bg: #3a2c0e;
+  --warn-ink: #f3cf86;
+  --warn-rule: #6b5220;
 
   --font-body: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
@@ -268,7 +269,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .hm-cell { position: relative; }
 .hm-cell .hm-value { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .hm-cell.is-empty { background: repeating-linear-gradient(135deg, var(--rule) 0 1.5px, transparent 1.5px 5px); }
-.hm-cell.is-off::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; }
+.hm-cell.is-off::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #111; }
 .hm-legend { display: flex; flex-direction: column; gap: 6px; width: 300px; max-width: 100%; margin-top: 16px; }
 .hm-legend-bar { height: 10px; border-radius: 2px; }
 .hm-legend-ticks { display: flex; justify-content: space-between; font: 500 10.5px/1 var(--font-mono); color: var(--muted); }
@@ -276,7 +277,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .hm-legend-keys { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
 .hm-key { display: flex; align-items: center; gap: 6px; }
 .hm-swatch { position: relative; width: 14px; height: 14px; border-radius: 2px; }
-.hm-swatch.is-off::after { content: ""; position: absolute; left: 4px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+.hm-swatch.is-off::after { content: ""; position: absolute; left: 4px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: #111; }
 .hm-swatch.is-none { background: repeating-linear-gradient(135deg, var(--rule) 0 1.5px, transparent 1.5px 5px); }
 
 /* tenor selection (#35) */
@@ -303,7 +304,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .dt-card-note { font-size: 12px; color: var(--muted); }
 .dt-chart { position: relative; width: 100%; min-width: 0; }
 .dt-empty { margin: 0; padding: 24px 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
-.dt-tip { position: absolute; z-index: 5; width: 200px; transform: translate(-50%, calc(-100% - 12px)); pointer-events: none; background: var(--ink); color: var(--bg); padding: 10px 12px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); }
+.dt-tip { position: absolute; z-index: 5; width: 200px; transform: translate(-50%, calc(-100% - 12px)); pointer-events: none; background: var(--ink); color: var(--bg); padding: 10px 12px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); }
 .dt-tip-date { font: 500 11.5px/1.2 var(--font-body); opacity: 0.8; }
 .dt-tip-val { font: 600 19px/1.1 var(--font-mono); }
 .dt-tip-sub { font: 400 11.5px/1.35 var(--font-body); opacity: 0.8; }
@@ -323,7 +324,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
   .hm-wrap { overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 4px; }
   .hm-table { width: max-content; table-layout: fixed; }
   .hm-table .hm-corner,
-  .hm-table tbody th { width: 60px; min-width: 60px; max-width: 60px; box-sizing: border-box; position: sticky; left: 0; z-index: 2; background: var(--bg); }
+  .hm-table tbody th { width: 60px; min-width: 60px; max-width: 60px; box-sizing: border-box; position: sticky; left: 0; z-index: 2; background: var(--bg); box-shadow: -2px 0 0 var(--bg), 2px 0 0 var(--bg); }
   .hm-table thead th:not(.hm-corner),
   .hm-cell { width: 26px; min-width: 26px; box-sizing: border-box; }
   .hm-pick { white-space: nowrap; }
@@ -347,7 +348,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
   border-radius: var(--radius);
   background: var(--ink);
   color: var(--bg);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .5);
   pointer-events: none;
 }
 .hm-tip[hidden] { display: none; }

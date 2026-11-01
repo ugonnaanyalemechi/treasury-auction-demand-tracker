@@ -103,7 +103,7 @@ export const SCALE_BOUND = 3;
 /**
  * Fill colour for a mean deviation (formula from design/NOTES.md). The value is
  * clamped to +/-SCALE_BOUND. Red is weaker demand (positive), blue stronger,
- * near-white at zero; lightness falls with |v| so it reads in greyscale.
+ * near-bg dark at zero; lightness rises with |v| (dark theme) so it reads in greyscale.
  * @param {number} v
  * @returns {string} an oklch() colour
  */
@@ -111,7 +111,7 @@ export function deviationColor(v) {
   const c = Math.max(-SCALE_BOUND, Math.min(SCALE_BOUND, v));
   const t = Math.abs(c) / SCALE_BOUND;
   const red = c > 0;
-  const L = 0.975 - 0.53 * t;
+  const L = 0.27 + 0.45 * t;
   const C = (red ? 0.19 : 0.15) * Math.min(1, t * 1.2);
   return `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${red ? 27 : 256})`;
 }

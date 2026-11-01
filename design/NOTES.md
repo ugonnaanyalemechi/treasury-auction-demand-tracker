@@ -21,38 +21,55 @@ table). The 1c per-auction table is a possible later addition.
 Also from the design, to implement: **1d** mobile heatmap, **1f** stale-data
 banner and footer, **1g** loading skeleton, **1h** fetch-failed state.
 
-## Tokens (light theme only)
+## Tokens (dark theme only)
+
+The page is dark only (issue #40): no toggle, no light fallback. `color-scheme:
+dark` is set on `:root` and in a `<meta name="color-scheme">` so native
+controls and scrollbars are dark. Tokens are the design's `[data-theme="dark"]`
+set, defined once on `:root`. `js/detail.js` reads them with `getComputedStyle`
+at chart-build time for the uPlot canvases.
 
 ```css
 :root {
-  --bg: #f6f5f1;       --surface: #ffffff;
-  --ink: #15171c;      --ink-2: #3a3e47;     --muted: #646a75;
-  --rule: #dedbd3;     --grid: #ebe9e3;      --chip: #efede7;
-  --warn-bg: #fbefd5;  --warn-ink: #6b4500;  --warn-rule: #e8c98a;
+  color-scheme: dark;
+  --bg: #111317;       --surface: #181b20;
+  --ink: #ecebe6;      --ink-2: #c9cbd0;     --muted: #979ca6;
+  --rule: #2b2f37;     --grid: #23262d;      --chip: #22252b;
+  --warn-bg: #3a2c0e;  --warn-ink: #f3cf86;  --warn-rule: #6b5220;
 }
 ```
+
+WCAG contrast (computed): --ink 15.58 on --bg, 14.46 on --surface; --ink-2
+11.45 / 10.63; --muted 6.75 / 6.27 (all above AA 4.5). --warn-ink on --warn-bg
+9.10.
 
 Fonts (Google Fonts): IBM Plex Sans 400/500/600 (body), IBM Plex Mono
 400/500/600 (numbers, labels, tabular data), Source Serif 4 600 (headings).
 Eyebrow labels: Plex Mono 600 11px, uppercase, letter-spacing .12em, `--muted`.
 Cards: `--surface` background, 1px `--rule` border, 6px radius.
-Tooltip: `--ink` background, `--bg` text, 6px radius, 200px wide.
+Tooltip: `--ink` background, `--bg` text, 6px radius, 200px wide (a light
+card on the dark page, as in the design; shadow is `rgba(0,0,0,.5)`).
 
 ## Heatmap colour scale (from the design)
 
 ```js
 // v = mean deviation; clamp to +/-3
 const c = Math.max(-3, Math.min(3, v)), t = Math.abs(c) / 3, red = c > 0;
-const L = 0.975 - 0.53 * t;                       // lightness falls with |v|
+const L = 0.27 + 0.45 * t;                        // lightness RISES with |v| on dark
 const C = (red ? 0.19 : 0.15) * Math.min(1, t * 1.2);
 const color = `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${red ? 27 : 256})`;
 ```
 
-Red = weaker demand (positive deviation), blue = stronger, near-white at 0.
-Off-scale (|mean| > 3): cell keeps the endpoint colour plus a 6px white dot
-centred in it (legend shows the same swatch, "Beyond ±3σ"). No scored auction:
+(The light variant, `L = 0.975 - 0.53 * t`, is no longer used.)
+
+Red = weaker demand (positive deviation), blue = stronger, near-background dark
+at 0, lightest at +/-3. Greyscale luminance rises monotonically with |v|
+(0.019, 0.07, 0.17, 0.33 at |v| = 0, 1, 2, 3). Off-scale (|mean| > 3): cell
+keeps the endpoint colour plus a 6px `#111` dot centred in it (legend shows the same swatch, "Beyond ±3σ"). No scored auction:
 diagonal hatch, `repeating-linear-gradient(135deg, var(--rule) 0 1.5px,
-transparent 1.5px 5px)`. Legend: a 10px gradient bar from -3σ to +3σ with
+transparent 1.5px 5px)`. Chip text on a coloured deviation chip is `#111` when |v| > 2 (design uses
+t > .55; at that point `#111` is only 3.2:1 and `--ink` 4.95:1, the two cross at
+about 2 sigma), otherwise `var(--ink)`. Legend: a 10px gradient bar from -3σ to +3σ with
 "Stronger demand" / "Weaker demand" captions.
 
 ## Layout details
@@ -99,7 +116,7 @@ transparent 1.5px 5px)`. Legend: a 10px gradient bar from -3σ to +3σ with
 
 | Design | Spec / decision | Resolution |
 |---|---|---|
-| Dark theme (toggle, 1e) | Light only for v1 (user decision) | Drop dark theme and the toggle. |
+| Dark theme (toggle, 1e) | Dark only (user decision, issue #40; supersedes light only for v1) | Dark is the chosen theme: dark tokens on `:root`, dark colour scale. The toggle and light set are dropped. |
 | Debt "over the past year" figure (`+$2.19T`) is a **mock**; `data.json` has no history | Story 2 deferred past v1; header shows level and date only | Omit the change figure entirely. |
 | Upcoming rows show date and amount only | `upcoming` now also carries `tenor` (issue #26, done) | Show date, tenor, amount. |
 | Detail charts hand-drawn as inline SVG | SPEC: charting via a library loaded by the browser | Pick a small library (issue #36), then style it to match: tokens, dot colours, triangle markers beyond +/-3, hover text. The heatmap itself stays plain DOM, as in the design. |

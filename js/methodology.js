@@ -45,7 +45,7 @@ const ITEMS = [
   },
   {
     title: "Colour scale",
-    text: "Fixed at ±3 standard deviations for every month and tenor, so colours mean the same thing everywhere. Beyond ±3 the cell keeps the end colour and gets a white dot. Colour is never the only signal: values are always available as numbers too.",
+    text: "Fixed at ±3 standard deviations for every month and tenor, so colours mean the same thing everywhere. Beyond ±3 the cell keeps the end colour and gets a dark dot. Colour is never the only signal: values are always available as numbers too.",
   },
   {
     title: "Refresh and staleness",

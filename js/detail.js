@@ -165,7 +165,7 @@ function drawMarkers(u, xs, values) {
   const s = 5 * px;
   ctx.save();
   ctx.lineWidth = 0.8 * px;
-  ctx.strokeStyle = "rgba(21,23,28,0.6)";
+  ctx.strokeStyle = token("--ink", 0.55);
   values.forEach((v, i) => {
     const cx = u.valToPos(xs[i], "x", true);
     const cy = u.valToPos(Math.max(-Y_LIMIT, Math.min(Y_LIMIT, v)), "y", true);
@@ -188,7 +188,25 @@ function drawMarkers(u, xs, values) {
 }
 
 const MONO = '10px "IBM Plex Mono", ui-monospace, monospace';
-const AXIS_STYLE = { stroke: "#646a75", font: MONO, ticks: { show: false } };
+
+/**
+ * Read a colour token from :root (style.css) at chart-build time, so the
+ * canvas charts follow the CSS tokens instead of hard-coded colours.
+ * @param {string} name  e.g. "--muted"
+ * @param {number} [alpha]  optional opacity 0..1 (canvas has no color-mix)
+ * @returns {string}
+ */
+function token(name, alpha) {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const m = /^#([0-9a-f]{6})$/i.exec(raw);
+  if (alpha === undefined || !m) return raw;
+  const n = parseInt(m[1], 16);
+  return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
+function axisStyle() {
+  return { stroke: token("--muted"), font: MONO, ticks: { show: false } };
+}
 
 /**
  * The shared time axis: one label every `everyN` months, same window for all
@@ -198,9 +216,9 @@ const AXIS_STYLE = { stroke: "#646a75", font: MONO, ticks: { show: false } };
  */
 function monthAxis(win, everyN) {
   return {
-    ...AXIS_STYLE,
+    ...axisStyle(),
     size: 28,
-    grid: { stroke: "#ebe9e3", width: 1, dash: [2, 3] },
+    grid: { stroke: token("--grid"), width: 1, dash: [2, 3] },
     splits: () => {
       /** @type {number[]} */
       const out = [];
@@ -291,7 +309,6 @@ function buildChart(host, scored, win, tenor) {
   const tip = makeTip();
 
   const height = () => (host.clientWidth < 600 ? 240 : 300);
-  const axisStyle = AXIS_STYLE;
   const everyN = host.clientWidth < 600 ? 6 : 3; // months between x labels
 
   const opts = {
@@ -299,7 +316,7 @@ function buildChart(host, scored, win, tenor) {
     height: height(),
     legend: { show: false },
     padding: [8, 8, 0, 0],
-    cursor: { y: false, drag: { x: false, y: false }, points: { size: 11, stroke: "#15171c", width: 1.5, fill: "transparent" } },
+    cursor: { y: false, drag: { x: false, y: false }, points: { size: 11, stroke: token("--ink"), width: 1.5, fill: "transparent" } },
     scales: {
       x: { time: true, range: () => [win.start, win.end] },
       y: { range: () => [-Y_LIMIT, Y_LIMIT] },
@@ -307,19 +324,19 @@ function buildChart(host, scored, win, tenor) {
     axes: [
       monthAxis(win, everyN),
       {
-        ...axisStyle,
+        ...axisStyle(),
         size: 38,
         splits: () => [-3, -2, -1, 0, 1, 2, 3],
         values: (/** @type {unknown} */ _u, /** @type {number[]} */ splits) =>
           splits.map((v) => (v > 0 ? `+${v}` : v < 0 ? `−${-v}` : "0")),
-        grid: { stroke: "#ebe9e3", width: 1 },
+        grid: { stroke: token("--grid"), width: 1 },
       },
     ],
     series: [
       {},
       {
         label: `${tenor} deviation`,
-        stroke: "rgba(100,106,117,0.6)",
+        stroke: token("--muted", 0.6),
         width: 1.1,
         points: { show: false },
       },
@@ -330,7 +347,7 @@ function buildChart(host, scored, win, tenor) {
           // Stronger zero line, drawn under the markers.
           const y0 = u.valToPos(0, "y", true);
           u.ctx.save();
-          u.ctx.strokeStyle = "#646a75";
+          u.ctx.strokeStyle = token("--muted");
           u.ctx.lineWidth = devicePixelRatio;
           u.ctx.beginPath();
           u.ctx.moveTo(u.bbox.left, y0);
@@ -469,7 +486,7 @@ function buildSmallChart(host, rows, win, spec, tenor) {
     height: height(),
     legend: { show: false },
     padding: [8, 8, 0, 0],
-    cursor: { y: false, drag: { x: false, y: false }, points: { size: 9, stroke: "#15171c", width: 1.5, fill: "transparent" } },
+    cursor: { y: false, drag: { x: false, y: false }, points: { size: 9, stroke: token("--ink"), width: 1.5, fill: "transparent" } },
     scales: {
       x: { time: true, range: () => [win.start, win.end] },
       y: { range: () => [min, max] },
@@ -477,20 +494,20 @@ function buildSmallChart(host, rows, win, spec, tenor) {
     axes: [
       monthAxis(win, everyN),
       {
-        ...AXIS_STYLE,
+        ...axisStyle(),
         size: 44,
         splits: () => spec.ticks(min, max),
         values: (/** @type {unknown} */ _u, /** @type {number[]} */ splits) => splits.map(spec.axisFmt),
-        grid: { stroke: "#ebe9e3", width: 1 },
+        grid: { stroke: token("--grid"), width: 1 },
       },
     ],
     series: [
       {},
       {
         label: spec.title,
-        stroke: "rgba(100,106,117,0.6)",
+        stroke: token("--muted", 0.6),
         width: 1.1,
-        points: { show: true, size: 5, fill: "#15171c", stroke: "#15171c" },
+        points: { show: true, size: 5, fill: token("--ink"), stroke: token("--ink") },
       },
     ],
     hooks: {
@@ -578,7 +595,8 @@ export function render(auctions, state) {
   if (latest && latest.deviation !== null) {
     chip.textContent = sigma(latest.deviation);
     chip.style.background = deviationColor(latest.deviation);
-    chip.style.color = Math.abs(latest.deviation) / SCALE_BOUND > 0.55 ? "#fff" : "var(--ink)";
+    // Dark text only once the chip is light enough: it beats --ink from about 2 sigma up.
+    chip.style.color = Math.abs(latest.deviation) / SCALE_BOUND > 2 / 3 ? "#111" : "var(--ink)";
   } else {
     chip.textContent = "n/a";
     chip.style.background = "var(--chip)";
