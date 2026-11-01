@@ -122,8 +122,9 @@ function ensureShell(host) {
     <div class="dt-head">
       <div class="dt-titleblock">
         <div class="eyebrow">Tenor detail</div>
-        <h2 class="dt-title" id="dt-title"></h2>
+        <h2 class="dt-title" id="dt-title" tabindex="-1"></h2>
         <div class="dt-sub"><span id="dt-count"></span><span class="dt-url" id="dt-url"></span></div>
+        <a class="dt-back" href="#heatmap" id="dt-back">Back to heatmap</a>
       </div>
       <div class="dt-stats">
         <div class="dt-stat"><span class="dt-stat-label">Latest auction</span><span class="dt-stat-val" id="dt-date"></span></div>
@@ -142,6 +143,30 @@ function ensureShell(host) {
     <!-- Issue #37: the three small cards render into this container on the
          same x-window as the big chart. -->
     <div class="dt-small" id="detail-small-charts" data-issue="37"></div>`;
+  host.querySelector("#dt-back")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    const row = document.querySelector('#heatmap .hm-pick[aria-pressed="true"]');
+    if (!(row instanceof HTMLElement)) return;
+    row.scrollIntoView({ behavior: scrollBehavior(), block: "center", inline: "nearest" });
+    row.focus({ preventScroll: true });
+  });
+}
+
+/** Smooth scrolling, except instant for people who ask for reduced motion. */
+function scrollBehavior() {
+  return matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
+/**
+ * After the user picks a tenor, bring the detail heading into view and move
+ * focus to it so keyboard and screen-reader users land on the new content.
+ * Call only from a user selection, never on page load or history navigation.
+ */
+export function revealDetail() {
+  const heading = document.getElementById("dt-title");
+  if (!heading) return;
+  heading.scrollIntoView({ behavior: scrollBehavior(), block: "start" });
+  heading.focus({ preventScroll: true });
 }
 
 /** Tear down every previous chart so repeated renders do not leak. */

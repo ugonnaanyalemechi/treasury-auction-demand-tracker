@@ -145,3 +145,17 @@ js/types.js       JSDoc typedefs for data.json
 Each module exports one `render(...)` function taking its slice of the
 dataset. Serve locally with `python -m http.server` (fetching `data.json`
 needs http, not `file://`).
+
+## Exception: the heatmap takeaway is computed in JS (issue #41)
+
+The spec keeps metric logic in Python. The one sentence under the heatmap
+heading is built in the browser (`computeTakeaway` in `js/heatmap.js`) from
+the already-binned cells, because it summarises the displayed grid and not a
+new metric. Rules: for each tenor take its three newest months in the 24-month
+window that contain at least one scored cell (months with none are skipped,
+not counted as zero); average those monthly means; name at most the two
+highest, only if at least +0.5σ; otherwise print "No tenor stands out as
+unusually weak". Tenor names come from the data rows. Hand-checked against
+an independent Python computation on the real `data.json`: all 14 tenors
+match to six decimals (e.g. 20-Year +1.271750, 5-Year +0.701217, 7-Year
++0.620876, 2-Year -0.288311, 10-Year -1.643195).

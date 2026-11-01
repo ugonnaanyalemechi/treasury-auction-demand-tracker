@@ -4,7 +4,7 @@
 
 import { render as renderHeader } from "./header.js";
 import { render as renderHeatmap } from "./heatmap.js";
-import { render as renderDetail } from "./detail.js";
+import { render as renderDetail, revealDetail } from "./detail.js";
 import { render as renderUpcoming } from "./upcoming.js";
 import { render as renderMethodology } from "./methodology.js";
 import { render as renderFooter } from "./footer.js";
@@ -78,10 +78,15 @@ function showError(reason) {
  * @param {import("./types.js").Tenor} tenor
  */
 function selectTenor(tenor) {
-  if (tenor === state.selectedTenor) return;
-  state.selectedTenor = tenor;
-  history.pushState(null, "", `?tenor=${formatTenor(tenor)}`);
-  renderAll();
+  if (tenor !== state.selectedTenor) {
+    state.selectedTenor = tenor;
+    history.pushState(null, "", `?tenor=${formatTenor(tenor)}`);
+    renderAll();
+  }
+  // Only a user selection reaches here (not page load or popstate), so it is
+  // the one place that scrolls to and focuses the detail. Re-picking the
+  // current tenor still jumps there, so a click never looks dead.
+  revealDetail();
 }
 
 // Back/forward: re-read the URL (an unknown value falls back to the default).

@@ -97,6 +97,52 @@ export function binAuctions(auctions) {
   return { months, tenors: TENOR_ROWS, cells };
 }
 
+/** A tenor must average at least this many sigma to be named in the takeaway. */
+const TAKEAWAY_MIN = 0.5;
+/** How many of a tenor's newest scored months the takeaway averages. */
+const TAKEAWAY_MONTHS = 3;
+
+/**
+ * For each tenor, the mean of its monthly mean deviations over its
+ * TAKEAWAY_MONTHS newest months in the window that hold at least one scored
+ * cell. Months with no scored cell are skipped, never counted as zero. A tenor
+ * with no scored cell at all is left out.
+ * @param {Binned} binned
+ * @returns {{tenor: Tenor, mean: number, months: number}[]}  in row order
+ */
+export function recentTenorMeans(binned) {
+  /** @type {{tenor: Tenor, mean: number, months: number}[]} */
+  const out = [];
+  for (const tenor of binned.tenors) {
+    /** @type {number[]} */
+    const means = [];
+    for (let i = binned.months.length - 1; i >= 0 && means.length < TAKEAWAY_MONTHS; i--) {
+      const cell = binned.cells.get(cellKey(tenor, binned.months[i].key));
+      if (cell && cell.mean !== null) means.push(cell.mean);
+    }
+    if (means.length) out.push({ tenor, mean: means.reduce((a, b) => a + b, 0) / means.length, months: means.length });
+  }
+  return out;
+}
+
+/**
+ * One computed sentence for under the heatmap heading. Names at most the two
+ * tenors with the highest (weakest-demand) recent mean, and only those at or
+ * above +0.5 sigma; otherwise says plainly that none stands out. Tenor names
+ * come from the data rows, never from the text.
+ * @param {Binned} binned
+ * @returns {string}
+ */
+export function computeTakeaway(binned) {
+  const weak = recentTenorMeans(binned)
+    .filter((t) => t.mean >= TAKEAWAY_MIN)
+    .sort((a, b) => b.mean - a.mean) // stable: ties keep row order
+    .slice(0, 2);
+  if (!weak.length) return "No tenor stands out as unusually weak in its three newest scored months.";
+  const named = weak.map((t) => `${t.tenor} (${formatSigma(t.mean)})`).join(" and ");
+  return `Weakest demand lately: ${named}, averaged over each tenor’s three newest scored months.`;
+}
+
 /** Fixed colour-scale bound, in standard deviations. Never auto-fitted. */
 export const SCALE_BOUND = 3;
 
@@ -153,12 +199,16 @@ function describeCell(tenor, m, cell) {
   const off = mean !== null && Math.abs(mean) > SCALE_BOUND;
   const value = mean !== null ? formatSigma(mean) : count ? "Not yet scored" : "No auction";
   const state = mean !== null ? value + (off ? " (off-scale)" : "") : value.toLowerCase();
-  const sub = cell && count
+  const detail = cell && count
     ? `${count} auction${count > 1 ? "s" : ""} · avg takedown ${(cell.takedown * 100).toFixed(1)}% · click for detail`
     : "Nothing auctioned this month";
+  // The value keeps its exact signed number; the words about the scale go in the sub-line.
+  const beyond = mean !== null && off
+    ? `Beyond the scale: ${mean > 0 ? "weaker than +" : "stronger than −"}${SCALE_BOUND}σ\n`
+    : "";
   return {
     aria: `${tenor}, ${monthLabel(m)}: ${state}`,
-    tip: [`${tenor} · ${monthLabel(m)}`, value + (off ? " off-scale" : ""), sub],
+    tip: [`${tenor} · ${monthLabel(m)}`, value, beyond + detail],
   };
 }
 
@@ -272,6 +322,21 @@ function buildLegend() {
 }
 
 /**
+ * The takeaway paragraph; sigma figures are set in the mono face.
+ * @param {string} text
+ */
+function buildTakeaway(text) {
+  const p = document.createElement("p");
+  p.className = "hm-takeaway";
+  // Tenor names never break at their hyphen ("5-" / "Year"); sigma figures are mono.
+  text.split(/([+−]\d+\.\d\dσ|\d+-(?:Year|Week))/).forEach((part, i) => {
+    if (!(i % 2)) p.append(part);
+    else p.append(Object.assign(document.createElement("span"), { className: part.endsWith("σ") ? "hm-num" : "hm-nowrap", textContent: part }));
+  });
+  return p;
+}
+
+/**
  * Header cell for a month column: month name, with the 2-digit year under it
  * for January and the first column.
  * @param {Month} m
@@ -309,7 +374,8 @@ function shortTenor(tenor) {
 export function render(auctions, state, onSelect) {
   const host = document.getElementById("heatmap");
   if (!host) return;
-  const { months, tenors, cells } = binAuctions(auctions);
+  const binned = binAuctions(auctions);
+  const { months, tenors, cells } = binned;
   // Selecting re-renders the whole table, which would drop keyboard focus.
   const active = document.activeElement;
   const refocus = active instanceof HTMLElement && host.contains(active) && active.matches(".hm-cell")
@@ -378,10 +444,16 @@ export function render(auctions, state, onSelect) {
   const keptScroll = oldWrap && oldWrap.clientWidth ? oldWrap.scrollLeft : null;
   oldWrap?.remove();
   host.querySelector(".hm-legend")?.remove();
+  host.querySelector(".hm-gloss")?.remove();
+  host.querySelector(".hm-takeaway")?.remove();
   const wrap = document.createElement("div");
   wrap.className = "hm-wrap";
   wrap.append(table);
-  host.append(buildLegend(), wrap);
+  const gloss = document.createElement("p");
+  gloss.className = "hm-gloss";
+  gloss.textContent = "σ shows how unusual a month was for that tenor: ±1 is ordinary, ±3 is rare.";
+  host.querySelector("h2")?.after(buildTakeaway(computeTakeaway(binned)));
+  host.append(buildLegend(), gloss, wrap);
   // First render opens on the newest month (right edge); later re-renders keep
   // wherever the user had scrolled to. main.js renders while the page is still
   // hidden (no layout yet), so wait for the wrap's first real size, once.

@@ -51,7 +51,9 @@ typography:
     letterSpacing: "0.12em"
 rounded:
   hairline: "2px"
+  control: "3px"
   chip: "4px"
+  button: "5px"
   card: "6px"
 spacing:
   gutter-phone: "16px"
@@ -139,7 +141,8 @@ A near-black blue-grey page with warm off-white text and one data palette (red f
 - **Display** (600, 46px, 1.06, −0.015em): the page question; 30px on phones.
 - **Title** (600, 34px, 1.1): the selected tenor's name in the detail view; 28px on phones.
 - **Headline** (600, 22px, 1.2): section headings.
-- **Body** (400, 13–16px, 1.5): explanations; the lede is 16px with a 640px maximum line length.
+- **Body** (400, 13–16px, 1.5): explanations; the lede is 16px with a 58ch maximum line length (about 65 characters a line). The heatmap takeaway sentence is 15px; its σ figures are 14px mono.
+- **Small steps in use:** 10px (hidden cell values, chart axis text), 11px (month and year headers, legend ticks, eyebrow, chips), 11.5px (tooltip lines, legend captions), 12px and 12.5px (notes, the σ gloss), 13px and 13.5px (banner, table and card text), 14px and 15px (card titles, small figures), 18px to 20px (error title, tooltip and stat values). Nothing below 10px, and nothing the reader must read below 11px.
 - **Figure** (500, 52px, 1, −0.03em): the debt total; 44px on phones. Smaller figures use 500 at 15–20px.
 - **Label** (600, 11px, 0.12em, uppercase, mono): eyebrow text above the title and the detail section.
 
@@ -165,7 +168,7 @@ Flat by default. Depth is tonal (Night Desk page, Ledger Panel cards) and drawn 
 
 ## Shapes
 
-Small, quiet corners and straight lines. Cards and tooltips use a 6px radius, chips 4px, heatmap cells and legend swatches 2px, and dots are circles. Triangles mark values beyond ±3σ on charts. Borders are 1px hairlines; no thick borders, no decorative side stripes.
+Small, quiet corners and straight lines. Cards and tooltips use a 6px radius, chips and code blocks 4px, buttons 5px, row-label buttons, the deviation chip and focus rings 3px, heatmap cells and legend swatches 2px, and dots are circles. Triangles mark values beyond ±3σ on charts. Borders are 1px hairlines; no thick borders, no decorative side stripes.
 
 ## Components
 
@@ -173,10 +176,12 @@ Small, quiet corners and straight lines. Cards and tooltips use a 6px radius, ch
 - **Cells:** 26px tall, 2px radius, filled from the deviation scale; empty cells show a diagonal hairline hatch; beyond-scale cells carry a centred 6px dark dot.
 - **Row labels:** mono text buttons; the selected tenor is filled Paper Ink with Night Desk text and `aria-pressed`.
 - **Legend:** a 10px gradient bar from −3σ to +3σ with "Stronger demand / Weaker demand" captions and swatches for "Beyond ±3σ" and "No scored auction".
+- **Takeaway and gloss:** one computed sentence under the heading names at most two tenors (see design/NOTES.md); a one-line σ gloss sits under the legend.
+- **Selection:** choosing a tenor scrolls the detail heading into view and focuses it; a "Back to heatmap" link in the detail header returns focus to the tenor's row label.
 - **Behavior:** hover or focus shows the tooltip; arrow keys move between cells; Enter selects the tenor.
 
 ### Tooltip
-Inverted (Paper Ink background, Night Desk text), 200px wide, 6px radius: a small title, a 19px mono value, and a one-line sub-caption.
+Inverted (Paper Ink background, Night Desk text), 6px radius, 232px wide on the heatmap (200px on charts): a small title, a 19px mono value that never wraps, and a sub-caption. For a beyond-scale cell the value keeps its exact signed number and the sub-caption opens with "Beyond the scale: weaker than +3σ" (or "stronger than −3σ").
 
 ### Cards
 Ledger Panel background, 1px Hairline border, 6px radius, 18–22px padding. Each detail card carries a title, the latest value in mono, a one- or two-sentence plain explanation, and a chart.
