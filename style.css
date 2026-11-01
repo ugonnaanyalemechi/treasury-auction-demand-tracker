@@ -354,3 +354,16 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .hm-tip-title { font: 500 11.5px/1.2 var(--font-body); opacity: .8; }
 .hm-tip-value { font: 600 19px/1.1 var(--font-mono); }
 .hm-tip-sub { font: 400 11.5px/1.35 var(--font-body); opacity: .8; }
+
+/* detail small charts (#37) */
+.dt-small { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.dt-mini { padding: 18px 18px 12px; gap: 8px; }
+.dt-mini .dt-card-head { flex-wrap: nowrap; justify-content: space-between; align-items: baseline; }
+.dt-mini-val { font: 500 15px var(--font-mono); white-space: nowrap; }
+.dt-mini-text { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); min-height: 54px; }
+.dt-mini-chart { margin-top: auto; }
+@media (max-width: 760px) {
+  .dt-small { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dt-mini { padding: 16px 12px 10px; }
+  .dt-mini-text { min-height: 0; }
+}

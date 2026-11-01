@@ -1,6 +1,6 @@
 // @ts-check
 // Tenor detail view: title, stats, and the big per-auction deviation chart.
-// Renders into #detail. Issue #36 (big chart); #37 fills #detail-small-charts.
+// Renders into #detail. Issue #36 (big chart); #37 (small charts below it).
 //
 // CHARTING LIBRARY CHOICE: uPlot 1.6.31, loaded from jsDelivr (pinned) in
 // index.html as a classic script exposing window.uPlot. Why: the SPEC wants a
@@ -32,10 +32,12 @@ import { binAuctions, deviationColor, SCALE_BOUND, formatMean } from "./heatmap.
 /** Y range of the plot: a little beyond +/-3 so edge markers are visible. */
 const Y_LIMIT = 3.4;
 
-/** @type {UPlotInstance | null} */
-let chart = null;
-/** @type {ResizeObserver | null} */
-let resizer = null;
+/**
+ * Every live chart (the big one plus the small ones) with its resize
+ * observer, so one call can tear them all down.
+ * @type {{ u: UPlotInstance, ro: ResizeObserver }[]}
+ */
+let live = [];
 
 /**
  * The shared x-axis range (unix seconds, UTC): the first day of the first
@@ -137,18 +139,18 @@ function ensureShell(host) {
       <div class="dt-chart" id="dt-chart"></div>
       <p class="dt-empty" id="dt-empty" hidden></p>
     </div>
-    <!-- Issue #37: the three small charts (allocation at high yield, bid
-         dispersion, bid-to-cover) render into this container. Use
-         chartWindow() from this module for the same x-axis range. -->
+    <!-- Issue #37: the three small cards render into this container on the
+         same x-window as the big chart. -->
     <div class="dt-small" id="detail-small-charts" data-issue="37"></div>`;
 }
 
-/** Tear down the previous chart so repeated renders do not leak. */
+/** Tear down every previous chart so repeated renders do not leak. */
 function destroyChart() {
-  resizer?.disconnect();
-  resizer = null;
-  chart?.destroy();
-  chart = null;
+  for (const { u, ro } of live) {
+    ro.disconnect();
+    u.destroy();
+  }
+  live = [];
 }
 
 /**
@@ -185,6 +187,89 @@ function drawMarkers(u, xs, values) {
   ctx.restore();
 }
 
+const MONO = '10px "IBM Plex Mono", ui-monospace, monospace';
+const AXIS_STYLE = { stroke: "#646a75", font: MONO, ticks: { show: false } };
+
+/**
+ * The shared time axis: one label every `everyN` months, same window for all
+ * charts so their x-axes line up exactly.
+ * @param {{start: number, end: number}} win
+ * @param {number} everyN
+ */
+function monthAxis(win, everyN) {
+  return {
+    ...AXIS_STYLE,
+    size: 28,
+    grid: { stroke: "#ebe9e3", width: 1, dash: [2, 3] },
+    splits: () => {
+      /** @type {number[]} */
+      const out = [];
+      const d = new Date(win.start * 1000);
+      let y = d.getUTCFullYear();
+      let m = d.getUTCMonth();
+      for (;;) {
+        const t = Date.UTC(y, m, 1) / 1000;
+        if (t >= win.end) break;
+        if (m % everyN === 0) out.push(t);
+        if (++m > 11) { m = 0; y++; }
+      }
+      return out;
+    },
+    values: (/** @type {unknown} */ _u, /** @type {number[]} */ splits) =>
+      splits.map((t) => {
+        const d = new Date(t * 1000);
+        const name = MONTHS[d.getUTCMonth()];
+        return d.getUTCMonth() === 0 ? `${name} ’${String(d.getUTCFullYear()).slice(2)}` : name;
+      }),
+  };
+}
+
+/**
+ * Create the tooltip element for a chart host.
+ * @returns {HTMLElement}
+ */
+function makeTip() {
+  const tip = el("div", "dt-tip");
+  tip.hidden = true;
+  tip.innerHTML = '<div class="dt-tip-date"></div><div class="dt-tip-val"></div><div class="dt-tip-sub"></div>';
+  return tip;
+}
+
+/**
+ * Fill and place the tooltip above the point at (x, y), or hide it.
+ * @param {UPlotInstance} u
+ * @param {HTMLElement} tip
+ * @param {{date: string, val: string, sub: string, x: number, y: number} | null} info
+ */
+function showTip(u, tip, info) {
+  if (!info) {
+    tip.hidden = true;
+    return;
+  }
+  const [dateEl, valEl, subEl] = /** @type {HTMLElement[]} */ ([...tip.children]);
+  dateEl.textContent = info.date;
+  valEl.textContent = info.val;
+  subEl.textContent = info.sub;
+  tip.hidden = false;
+  const w = u.over.clientWidth;
+  tip.style.left = `${u.over.offsetLeft + Math.min(Math.max(u.valToPos(info.x, "x"), 100), w - 100)}px`;
+  tip.style.top = `${u.over.offsetTop + u.valToPos(info.y, "y")}px`;
+}
+
+/**
+ * Register a chart for teardown and keep it sized to its host.
+ * @param {UPlotInstance} u
+ * @param {HTMLElement} host
+ * @param {() => number} height
+ */
+function track(u, host, height) {
+  const ro = new ResizeObserver(() => {
+    u.setSize({ width: Math.max(host.clientWidth, 200), height: height() });
+  });
+  ro.observe(host);
+  live.push({ u, ro });
+}
+
 /**
  * Create the uPlot chart for one tenor.
  * @param {HTMLElement} host
@@ -203,13 +288,10 @@ function buildChart(host, scored, win, tenor) {
   // The line is drawn from clamped values so it stays inside the plot.
   const clamped = values.map((v) => Math.max(-Y_LIMIT, Math.min(Y_LIMIT, v)));
 
-  const tip = el("div", "dt-tip");
-  tip.hidden = true;
-  tip.innerHTML = '<div class="dt-tip-date"></div><div class="dt-tip-val"></div><div class="dt-tip-sub"></div>';
+  const tip = makeTip();
 
   const height = () => (host.clientWidth < 600 ? 240 : 300);
-  const mono = '10px "IBM Plex Mono", ui-monospace, monospace';
-  const axisStyle = { stroke: "#646a75", font: mono, ticks: { show: false } };
+  const axisStyle = AXIS_STYLE;
   const everyN = host.clientWidth < 600 ? 6 : 3; // months between x labels
 
   const opts = {
@@ -223,31 +305,7 @@ function buildChart(host, scored, win, tenor) {
       y: { range: () => [-Y_LIMIT, Y_LIMIT] },
     },
     axes: [
-      {
-        ...axisStyle,
-        size: 28,
-        grid: { stroke: "#ebe9e3", width: 1, dash: [2, 3] },
-        splits: () => {
-          /** @type {number[]} */
-          const out = [];
-          const d = new Date(win.start * 1000);
-          let y = d.getUTCFullYear();
-          let m = d.getUTCMonth();
-          for (;;) {
-            const t = Date.UTC(y, m, 1) / 1000;
-            if (t >= win.end) break;
-            if (m % everyN === 0) out.push(t);
-            if (++m > 11) { m = 0; y++; }
-          }
-          return out;
-        },
-        values: (/** @type {unknown} */ _u, /** @type {number[]} */ splits) =>
-          splits.map((t) => {
-            const d = new Date(t * 1000);
-            const name = MONTHS[d.getUTCMonth()];
-            return d.getUTCMonth() === 0 ? `${name} ’${String(d.getUTCFullYear()).slice(2)}` : name;
-          }),
-      },
+      monthAxis(win, everyN),
       {
         ...axisStyle,
         size: 38,
@@ -286,25 +344,22 @@ function buildChart(host, scored, win, tenor) {
         (/** @type {UPlotInstance} */ u) => {
           const i = u.cursor.idx;
           if (i === null || i === undefined || !scored[i]) {
-            tip.hidden = true;
+            showTip(u, tip, null);
             return;
           }
           const a = scored[i];
           const v = values[i];
-          const [dateEl, valEl, subEl] = /** @type {HTMLElement[]} */ ([...tip.children]);
-          dateEl.textContent = longDate(a.auction_date);
-          valEl.textContent = sigma(v);
-          subEl.textContent = [
-            a.reopening ? "Reopening" : "New issue",
-            Math.abs(v) > SCALE_BOUND ? "beyond ±3σ" : "",
-            `takedown ${pct(a.takedown)}`,
-          ].filter(Boolean).join(" · ");
-          tip.hidden = false;
-          const x = u.valToPos(xs[i], "x");
-          const y = u.valToPos(clamped[i], "y");
-          const w = u.over.clientWidth;
-          tip.style.left = `${u.over.offsetLeft + Math.min(Math.max(x, 100), w - 100)}px`;
-          tip.style.top = `${u.over.offsetTop + y}px`;
+          showTip(u, tip, {
+            date: longDate(a.auction_date),
+            val: sigma(v),
+            sub: [
+              a.reopening ? "Reopening" : "New issue",
+              Math.abs(v) > SCALE_BOUND ? "beyond ±3σ" : "",
+              `takedown ${pct(a.takedown)}`,
+            ].filter(Boolean).join(" · "),
+            x: xs[i],
+            y: clamped[i],
+          });
         },
       ],
     },
@@ -317,12 +372,182 @@ function buildChart(host, scored, win, tenor) {
     "aria-label",
     `${tenor} deviation by auction, ${scored.length} scored auctions. Latest ${sigma(values[values.length - 1])}.`,
   );
-  chart = u;
-  resizer = new ResizeObserver(() => {
-    const width = Math.max(host.clientWidth, 280);
-    u.setSize({ width, height: height() });
-  });
-  resizer.observe(host);
+  track(u, host, height);
+}
+
+/**
+ * One small-multiple card's definition.
+ * @typedef {object} SmallSpec
+ * @property {string} title
+ * @property {string} text  explanatory sentence(s)
+ * @property {(a: Auction) => number} read  convert the raw field; NaN if invalid
+ * @property {(v: number) => string} fmt  value text, also used in the tooltip
+ * @property {(vals: number[]) => {min: number, max: number}} range  y range from the plotted values
+ * @property {(min: number, max: number) => number[]} ticks
+ * @property {(v: number) => string} axisFmt
+ */
+
+/**
+ * Convert an API string (or number) to a finite number, else NaN. Only the
+ * rendering layer does this; "" and null are NOT zero.
+ * @param {unknown} raw
+ */
+function toNum(raw) {
+  if (raw === null || raw === undefined || raw === "") return NaN;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+/** @type {SmallSpec[]} */
+const SMALL_SPECS = [
+  {
+    title: "Allocation at high yield",
+    text: "Share of bids at the worst accepted yield that were filled. Near 100% means Treasury had to take nearly every bid at the clearing price.",
+    read: (a) => toNum(a.allocation_pctage),
+    fmt: (v) => `${v.toFixed(1)}%`,
+    range: () => ({ min: 0, max: 100 }),
+    ticks: () => [0, 50, 100],
+    axisFmt: (v) => `${v}%`,
+  },
+  {
+    title: "Bid dispersion",
+    text: "High minus median yield, in basis points: how much bidders disagreed on value. Not a tail, which would need when-issued data.",
+    read: (a) => toNum(a.bid_dispersion),
+    fmt: (v) => `${v.toFixed(1)} bp`,
+    range: (vals) => ({ min: 0, max: Math.max(2, 2 * Math.ceil(Math.max(...vals) / 2)) }),
+    ticks: (min, max) => [min, Math.round(max / 2), max],
+    axisFmt: (v) => `${v}bp`,
+  },
+  {
+    title: "Bid-to-cover",
+    text: "The number the press quotes. It counts bids that never fill, so it can look healthy after a weak auction.",
+    read: (a) => toNum(a.bid_to_cover_ratio),
+    fmt: (v) => `${v.toFixed(2)}×`,
+    range: (vals) => {
+      const min = Math.floor(Math.min(...vals) * 2) / 2;
+      const max = Math.ceil(Math.max(...vals) * 2) / 2;
+      return max > min ? { min, max } : { min, max: min + 0.5 };
+    },
+    ticks: (min, max) => [min, (min + max) / 2, max],
+    axisFmt: (v) => `${v.toFixed(1)}×`,
+  },
+];
+
+/**
+ * Create one small chart on the shared x-window. Points with a missing or
+ * invalid value are skipped, not plotted as zero.
+ * @param {HTMLElement} host
+ * @param {Auction[]} rows  the tenor's auctions in the window, oldest first
+ * @param {{start: number, end: number}} win
+ * @param {SmallSpec} spec
+ * @param {string} tenor
+ */
+function buildSmallChart(host, rows, win, spec, tenor) {
+  const pts = rows
+    .map((a) => ({ a, v: spec.read(a) }))
+    .filter((p) => Number.isFinite(p.v));
+  if (!pts.length) {
+    const msg = el("p", "dt-empty");
+    msg.textContent = "No valid values for this tenor in the window.";
+    host.append(msg);
+    return;
+  }
+  const uPlot = /** @type {any} */ (window).uPlot;
+  if (!uPlot) {
+    host.textContent = "The charting library did not load, so the chart is unavailable.";
+    return;
+  }
+  const xs = pts.map((p) => Date.parse(p.a.auction_date) / 1000);
+  const ys = pts.map((p) => p.v);
+  const { min, max } = spec.range(ys);
+  const tip = makeTip();
+  const height = () => 130;
+  const everyN = host.clientWidth < 300 ? 6 : 3;
+
+  const opts = {
+    width: Math.max(host.clientWidth, 200),
+    height: height(),
+    legend: { show: false },
+    padding: [8, 8, 0, 0],
+    cursor: { y: false, drag: { x: false, y: false }, points: { size: 9, stroke: "#15171c", width: 1.5, fill: "transparent" } },
+    scales: {
+      x: { time: true, range: () => [win.start, win.end] },
+      y: { range: () => [min, max] },
+    },
+    axes: [
+      monthAxis(win, everyN),
+      {
+        ...AXIS_STYLE,
+        size: 44,
+        splits: () => spec.ticks(min, max),
+        values: (/** @type {unknown} */ _u, /** @type {number[]} */ splits) => splits.map(spec.axisFmt),
+        grid: { stroke: "#ebe9e3", width: 1 },
+      },
+    ],
+    series: [
+      {},
+      {
+        label: spec.title,
+        stroke: "rgba(100,106,117,0.6)",
+        width: 1.1,
+        points: { show: true, size: 5, fill: "#15171c", stroke: "#15171c" },
+      },
+    ],
+    hooks: {
+      setCursor: [
+        (/** @type {UPlotInstance} */ u) => {
+          const i = u.cursor.idx;
+          if (i === null || i === undefined || !pts[i]) {
+            showTip(u, tip, null);
+            return;
+          }
+          showTip(u, tip, {
+            date: longDate(pts[i].a.auction_date),
+            val: spec.fmt(ys[i]),
+            sub: pts[i].a.reopening ? "Reopening" : "New issue",
+            x: xs[i],
+            y: ys[i],
+          });
+        },
+      ],
+    },
+  };
+  const u = /** @type {UPlotInstance} */ (new uPlot(opts, [xs, ys], host));
+  host.append(tip);
+  host.setAttribute("role", "img");
+  host.setAttribute(
+    "aria-label",
+    `${tenor} ${spec.title.toLowerCase()} by auction, ${pts.length} values. Latest ${spec.fmt(ys[ys.length - 1])}.`,
+  );
+  track(u, host, height);
+}
+
+/**
+ * Rebuild the three small cards for the selected tenor.
+ * @param {HTMLElement} container
+ * @param {Auction[]} rows
+ * @param {{start: number, end: number}} win
+ * @param {string} tenor
+ */
+function renderSmallCharts(container, rows, win, tenor) {
+  container.replaceChildren();
+  const latest = rows[rows.length - 1];
+  for (const spec of SMALL_SPECS) {
+    const card = el("div", "dt-card dt-mini");
+    const head = el("div", "dt-card-head");
+    const title = el("span", "dt-card-title");
+    title.textContent = spec.title;
+    const val = el("span", "dt-mini-val");
+    const v = latest ? spec.read(latest) : NaN;
+    val.textContent = Number.isFinite(v) ? spec.fmt(v) : "–";
+    head.append(title, val);
+    const text = el("p", "dt-mini-text");
+    text.textContent = spec.text;
+    const host = el("div", "dt-chart dt-mini-chart");
+    card.append(head, text, host);
+    container.append(card);
+    buildSmallChart(host, rows, win, spec, tenor);
+  }
 }
 
 /**
@@ -365,6 +590,8 @@ export function render(auctions, state) {
   chartHost.removeAttribute("role");
   chartHost.removeAttribute("aria-label");
   const empty = q("dt-empty");
+  const win = chartWindow(auctions);
+  renderSmallCharts(q("detail-small-charts"), rows, win, tenor);
   if (!scored.length) {
     empty.hidden = false;
     empty.textContent = rows.length
@@ -373,5 +600,5 @@ export function render(auctions, state) {
     return;
   }
   empty.hidden = true;
-  buildChart(chartHost, scored, chartWindow(auctions), tenor);
+  buildChart(chartHost, scored, win, tenor);
 }
