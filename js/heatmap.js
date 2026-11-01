@@ -164,8 +164,9 @@ function monthHeader(m, isFirst) {
 /**
  * @param {Auction[]} auctions
  * @param {AppState} state
+ * @param {(tenor: Tenor) => void} [onSelect]  called when a row label is clicked
  */
-export function render(auctions, state) {
+export function render(auctions, state, onSelect) {
   const host = document.getElementById("heatmap");
   if (!host) return;
   const { months, tenors, cells } = binAuctions(auctions);
@@ -187,7 +188,14 @@ export function render(auctions, state) {
     tr.dataset.tenor = tenor;
     const label = document.createElement("th");
     label.scope = "row";
-    label.textContent = tenor;
+    const pick = document.createElement("button");
+    pick.type = "button";
+    pick.className = "hm-pick";
+    pick.textContent = tenor;
+    pick.setAttribute("aria-pressed", String(tenor === state.selectedTenor));
+    pick.addEventListener("click", () => onSelect?.(tenor));
+    label.append(pick);
+    if (tenor === state.selectedTenor) tr.classList.add("is-selected");
     tr.append(label);
     for (const m of months) {
       const cell = cells.get(cellKey(tenor, m.key));

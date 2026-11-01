@@ -8,12 +8,13 @@ import { render as renderDetail } from "./detail.js";
 import { render as renderUpcoming } from "./upcoming.js";
 import { render as renderMethodology } from "./methodology.js";
 import { render as renderFooter } from "./footer.js";
+import { tenorFromSearch, formatTenor } from "./url-state.js";
 
 /** @typedef {import("./types.js").Dataset} Dataset */
 /** @typedef {import("./types.js").AppState} AppState */
 
 /** @type {AppState} */
-const state = { selectedTenor: "10-Year" };
+const state = { selectedTenor: tenorFromSearch(location.search) };
 
 /** @type {Dataset | null} */
 let dataset = null;
@@ -72,11 +73,28 @@ function showError(reason) {
   setPageState("error");
 }
 
+/**
+ * Select a tenor from a click: push a history entry so back/forward work.
+ * @param {import("./types.js").Tenor} tenor
+ */
+function selectTenor(tenor) {
+  if (tenor === state.selectedTenor) return;
+  state.selectedTenor = tenor;
+  history.pushState(null, "", `?tenor=${formatTenor(tenor)}`);
+  renderAll();
+}
+
+// Back/forward: re-read the URL (an unknown value falls back to the default).
+window.addEventListener("popstate", () => {
+  state.selectedTenor = tenorFromSearch(location.search);
+  renderAll();
+});
+
 /** Call every section's render() with its slice of the dataset. */
 function renderAll() {
   if (!dataset) return;
   renderHeader(dataset.debt);
-  renderHeatmap(dataset.auctions, state);
+  renderHeatmap(dataset.auctions, state, selectTenor);
   renderDetail(dataset.auctions, state);
   renderUpcoming(dataset.upcoming);
   renderMethodology();
