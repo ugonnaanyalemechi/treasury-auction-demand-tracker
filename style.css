@@ -161,7 +161,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 /* Phone width */
 @media (max-width: 760px) {
   h1 { font-size: 30px; }
-  .site-header { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 32px 16px 24px; }
+  .site-header { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 24px 16px 20px; }
   .debt { padding-left: 0; border-left: 0; }
   .section { padding: 28px 16px 32px; }
   .section-pair { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 0; }
@@ -221,7 +221,19 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .debt-unit { font-size: 15px; color: var(--ink-2); }
 .debt-exact { font: 400 11px/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
 @media (max-width: 760px) {
-  .debt-big { font-size: 44px; }
+  /* Compact: figure and label share a row, exact figure underneath. */
+  .debt {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "figure label" "exact exact";
+    align-items: baseline;
+    gap: 2px 14px;
+  }
+  .debt-figure { grid-area: figure; flex-wrap: nowrap; gap: 6px; }
+  .debt-label { grid-area: label; font-size: 12px; line-height: 1.3; }
+  .debt-exact { grid-area: exact; }
+  .debt-big { font-size: 32px; }
+  .debt-unit { font-size: 13px; }
 }
 
 /* methodology (#39) */
@@ -244,16 +256,14 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
   overflow-wrap: anywhere;
 }
 .meth-link { display: inline-block; margin-top: 20px; font-size: 13.5px; color: var(--ink); }
-/* The summary only matters on a phone, where the body can collapse. */
-.meth-details > summary { display: none; }
+.meth-sub, .meth-details > summary { font: 600 15px/1.3 var(--font-serif); color: var(--ink); }
+.meth-sub { margin: 0 0 12px; }
+.meth-details { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.meth-details > summary { cursor: pointer; }
+.meth-details > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 3px; }
+.meth-details[open] > summary { margin-bottom: 14px; }
 @media (max-width: 760px) {
-  .meth-details > summary {
-    display: list-item;
-    cursor: pointer;
-    font: 600 15px var(--font-serif);
-    color: var(--ink);
-  }
-  .meth-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 12px; }
+  .meth-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .meth-link { margin-top: 16px; }
 }
 
@@ -300,6 +310,10 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .dt-stat { display: flex; flex-direction: column; gap: 6px; }
 .dt-stat-label { font-size: 12px; color: var(--muted); }
 .dt-stat-val { font: 500 20px/1 var(--font-mono); }
+.dt-stat-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.dt-stat-aside { font: 400 12px/1 var(--font-mono); color: var(--muted); }
+.dt-verdict { margin: 0 0 20px; max-width: 70ch; font-size: 15px; line-height: 1.5; color: var(--ink); text-wrap: pretty; }
+.dt-num { font: 500 14px var(--font-mono); white-space: nowrap; }
 .dt-chip { align-self: flex-start; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
 .dt-card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 20px 22px 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .dt-card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; }
@@ -320,6 +334,7 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 
 /* heatmap on phones (#33) */
 .hm-short { display: none; }
+.hm-cue, .hm-fade { display: none; }
 @media (max-width: 760px) {
   .hm-long { display: none; }
   .hm-short { display: inline; }
@@ -330,8 +345,17 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
   .hm-table tbody th { width: 60px; min-width: 60px; max-width: 60px; box-sizing: border-box; position: sticky; left: 0; z-index: 2; background: var(--bg); box-shadow: -2px 0 0 var(--bg), 2px 0 0 var(--bg); }
   .hm-table thead th:not(.hm-corner),
   .hm-cell { width: 26px; min-width: 26px; box-sizing: border-box; }
-  .hm-pick { white-space: nowrap; }
-  .hm-table tr.is-selected .hm-cell { box-shadow: inset 0 0 0 2px var(--ink); }
+  /* 32px tall: past the 24px WCAG 2.5.8 minimum, and the rows stay 32px so
+     the cells are as tall as the buttons (no extra grid height beyond that). */
+  .hm-pick { display: flex; align-items: center; min-height: 32px; white-space: nowrap; }
+  /* Selected row: the filled label plus a 1px rule above and below the cells. */
+  .hm-table tr.is-selected .hm-cell { box-shadow: inset 0 1px 0 var(--ink-2), inset 0 -1px 0 var(--ink-2); }
+  .hm-cue { display: block; margin: 12px 0 0; font-size: 12px; color: var(--muted); }
+  .hm-cue.is-start { visibility: hidden; }
+  .hm-frame { position: relative; margin-top: 4px; }
+  /* Fades the cells under the sticky label column; gone once at the start. */
+  .hm-fade { display: block; position: absolute; top: 0; bottom: 4px; left: 62px; width: 28px; pointer-events: none; z-index: 3; background: linear-gradient(90deg, var(--bg), transparent); }
+  .hm-frame.is-start .hm-fade { display: none; }
 }
 
 /* heatmap cell text and tooltip (#34) */

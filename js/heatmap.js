@@ -390,7 +390,7 @@ export function render(auctions, state, onSelect) {
   const { months, tenors, cells } = binned;
   host.querySelector(".hm-empty")?.remove();
   if (!months.length) {
-    for (const old of host.querySelectorAll(".hm-wrap, .hm-legend, .hm-gloss, .hm-takeaway, .hm-tip")) old.remove();
+    for (const old of host.querySelectorAll(".hm-frame, .hm-cue, .hm-legend, .hm-gloss, .hm-takeaway, .hm-tip")) old.remove();
     host.append(el("p", "hm-empty", "No auctions to show yet. The heatmap appears once the data holds at least one auction."));
     return;
   }
@@ -457,7 +457,8 @@ export function render(auctions, state, onSelect) {
 
   const oldWrap = host.querySelector(".hm-wrap");
   const keptScroll = oldWrap && oldWrap.clientWidth ? oldWrap.scrollLeft : null;
-  oldWrap?.remove();
+  host.querySelector(".hm-frame")?.remove();
+  host.querySelector(".hm-cue")?.remove();
   host.querySelector(".hm-legend")?.remove();
   host.querySelector(".hm-gloss")?.remove();
   host.querySelector(".hm-takeaway")?.remove();
@@ -468,11 +469,25 @@ export function render(auctions, state, onSelect) {
   gloss.className = "hm-gloss";
   gloss.textContent = "σ shows how unusual a month was for that tenor: ±1 is ordinary, ±3 is rare.";
   host.querySelector("h2")?.after(buildTakeaway(computeTakeaway(binned)));
-  host.append(buildLegend(), gloss, wrap);
+  // Phone only (CSS): a caption and a fading left edge say earlier months are
+  // off to the left; both hide once the wrap is scrolled to its start.
+  const cue = el("p", "hm-cue", "← Scroll left for earlier months");
+  const fade = el("div", "hm-fade");
+  fade.setAttribute("aria-hidden", "true");
+  const frame = el("div", "hm-frame");
+  frame.append(wrap, fade);
+  host.append(buildLegend(), gloss, cue, frame);
+  const syncCue = () => {
+    const atStart = wrap.scrollLeft <= 1 || wrap.scrollWidth <= wrap.clientWidth;
+    frame.classList.toggle("is-start", atStart);
+    cue.classList.toggle("is-start", atStart);
+  };
+  wrap.addEventListener("scroll", syncCue, { passive: true });
   // First render opens on the newest month (right edge); later re-renders keep
   // wherever the user had scrolled to. main.js shows the page before rendering,
   // so the wrap already has its real size here.
   wrap.scrollLeft = keptScroll !== null ? keptScroll : wrap.scrollWidth;
+  syncCue();
   if (refocus) {
     const again = [...table.querySelectorAll(".hm-cell")].find(
       (c) => c instanceof HTMLElement && c.dataset.tenor === refocus.tenor && c.dataset.month === refocus.month,

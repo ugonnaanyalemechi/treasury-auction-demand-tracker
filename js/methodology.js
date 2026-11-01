@@ -1,7 +1,8 @@
 // @ts-check
-// Methodology text (issue #39); renders into #methodology. The copy is static,
-// so nothing from data.json is used. On a phone the body collapses into a
-// <details> (design 1d); on desktop it is always open.
+// Methodology text (issues #39, #43); renders into #methodology. The copy is
+// static, so nothing from data.json is used. Two parts: "How to read this"
+// (three items, always shown) and "How it is computed" (the rest, in a
+// <details> that starts closed at every width).
 
 const README_URL =
   "https://github.com/ugonnaanyalemechi/treasury-auction-demand-tracker#readme";
@@ -11,21 +12,35 @@ const README_URL =
  * @typedef {{ title: string, formula?: string, text: string }} Item
  */
 
-/** @type {Item[]} */
-const ITEMS = [
+/**
+ * What a first-time reader needs to make sense of the heatmap.
+ * @type {Item[]}
+ */
+const READ_ITEMS = [
   {
     title: "Dealer takedown",
     formula: "dealer accepted ÷ (competitive + non-competitive accepted)",
     text: "Primary dealers must bid at every auction, so a high share means the open market held back.",
   },
   {
-    title: "Fed rollovers excluded",
-    text: "SOMA (Federal Reserve) holdings that mature are rolled into the new auction without a competitive bid. They are left out of both the numerator and the denominator, so the Fed's maturity calendar can't pass for a change in investor appetite. The amounts are still published in data.json.",
-  },
-  {
-    title: "Deviation",
+    title: "Deviation (σ)",
     formula: "(takedown − mean of prior 12) ÷ stdev of prior 12",
     text: "Each auction is scored against the previous 12 auctions of the same tenor, so bills and bonds sit on one scale. Positive means weaker demand, negative stronger. With fewer than 12 prior auctions there is no score (null), never a partial one.",
+  },
+  {
+    title: "What red and blue mean",
+    text: "Red: dealers took more of the auction than usual for that tenor, so demand was weaker. Blue: they took less, so demand was stronger. Near-black is ordinary, and the colour lightens the further a month is from ordinary.",
+  },
+];
+
+/**
+ * The rest of the method, for readers who want to check the work.
+ * @type {Item[]}
+ */
+const COMPUTED_ITEMS = [
+  {
+    title: "Fed rollovers excluded",
+    text: "SOMA (Federal Reserve) holdings that mature are rolled into the new auction without a competitive bid. They are left out of both the numerator and the denominator, so the Fed's maturity calendar can't pass for a change in investor appetite. The amounts are still published in data.json.",
   },
   {
     title: "Tenor labels",
@@ -78,18 +93,34 @@ function buildItem(item) {
 }
 
 /**
+ * @param {Item[]} items
+ * @returns {HTMLElement}
+ */
+function buildGrid(items) {
+  const grid = document.createElement("div");
+  grid.className = "meth-grid";
+  grid.append(...items.map(buildItem));
+  return grid;
+}
+
+/**
  * The copy is static, so build it once: later calls (every tenor selection
- * re-renders the page) leave it alone, which keeps an opened section open and
- * adds no further media-query listener.
+ * re-renders the page) leave it alone, which keeps an opened section open.
  */
 export function render() {
   const root = document.getElementById("methodology");
   if (!root || root.querySelector(".meth-details")) return;
   const heading = document.getElementById("methodology-title");
 
-  const body = document.createElement("div");
-  body.className = "meth-grid";
-  body.append(...ITEMS.map(buildItem));
+  const readTitle = document.createElement("h3");
+  readTitle.className = "meth-sub";
+  readTitle.textContent = "How to read this";
+
+  const details = document.createElement("details");
+  details.className = "meth-details";
+  const summary = document.createElement("summary");
+  summary.textContent = "How it is computed";
+  details.append(summary, buildGrid(COMPUTED_ITEMS));
 
   const link = document.createElement("a");
   link.href = README_URL;
@@ -98,18 +129,5 @@ export function render() {
   link.target = "_blank";
   link.rel = "noopener";
 
-  const details = document.createElement("details");
-  details.className = "meth-details";
-  const summary = document.createElement("summary");
-  summary.textContent = "Show methodology";
-  details.append(summary, body, link);
-
-  // Desktop: always open. Phone: collapsed, the reader can open it.
-  const phone = window.matchMedia("(max-width: 760px)");
-  details.open = !phone.matches;
-  phone.addEventListener("change", (e) => {
-    details.open = !e.matches;
-  });
-
-  root.replaceChildren(...(heading ? [heading] : []), details);
+  root.replaceChildren(...(heading ? [heading] : []), readTitle, buildGrid(READ_ITEMS), details, link);
 }

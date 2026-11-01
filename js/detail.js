@@ -92,6 +92,51 @@ function median(xs) {
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
 }
 
+/** Deviation at or beyond this many sigma reads as weaker or stronger than usual. */
+const VERDICT_SIGMA = 1;
+
+/**
+ * The one computed sentence under the detail stats. Exported and pure so it
+ * can be hand-checked against Python (design/NOTES.md).
+ *
+ * The comparison words ("above", "below") come from the latest takedown vs the
+ * window median; the verdict comes only from the latest deviation (>= +1
+ * weaker, <= -1 stronger, otherwise about normal, null means no verdict). The
+ * two can disagree because the median spans 24 months and the deviation uses
+ * only the 12 auctions before; then the sentence says "but" and names the
+ * 12-auction yardstick instead of implying the median decides it.
+ * @param {number} takedown  latest takedown, 0 to 1
+ * @param {number} medianTakedown  median takedown of the window, 0 to 1
+ * @param {number | null} deviation  latest deviation, sigma
+ * @returns {string}
+ */
+export function verdictSentence(takedown, medianTakedown, deviation) {
+  const t = pct(takedown);
+  const m = pct(medianTakedown);
+  const rel = t === m ? "in line with" : takedown > medianTakedown ? "above" : "below";
+  const lead = `Dealers took ${t} of this auction, ${rel} the ${m} median for this tenor`;
+  if (deviation === null) return `${lead}; this auction is not yet scored, so there is no verdict on demand.`;
+  const weaker = deviation >= VERDICT_SIGMA;
+  const stronger = deviation <= -VERDICT_SIGMA;
+  const verdict = weaker ? "weaker than usual" : stronger ? "stronger than usual" : "about normal";
+  const agrees = (!weaker && !stronger) || (weaker && rel === "above") || (stronger && rel === "below");
+  return agrees
+    ? `${lead}, so demand was ${verdict}.`
+    : `${lead}, but against the 12 auctions before it, demand was ${verdict}.`;
+}
+
+/**
+ * The verdict paragraph; percentages are set in the mono face.
+ * @param {HTMLElement} p
+ * @param {string} text
+ */
+function fillVerdict(p, text) {
+  p.replaceChildren();
+  text.split(/(\d+\.\d%)/).forEach((part, i) => {
+    p.append(i % 2 ? el("span", "dt-num", part) : part);
+  });
+}
+
 /**
  * Build the static shell once; render() only updates it.
  * @param {HTMLElement} host
@@ -108,10 +153,11 @@ function ensureShell(host) {
       </div>
       <div class="dt-stats">
         <div class="dt-stat"><span class="dt-stat-label">Latest auction</span><span class="dt-stat-val" id="dt-date"></span></div>
-        <div class="dt-stat"><span class="dt-stat-label">Dealer takedown</span><span class="dt-stat-val" id="dt-takedown"></span></div>
+        <div class="dt-stat"><span class="dt-stat-label">Dealer takedown</span><span class="dt-stat-row"><span class="dt-stat-val" id="dt-takedown"></span><span class="dt-stat-aside" id="dt-median"></span></span></div>
         <div class="dt-stat"><span class="dt-stat-label">Deviation</span><span class="dt-stat-val dt-chip" id="dt-dev"></span></div>
       </div>
     </div>
+    <p class="dt-verdict" id="dt-verdict" hidden></p>
     <div class="dt-card">
       <div class="dt-card-head">
         <span class="dt-card-title">Dealer takedown deviation</span>
@@ -486,7 +532,9 @@ function buildSmallChart(host, rows, win, spec, tenor) {
   const { min, max } = spec.range(ys);
   const tip = makeTip();
   const height = () => 130;
-  const everyN = () => (host.clientWidth < 300 ? 6 : 3);
+  // Every 6 months (4 labels over the window) on a normal card, every 12 (2
+  // labels) on a very narrow one: the old every-3 gave 8 labels that collided.
+  const everyN = () => (host.clientWidth < 300 ? 12 : 6);
 
   const opts = {
     width: Math.max(host.clientWidth, 200),
@@ -598,6 +646,11 @@ export function render(auctions, state) {
   q("dt-url").textContent = `?tenor=${tenor.toLowerCase()}`;
   q("dt-date").textContent = latest ? longDate(latest.auction_date) : "–";
   q("dt-takedown").textContent = latest ? pct(latest.takedown) : "–";
+  const med = median(rows.map((a) => a.takedown));
+  q("dt-median").textContent = latest ? `median ${pct(med)}` : "";
+  const verdict = q("dt-verdict");
+  verdict.hidden = !latest;
+  if (latest) fillVerdict(verdict, verdictSentence(latest.takedown, med, latest.deviation));
 
   const chip = q("dt-dev");
   if (latest && latest.deviation !== null) {

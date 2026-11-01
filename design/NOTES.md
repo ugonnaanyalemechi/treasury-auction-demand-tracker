@@ -84,7 +84,12 @@ about 2 sigma), otherwise `var(--ink)`. Legend: a 10px gradient bar from -3σ to
 - **Mobile heatmap (1d):** grid `60px repeat(24, 26px)`, scrolls horizontally in
   its container, tenor label column `position: sticky; left: 0`, abbreviated
   labels (`4 wk`, `10 yr`), initially scrolled to the right edge, selected row
-  shown with an inset ring on its cells. Methodology becomes a `<details>`.
+  shown with a 1px rule above and below its cells (issue #43 replaced the 2px
+  ring). Row-label buttons are 32px tall, so phone rows are 32px. A caption
+  ("Scroll left for earlier months") and a left fade (`.hm-cue`, `.hm-fade`,
+  toggled by `is-start` from a scroll listener in `js/heatmap.js`) show that
+  earlier months are off-screen and hide at the start of the scroll. The debt
+  stat is a compact grid on phones (figure and label on one row).
 - **Tooltip:** title `Tenor · Mon YYYY`, value `+1.23σ` (or "Not yet scored" /
   "No auction"), sub-line `N auctions · avg takedown 12.3% · click for detail`.
 - **Cell accessible text:** `10-Year, Aug 2026: +1.23σ` plus ` (off-scale)`;
@@ -97,7 +102,12 @@ about 2 sigma), otherwise `var(--ink)`. Legend: a 10px gradient bar from -3σ to
   then three cards: allocation at high yield, bid dispersion, bid-to-cover, each
   with a one-to-two-sentence explanation and the latest value. Bid dispersion
   text must say it is not a tail. Bid-to-cover text must say it counts bids that
-  never fill.
+  never fill. Issue #43 adds the window median beside the latest takedown and a
+  computed verdict sentence under the stats (see the exception below). The
+  small charts' x labels are every 6 months (every 12 under 300px wide).
+- **Methodology (#43):** "How to read this" (takedown, deviation, red and blue)
+  always shown; "How it is computed" in a `<details>` that starts closed at
+  every width and is built once, so its state survives tenor selections.
 - **Selection:** one state, selected tenor, default `10-Year`. URL form is
   lower-case, `?tenor=10-year`.
 - **Header:** eyebrow, serif H1 "Which part of the curve is the market not
@@ -159,3 +169,32 @@ unusually weak". Tenor names come from the data rows. Hand-checked against
 an independent Python computation on the real `data.json`: all 14 tenors
 match to six decimals (e.g. 20-Year +1.271750, 5-Year +0.701217, 7-Year
 +0.620876, 2-Year -0.288311, 10-Year -1.643195).
+
+## Exception: the detail verdict sentence is computed in JS (issue #43)
+
+The second piece of browser-side logic, next to the takeaway above: `verdictSentence`
+in `js/detail.js`, a pure exported function. It restates three numbers already
+on screen for the selected tenor: the latest auction's takedown, the median
+takedown of the tenor's auctions in the 24-month window (the same median shown
+in the detail header; unscored auctions count), and the latest auction's
+deviation. It adds no new metric. Rules: the words "above", "below" or "in
+line with" come from comparing the takedown with the median at the displayed
+one-decimal precision; the verdict comes only from the latest deviation
+(>= +1 "weaker than usual", <= -1 "stronger than usual", otherwise "about
+normal"; null prints "not yet scored" and gives no verdict). Because the median
+spans 24 months and the deviation uses the 12 auctions before, they can
+disagree; the sentence then switches from "so" to "but against the 12 auctions
+before it". Thresholds apply to the raw deviation: 30-Year shows -1.00σ but is
+-0.9971 raw, so it reads "about normal".
+
+Hand-checked against an independent Python computation on the real
+`data.json` (all 14 tenors match; five shown, latest takedown / window median /
+latest deviation):
+
+| Tenor | Takedown | Median | Deviation | Verdict |
+|---|---|---|---|---|
+| 30-Year | 6.7750% | 11.6189% | -0.9971 | about normal |
+| 20-Year | 16.7422% | 12.3399% | +1.9143 | weaker than usual |
+| 10-Year | 2.5231% | 10.4540% | -2.5831 | stronger than usual |
+| 5-Year | 15.7021% | 11.2673% | +1.8207 | weaker than usual |
+| 13-Week | 43.2529% | 34.4815% | +1.7417 | weaker than usual |

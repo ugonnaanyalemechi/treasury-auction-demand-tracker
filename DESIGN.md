@@ -153,7 +153,7 @@ A near-black blue-grey page with warm off-white text and one data palette (red f
 
 One scrolling column in spec order: header with debt stat, heatmap, tenor detail, upcoming auctions beside methodology, footer. Sections sit between hairline rules with 56px side gutters and about 40px vertical padding on desktop; 16px gutters on phones, below 760px, where multi-column areas collapse to one column.
 
-The heatmap is a fixed grid of 14 tenor rows (long end on top) by 24 month columns with 2px gaps and 26px-tall cells. On phones it scrolls horizontally inside its container with a 60px sticky label column and abbreviated labels (`4 wk`, `10 yr`), opening at the newest months. The detail view stacks a wide deviation chart over three equal metric cards that become one column on phones. The page itself never scrolls sideways.
+The heatmap is a fixed grid of 14 tenor rows (long end on top) by 24 month columns with 2px gaps and 26px-tall cells. On phones it scrolls horizontally inside its container with a 60px sticky label column and abbreviated labels (`4 wk`, `10 yr`), opening at the newest months. Phone rows are 32px tall (the label buttons are 32px, past the 24px WCAG 2.5.8 minimum); a muted caption "Scroll left for earlier months" above the grid and a 28px fade on the left edge of the cells show that earlier months are off-screen, and both hide once the grid is scrolled to its start. On phones the debt stat is compact: a 32px figure with its label on one row, the exact figure beneath, and tighter header padding so the heatmap starts higher. The detail view stacks a wide deviation chart over three equal metric cards that become one column on phones. The page itself never scrolls sideways.
 
 ## Elevation & Depth
 
@@ -161,7 +161,7 @@ Flat by default. Depth is tonal (Night Desk page, Ledger Panel cards) and drawn 
 
 ### Shadow Vocabulary
 - **Tooltip lift** (`box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5)`): heatmap and chart tooltips only.
-- **Selected-row ring** (`box-shadow: inset 0 0 0 2px var(--ink)`): marks the selected tenor's cells on phones. A state indicator, not elevation.
+- **Selected-row rules** (`box-shadow: inset 0 1px 0 var(--ink-2), inset 0 -1px 0 var(--ink-2)`): a 1px line above and below the selected tenor's cells on phones, in addition to the filled label. A state indicator, not elevation; deliberately quieter than the old 2px ring so the data stays the loudest thing.
 
 ### Named Rules
 **The Flat-By-Default Rule.** Nothing casts a shadow at rest. Shadows appear only on elements that float above the page.
@@ -174,7 +174,7 @@ Small, quiet corners and straight lines. Cards and tooltips use a 6px radius, ch
 
 ### Heatmap
 - **Cells:** 26px tall, 2px radius, filled from the deviation scale; empty cells show a diagonal hairline hatch; beyond-scale cells carry a centred 6px dark dot.
-- **Row labels:** mono text buttons; the selected tenor is filled Paper Ink with Night Desk text and `aria-pressed`.
+- **Row labels:** mono text buttons (32px tall on phones, about 20px on desktop); the selected tenor is filled Paper Ink with Night Desk text and `aria-pressed`.
 - **Legend:** a 10px gradient bar from −3σ to +3σ with "Stronger demand / Weaker demand" captions and swatches for "Beyond ±3σ" and "No scored auction".
 - **Takeaway and gloss:** one computed sentence under the heading names at most two tenors (see design/NOTES.md); a one-line σ gloss sits under the legend.
 - **Selection:** choosing a tenor scrolls the detail heading into view and focuses it; a "Back to heatmap" link in the detail header returns focus to the tenor's row label.
@@ -195,8 +195,14 @@ Amber Alert fill, ink and rule, full width at the top plus a matching footer, wi
 ### Load and Error States
 A skeleton in the exact shape of the heatmap (Grid Line blocks) while loading; on failure, a dashed-border plain message with the status and a "Try again" button (Paper Ink fill).
 
+### Detail verdict
+Under the detail stats, one 15px sentence built from the latest auction (see design/NOTES.md): "Dealers took 6.8% of this auction, below the 11.6% median for this tenor, so demand was ..." Its percentages are 14px mono. The window median is also printed in small muted mono beside the latest takedown value.
+
+### Methodology
+Two parts under one heading: "How to read this" (dealer takedown, deviation, what red and blue mean) is always shown; "How it is computed" is a `<details>` that starts closed at every width and keeps its open state across tenor selections. The README link sits below both. Hairline rule above the details, no card.
+
 ### Charts (uPlot)
-Grid lines in Grid Line, zero line in Quiet Slate, axis text in mono 10px, each auction a dot in the scale colour; beyond-scale values are triangles clamped to the plot edge.
+Grid lines in Grid Line, zero line in Quiet Slate, axis text in mono 10px, each auction a dot in the scale colour; beyond-scale values are triangles clamped to the plot edge. The x axis is thinned so labels never collide: the small charts label every 6 months (Jan and Jul), every 12 on a card narrower than 300px.
 
 ## Do's and Don'ts
 
