@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T00:23:10.698019+00:00",
+  "title": "Design System: Treasury Auction Demand Tracker",
+  "extensions": {
+    "colorMeta": {
+      "night-desk": {
+        "role": "neutral",
+        "displayName": "Night Desk",
+        "canonical": "#111317",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242527",
+          "#404246",
+          "#5f6166",
+          "#808288",
+          "#a3a5a9",
+          "#c8c9cc",
+          "#eeeef0"
+        ]
+      },
+      "ledger-panel": {
+        "role": "neutral",
+        "displayName": "Ledger Panel",
+        "canonical": "#181b20",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242527",
+          "#3f4247",
+          "#5e6168",
+          "#7f8389",
+          "#a2a5aa",
+          "#c7c9cc",
+          "#eeeef0"
+        ]
+      },
+      "paper-ink": {
+        "role": "neutral",
+        "displayName": "Paper Ink",
+        "canonical": "#ecebe6",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252523",
+          "#43423f",
+          "#62615d",
+          "#83827e",
+          "#a6a5a1",
+          "#c9c9c7",
+          "#efeeed"
+        ]
+      },
+      "soft-ink": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#c9cbd0",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242527",
+          "#414245",
+          "#5f6165",
+          "#808287",
+          "#a3a5a9",
+          "#c8c9cb",
+          "#eeeeef"
+        ]
+      },
+      "quiet-slate": {
+        "role": "neutral",
+        "displayName": "Quiet Slate",
+        "canonical": "#979ca6",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232529",
+          "#3f4249",
+          "#5d616a",
+          "#7e828c",
+          "#a1a5ad",
+          "#c7c9ce",
+          "#edeef1"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#2b2f37",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232529",
+          "#3f4249",
+          "#5d616a",
+          "#7e828c",
+          "#a1a5ad",
+          "#c7c9ce",
+          "#edeef1"
+        ]
+      },
+      "grid-line": {
+        "role": "neutral",
+        "displayName": "Grid Line",
+        "canonical": "#23262d",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242528",
+          "#3f4248",
+          "#5e6169",
+          "#7f828b",
+          "#a2a5ac",
+          "#c7c9cd",
+          "#edeef0"
+        ]
+      },
+      "chip-fill": {
+        "role": "neutral",
+        "displayName": "Chip Fill",
+        "canonical": "#22252b",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242528",
+          "#3f4247",
+          "#5e6168",
+          "#7f828a",
+          "#a2a5ab",
+          "#c7c9cd",
+          "#eeeef0"
+        ]
+      },
+      "amber-alert-fill": {
+        "role": "alert",
+        "displayName": "Amber Alert Fill",
+        "canonical": "#3a2c0e",
+        "tonalRamp": [
+          "#0d0b07",
+          "#2a2418",
+          "#4c402a",
+          "#6f5f41",
+          "#908061",
+          "#b1a38a",
+          "#d0c8b9",
+          "#f2eee7"
+        ]
+      },
+      "amber-alert-ink": {
+        "role": "alert",
+        "displayName": "Amber Alert Ink",
+        "canonical": "#f3cf86",
+        "tonalRamp": [
+          "#0f0a03",
+          "#2f2307",
+          "#553e00",
+          "#7c5b03",
+          "#9e7d33",
+          "#bca16b",
+          "#d7c7a8",
+          "#f5eee0"
+        ]
+      },
+      "amber-alert-rule": {
+        "role": "alert",
+        "displayName": "Amber Alert Rule",
+        "canonical": "#6b5220",
+        "tonalRamp": [
+          "#0e0b05",
+          "#2d2311",
+          "#513f1b",
+          "#765d2c",
+          "#997e4d",
+          "#b7a27c",
+          "#d4c8b1",
+          "#f3eee4"
+        ]
+      },
+      "weak-demand-red": {
+        "role": "primary",
+        "displayName": "Weak-Demand Red",
+        "canonical": "oklch(0.72 0.19 27)",
+        "tonalRamp": [
+          "#262626",
+          "#4b322e",
+          "#713c36",
+          "#98443d",
+          "#c14c43",
+          "#eb5249",
+          "#ff6b60",
+          "#ff6b60"
+        ]
+      },
+      "strong-demand-blue": {
+        "role": "primary",
+        "displayName": "Strong-Demand Blue",
+        "canonical": "oklch(0.72 0.15 256)",
+        "tonalRamp": [
+          "#262626",
+          "#2f3a49",
+          "#374e6e",
+          "#3e6394",
+          "#4578bd",
+          "#4a8ee7",
+          "#61a6ff",
+          "#61a6ff"
+        ]
+      },
+      "scale-midpoint": {
+        "role": "neutral",
+        "displayName": "Scale Midpoint",
+        "canonical": "oklch(0.27 0 0)",
+        "tonalRamp": [
+          "#262626",
+          "#393939",
+          "#4d4d4d",
+          "#626262",
+          "#777777",
+          "#8d8d8d",
+          "#a4a4a4",
+          "#a4a4a4"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The page question."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "The selected tenor's name."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Plain-language explanations."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "The debt total and other large numbers."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase eyebrow text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tooltip-lift",
+        "value": "0 6px 20px rgba(0, 0, 0, 0.5)",
+        "purpose": "Floating tooltips only."
+      },
+      {
+        "name": "selected-row-ring",
+        "value": "inset 0 0 0 2px #ecebe6",
+        "purpose": "Marks the selected tenor's cells on phones (state, not elevation)."
+      }
+    ],
+    "motion": [],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat panel for a metric: title, latest value, plain explanation, chart.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-head\"><span class=\"ds-card-title\">Bid dispersion</span><span class=\"ds-card-val\">4.5 bp</span></div><p class=\"ds-card-note\">High minus median yield: how much bidders disagreed on value. Not a tail.</p></div>",
+      "css": ".ds-card{background:#181b20;border:1px solid #2b2f37;border-radius:6px;padding:18px 18px 12px;display:flex;flex-direction:column;gap:8px;color:#ecebe6;font-family:'IBM Plex Sans',system-ui,sans-serif;max-width:340px}.ds-card-head{display:flex;justify-content:space-between;align-items:baseline}.ds-card-title{font-weight:600;font-size:14px}.ds-card-val{font:500 15px 'IBM Plex Mono',monospace}.ds-card-note{margin:0;font-size:12.5px;line-height:1.45;color:#979ca6}"
+    },
+    {
+      "name": "URL Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Mono chip for the shareable ?tenor= link and formulas.",
+      "html": "<span class=\"ds-chip\">?tenor=10-year</span>",
+      "css": ".ds-chip{font:400 11px/1 'IBM Plex Mono',monospace;padding:4px 7px;border-radius:4px;background:#22252b;color:#c9cbd0}"
+    },
+    {
+      "name": "Deviation Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Latest deviation, filled with its scale colour; dark text above 2 sigma.",
+      "html": "<span class=\"ds-dev ds-dev-hi\">+2.40σ</span> <span class=\"ds-dev ds-dev-lo\">−0.45σ</span>",
+      "css": ".ds-dev{font:600 20px/1 'IBM Plex Mono',monospace;padding:2px 6px;border-radius:3px}.ds-dev-hi{background:oklch(0.62 0.17 27);color:#111}.ds-dev-lo{background:oklch(0.32 0.03 256);color:#ecebe6}"
+    },
+    {
+      "name": "Heatmap Row",
+      "kind": "custom",
+      "refersTo": "heatmap-cell",
+      "description": "A tenor row: selectable label button plus 2px-gapped scale cells, a hatch cell and an off-scale dot.",
+      "html": "<div class=\"ds-row\"><button class=\"ds-pick\" aria-pressed=\"true\">10-Year</button><span class=\"ds-c\" style=\"background:oklch(0.27 0 0)\"></span><span class=\"ds-c\" style=\"background:oklch(0.51 0.1 27)\"></span><span class=\"ds-c\" style=\"background:oklch(0.72 0.19 27)\"></span><span class=\"ds-c ds-off\" style=\"background:oklch(0.72 0.15 256)\"></span><span class=\"ds-c ds-none\"></span></div>",
+      "css": ".ds-row{display:grid;grid-template-columns:76px repeat(5,26px);gap:2px;align-items:center}.ds-pick{border:0;border-radius:3px;background:#ecebe6;color:#111317;font:500 12px/1 'IBM Plex Mono',monospace;padding:6px;text-align:left;cursor:pointer}.ds-c{position:relative;height:26px;border-radius:2px}.ds-off::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#111}.ds-none{background:repeating-linear-gradient(135deg,#2b2f37 0 1.5px,transparent 1.5px 5px)}.ds-pick:focus-visible{outline:2px solid #ecebe6;outline-offset:2px}"
+    },
+    {
+      "name": "Tooltip",
+      "kind": "custom",
+      "refersTo": "tooltip",
+      "description": "Inverted floating tooltip: the only element allowed a shadow.",
+      "html": "<div class=\"ds-tip\"><div class=\"ds-tip-t\">30-Year · Sep 2026</div><div class=\"ds-tip-v\">−3.60σ off-scale</div><div class=\"ds-tip-s\">1 auction · avg takedown 2.2% · click for detail</div></div>",
+      "css": ".ds-tip{width:200px;background:#ecebe6;color:#111317;padding:10px 12px;border-radius:6px;display:flex;flex-direction:column;gap:4px;box-shadow:0 6px 20px rgba(0,0,0,.5)}.ds-tip-t{font:500 11.5px/1.2 'IBM Plex Sans',sans-serif;opacity:.8}.ds-tip-v{font:600 19px/1.1 'IBM Plex Mono',monospace}.ds-tip-s{font:400 11.5px/1.35 'IBM Plex Sans',sans-serif;opacity:.8}"
+    },
+    {
+      "name": "Stale Banner",
+      "kind": "custom",
+      "refersTo": "stale-banner",
+      "description": "Cause-agnostic failure signal shown once data is over about four days old.",
+      "html": "<div class=\"ds-stale\" role=\"alert\"><span class=\"ds-bang\">!</span><div><strong>This data is 6 days old</strong><br><span>Auctions held since then are not shown.</span></div></div>",
+      "css": ".ds-stale{display:flex;gap:12px;align-items:flex-start;padding:14px 24px;background:#3a2c0e;color:#f3cf86;border-bottom:1px solid #6b5220;font:13px/1.45 'IBM Plex Sans',sans-serif}.ds-bang{flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font:700 11px/1 'IBM Plex Mono',monospace;margin-top:1px}"
+    },
+    {
+      "name": "Retry Button",
+      "kind": "button",
+      "refersTo": "card",
+      "description": "The only button: solid Paper Ink, used on the failed-load state.",
+      "html": "<button class=\"ds-btn\">Try again</button>",
+      "css": ".ds-btn{font:500 13px 'IBM Plex Sans',sans-serif;padding:8px 16px;border-radius:5px;border:1px solid #ecebe6;background:#ecebe6;color:#111317;cursor:pointer}.ds-btn:hover{background:#c9cbd0}.ds-btn:focus-visible{outline:2px solid #ecebe6;outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Night Desk",
+    "overview": "A late-evening data desk: a dark, quiet room where the only lit object is the curve. A calm, exact record of who is buying U.S. government debt, for a curious reader who is not a trader. Everything that is not data recedes; colour is spent on the heatmap and charts, where it carries meaning.",
+    "keyCharacteristics": [
+      "Dark only. One theme, no toggle and no light fallback.",
+      "Colour belongs to the data: a fixed ±3σ red↔blue scale, with lightness also carrying the signal.",
+      "Flat and ruled: tonal surfaces plus 1px rules; shadow only on floating tooltips.",
+      "Numbers in monospace, claims in serif, explanations in sans.",
+      "Honest states: stale, loading, empty and failed are each drawn plainly, never hidden."
+    ],
+    "rules": [
+      {
+        "name": "The Colour-Is-Data Rule",
+        "body": "Red and blue appear only on data marks. Never use them for buttons, links, borders or decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed-Scale Rule",
+        "body": "The scale is clamped at ±3σ and never auto-fitted, so a shade means the same thing permanently. Beyond-scale values keep the endpoint colour and get a dark dot.",
+        "section": "colors"
+      },
+      {
+        "name": "The Lightness-Carries-Signal Rule",
+        "body": "On the dark scale lightness rises with |value|, so the chart still reads in greyscale. Direction in greyscale comes from position against the legend.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono-For-Measurement Rule",
+        "body": "Any number a reader might compare is set in IBM Plex Mono.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Nothing casts a shadow at rest. Shadows appear only on elements that float above the page.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep red and blue exclusively for data marks and the legend.",
+      "Do keep the scale clamped at ±3σ and mark beyond-scale values with a dark dot (cells) or a triangle (charts).",
+      "Do set every comparable number in IBM Plex Mono.",
+      "Do keep body and muted text at 4.5:1 or better on Night Desk and Ledger Panel.",
+      "Do give every heatmap cell tenor, month and value as accessible text, and never let colour be the only encoding.",
+      "Do state stale, loading, empty and failed states in words.",
+      "Do place each metric's plain-language explanation beside it."
+    ],
+    "donts": [
+      "Don't add a light theme, a theme toggle, or a light-coloured surface.",
+      "Don't use red or blue for buttons, links, borders or any non-data decoration.",
+      "Don't add drop shadows to cards or panels; only floating tooltips may cast one.",
+      "Don't auto-fit the colour scale to the data.",
+      "Don't call bid dispersion a \"tail\", or imply bid-to-cover is the headline measure.",
+      "Don't use side-stripe borders, gradient text, or decorative glows."
+    ]
+  }
+}
