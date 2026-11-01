@@ -284,3 +284,28 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .hm-pick:hover { background: var(--chip); }
 .hm-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 .hm-pick[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* heatmap cell text and tooltip (#34) */
+.hm-cell { cursor: pointer; }
+.hm-cell:focus { outline: none; }
+.hm-cell:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; z-index: 1; }
+/* Fixed to the viewport and placed from the cell's rect in JS, so a scroll
+   container around the table cannot clip it. */
+.hm-tip {
+  position: fixed;
+  z-index: 10;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+  pointer-events: none;
+}
+.hm-tip[hidden] { display: none; }
+.hm-tip-title { font: 500 11.5px/1.2 var(--font-body); opacity: .8; }
+.hm-tip-value { font: 600 19px/1.1 var(--font-mono); }
+.hm-tip-sub { font: 400 11.5px/1.35 var(--font-body); opacity: .8; }
