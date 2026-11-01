@@ -95,6 +95,50 @@ export function binAuctions(auctions) {
   return { months, tenors: TENOR_ROWS, cells };
 }
 
+/** Fixed colour-scale bound, in standard deviations. Never auto-fitted. */
+export const SCALE_BOUND = 3;
+
+/**
+ * Fill colour for a mean deviation (formula from design/NOTES.md). The value is
+ * clamped to +/-SCALE_BOUND. Red is weaker demand (positive), blue stronger,
+ * near-white at zero; lightness falls with |v| so it reads in greyscale.
+ * @param {number} v
+ * @returns {string} an oklch() colour
+ */
+export function deviationColor(v) {
+  const c = Math.max(-SCALE_BOUND, Math.min(SCALE_BOUND, v));
+  const t = Math.abs(c) / SCALE_BOUND;
+  const red = c > 0;
+  const L = 0.975 - 0.53 * t;
+  const C = (red ? 0.19 : 0.15) * Math.min(1, t * 1.2);
+  return `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${red ? 27 : 256})`;
+}
+
+/**
+ * Two-decimal text for a mean, never "-0.00".
+ * @param {number} v
+ */
+export function formatMean(v) {
+  const text = v.toFixed(2);
+  return text === "-0.00" ? "0.00" : text;
+}
+
+/** Legend: gradient bar, end captions, and the two non-gradient swatches. */
+function buildLegend() {
+  const el = document.createElement("div");
+  el.className = "hm-legend";
+  const stops = [-3, -2, -1, 0, 1, 2, 3].map(deviationColor).join(", ");
+  el.innerHTML = `
+    <div class="hm-legend-bar" style="background: linear-gradient(90deg, ${stops})"></div>
+    <div class="hm-legend-ticks"><span>−3σ</span><span>0</span><span>+3σ</span></div>
+    <div class="hm-legend-caps"><span>← Stronger demand</span><span>Weaker demand →</span></div>
+    <div class="hm-legend-keys">
+      <span class="hm-key"><span class="hm-swatch is-off" style="background: ${deviationColor(SCALE_BOUND + 0.5)}"></span>Beyond ±3σ</span>
+      <span class="hm-key"><span class="hm-swatch is-none"></span>No scored auction</span>
+    </div>`;
+  return el;
+}
+
 /**
  * Header cell for a month column: month name, with the 2-digit year under it
  * for January and the first column.
@@ -153,8 +197,13 @@ export function render(auctions, state) {
       td.dataset.month = m.key;
       td.dataset.count = String(cell ? cell.count : 0);
       if (cell && cell.mean !== null) {
-        td.textContent = cell.mean.toFixed(2);
+        const value = document.createElement("span");
+        value.className = "hm-value";
+        value.textContent = formatMean(cell.mean);
+        td.append(value);
         td.dataset.mean = String(cell.mean);
+        td.style.background = deviationColor(cell.mean);
+        if (Math.abs(cell.mean) > SCALE_BOUND) td.classList.add("is-off");
       } else {
         td.classList.add("is-empty");
       }
@@ -162,8 +211,9 @@ export function render(auctions, state) {
   }
 
   host.querySelector(".hm-wrap")?.remove();
+  host.querySelector(".hm-legend")?.remove();
   const wrap = document.createElement("div");
   wrap.className = "hm-wrap";
   wrap.append(table);
-  host.append(wrap);
+  host.append(buildLegend(), wrap);
 }
