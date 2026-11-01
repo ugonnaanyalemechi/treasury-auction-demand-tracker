@@ -184,8 +184,9 @@ one-decimal precision; the verdict comes only from the latest deviation
 normal"; null prints "not yet scored" and gives no verdict). Because the median
 spans 24 months and the deviation uses the 12 auctions before, they can
 disagree; the sentence then switches from "so" to "but against the 12 auctions
-before it". Thresholds apply to the raw deviation: 30-Year shows -1.00σ but is
--0.9971 raw, so it reads "about normal".
+before it". Thresholds apply to the deviation as displayed (rounded to two decimals):
+30-Year is -0.9971 raw, shows -1.00σ, and so reads "stronger than usual",
+never contradicting its chip.
 
 Hand-checked against an independent Python computation on the real
 `data.json` (all 14 tenors match; five shown, latest takedown / window median /
@@ -193,7 +194,7 @@ latest deviation):
 
 | Tenor | Takedown | Median | Deviation | Verdict |
 |---|---|---|---|---|
-| 30-Year | 6.7750% | 11.6189% | -0.9971 | about normal |
+| 30-Year | 6.7750% | 11.6189% | -0.9971 (shows -1.00) | stronger than usual |
 | 20-Year | 16.7422% | 12.3399% | +1.9143 | weaker than usual |
 | 10-Year | 2.5231% | 10.4540% | -2.5831 | stronger than usual |
 | 5-Year | 15.7021% | 11.2673% | +1.8207 | weaker than usual |

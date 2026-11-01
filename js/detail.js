@@ -116,8 +116,11 @@ export function verdictSentence(takedown, medianTakedown, deviation) {
   const rel = t === m ? "in line with" : takedown > medianTakedown ? "above" : "below";
   const lead = `Dealers took ${t} of this auction, ${rel} the ${m} median for this tenor`;
   if (deviation === null) return `${lead}; this auction is not yet scored, so there is no verdict on demand.`;
-  const weaker = deviation >= VERDICT_SIGMA;
-  const stronger = deviation <= -VERDICT_SIGMA;
+  // Compare the value as displayed (two decimals) so a chip reading -1.00σ
+  // and the sentence can never disagree.
+  const shown = Math.round(deviation * 100) / 100;
+  const weaker = shown >= VERDICT_SIGMA;
+  const stronger = shown <= -VERDICT_SIGMA;
   const verdict = weaker ? "weaker than usual" : stronger ? "stronger than usual" : "about normal";
   const agrees = (!weaker && !stronger) || (weaker && rel === "above") || (stronger && rel === "below");
   return agrees
