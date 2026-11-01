@@ -261,3 +261,9 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .upcoming-what { color: var(--ink-2); }
 .upcoming-amt { font-weight: 500; }
 .upcoming-empty { margin: 0; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+
+/* tenor selection (#35) */
+.hm-pick { display: block; width: 100%; padding: 3px 4px; border: 0; border-radius: 3px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.hm-pick:hover { background: var(--chip); }
+.hm-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.hm-pick[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
