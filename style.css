@@ -284,3 +284,19 @@ h2 { margin: 0 0 14px; font: 600 22px/1.2 var(--font-serif); }
 .hm-pick:hover { background: var(--chip); }
 .hm-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 .hm-pick[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* heatmap on phones (#33) */
+.hm-short { display: none; }
+@media (max-width: 760px) {
+  .hm-long { display: none; }
+  .hm-short { display: inline; }
+  #heatmap { min-width: 0; }
+  .hm-wrap { overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 4px; }
+  .hm-table { width: max-content; table-layout: fixed; }
+  .hm-table .hm-corner,
+  .hm-table tbody th { width: 60px; min-width: 60px; max-width: 60px; box-sizing: border-box; position: sticky; left: 0; z-index: 2; background: var(--bg); }
+  .hm-table thead th:not(.hm-corner),
+  .hm-cell { width: 26px; min-width: 26px; box-sizing: border-box; }
+  .hm-pick { white-space: nowrap; }
+  .hm-table tr.is-selected .hm-cell { box-shadow: inset 0 0 0 2px var(--ink); }
+}

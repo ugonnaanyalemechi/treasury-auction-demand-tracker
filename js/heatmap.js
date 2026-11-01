@@ -162,6 +162,14 @@ function monthHeader(m, isFirst) {
 }
 
 /**
+ * Phone label: "4-Week" -> "4 wk", "10-Year" -> "10 yr".
+ * @param {string} tenor
+ */
+function shortTenor(tenor) {
+  return tenor.replace("-Week", " wk").replace("-Year", " yr");
+}
+
+/**
  * @param {Auction[]} auctions
  * @param {AppState} state
  * @param {(tenor: Tenor) => void} [onSelect]  called when a row label is clicked
@@ -191,7 +199,10 @@ export function render(auctions, state, onSelect) {
     const pick = document.createElement("button");
     pick.type = "button";
     pick.className = "hm-pick";
-    pick.textContent = tenor;
+    // Both spellings are in the DOM; CSS shows the short one on phones (#33).
+    pick.setAttribute("aria-label", tenor);
+    pick.append(Object.assign(document.createElement("span"), { className: "hm-long", textContent: tenor }));
+    pick.append(Object.assign(document.createElement("span"), { className: "hm-short", textContent: shortTenor(tenor) }));
     pick.setAttribute("aria-pressed", String(tenor === state.selectedTenor));
     pick.addEventListener("click", () => onSelect?.(tenor));
     label.append(pick);
@@ -218,10 +229,25 @@ export function render(auctions, state, onSelect) {
     }
   }
 
-  host.querySelector(".hm-wrap")?.remove();
+  const oldWrap = host.querySelector(".hm-wrap");
+  const keptScroll = oldWrap && oldWrap.clientWidth ? oldWrap.scrollLeft : null;
+  oldWrap?.remove();
   host.querySelector(".hm-legend")?.remove();
   const wrap = document.createElement("div");
   wrap.className = "hm-wrap";
   wrap.append(table);
   host.append(buildLegend(), wrap);
+  // First render opens on the newest month (right edge); later re-renders keep
+  // wherever the user had scrolled to. main.js renders while the page is still
+  // hidden (no layout yet), so wait for the wrap's first real size, once.
+  if (keptScroll !== null) {
+    wrap.scrollLeft = keptScroll;
+  } else {
+    const ro = new ResizeObserver(() => {
+      if (!wrap.clientWidth) return;
+      wrap.scrollLeft = wrap.scrollWidth;
+      ro.disconnect();
+    });
+    ro.observe(wrap);
+  }
 }
