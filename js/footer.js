@@ -2,12 +2,13 @@
 // Data-as-of line and stale-data warning (issue #30). Renders into #footer and
 // #stale-banner. The age check is the primary failure signal for the pipeline.
 
+import { el, formatUtcDate } from "./format.js";
+
 /** @typedef {import("./types.js").Dataset} Dataset */
 
 /** Data older than this many days counts as stale (design 1f: "about 4 days"). */
 const STALE_AFTER_DAYS = 4;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /**
  * Age of the data in whole days, and whether that is stale. Pure: takes the
@@ -24,33 +25,13 @@ export function dataAge(generatedAt, now) {
 }
 
 /**
- * "8 Oct 2026" (UTC).
- * @param {Date} d
- */
-function formatDate(d) {
-  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
-}
-
-/**
  * "8 Oct 2026, 23:04 UTC".
  * @param {Date} d
  */
 function formatDateTime(d) {
   const hh = String(d.getUTCHours()).padStart(2, "0");
   const mm = String(d.getUTCMinutes()).padStart(2, "0");
-  return `${formatDate(d)}, ${hh}:${mm} UTC`;
-}
-
-/**
- * @param {string} tag
- * @param {string} text
- * @param {string} [className]
- */
-function el(tag, text, className) {
-  const node = document.createElement(tag);
-  node.textContent = text;
-  if (className) node.className = className;
-  return node;
+  return `${formatUtcDate(d)}, ${hh}:${mm} UTC`;
 }
 
 /** @param {Dataset} dataset */
@@ -72,7 +53,7 @@ export function render(dataset) {
     : "Source: U.S. Treasury Fiscal Data · refreshes weekdays";
 
   footer.classList.toggle("is-stale", stale);
-  footer.replaceChildren(el("span", asOfText), el("span", right));
+  footer.replaceChildren(el("span", "", asOfText), el("span", "", right));
 
   if (!stale) {
     banner.hidden = true;
@@ -81,11 +62,11 @@ export function render(dataset) {
   }
   const headline = valid ? `This data is ${days} ${days === 1 ? "day" : "days"} old` : "This data's age is unknown";
   const detail = valid
-    ? `Last refreshed ${formatDate(generated)}. Auctions held since then are not shown, and the latest column may be incomplete.`
+    ? `Last refreshed ${formatUtcDate(generated)}. Auctions held since then are not shown, and the latest column may be incomplete.`
     : "The refresh time is missing or unreadable. Auctions held recently may not be shown.";
   const body = document.createElement("div");
   body.className = "stale-text";
-  body.append(el("strong", headline), el("span", detail));
-  banner.replaceChildren(el("span", "!", "stale-icon"), body);
+  body.append(el("strong", "", headline), el("span", "", detail));
+  banner.replaceChildren(el("span", "stale-icon", "!"), body);
   banner.hidden = false;
 }

@@ -12,7 +12,8 @@
 // library offers out of the box), and a cursor/`setCursor` hook for a custom
 // tooltip. cdnjs does not carry uPlot, so jsDelivr (also allowed) is used.
 
-import { binAuctions, deviationColor, SCALE_BOUND, formatMean } from "./heatmap.js";
+import { binAuctions, deviationColor, SCALE_BOUND, formatSigma } from "./heatmap.js";
+import { el, MONTH_NAMES, formatIsoDate } from "./format.js";
 
 /** @typedef {import("./types.js").Auction} Auction */
 /** @typedef {import("./types.js").AppState} AppState */
@@ -50,6 +51,7 @@ export function chartWindow(auctions) {
   const { months } = binAuctions(auctions);
   const first = months[0];
   const last = months[months.length - 1];
+  if (!first) return { start: 0, end: 0 }; // no auctions: nothing is plotted
   return {
     start: Date.UTC(first.year, first.month - 1, 1) / 1000,
     end: Date.UTC(last.year, last.month, 1) / 1000,
@@ -60,33 +62,21 @@ export function chartWindow(auctions) {
  * Auctions of one tenor inside the 24-month window, oldest first.
  * @param {Auction[]} auctions
  * @param {string} tenor
+ * @param {{ start: number, end: number }} [win]  pass the window already computed for this render
  */
-export function tenorAuctions(auctions, tenor) {
-  const { start } = chartWindow(auctions);
+export function tenorAuctions(auctions, tenor, win = chartWindow(auctions)) {
+  const { start } = win;
   return auctions
     .filter((a) => a.tenor === tenor && Date.parse(a.auction_date) / 1000 >= start)
     .sort((a, b) => (a.auction_date < b.auction_date ? -1 : a.auction_date > b.auction_date ? 1 : 0));
 }
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /**
  * @param {string} iso "YYYY-MM-DD"
  * @returns {string} e.g. "8 Oct 2026"
  */
 function longDate(iso) {
-  const [y, m, d] = iso.split("-").map(Number);
-  return `${d} ${MONTHS[m - 1]} ${y}`;
-}
-
-/**
- * Signed two-decimal sigma text with a true minus sign, e.g. "+1.23σ".
- * @param {number} v
- */
-function sigma(v) {
-  const t = formatMean(v);
-  if (t === "0.00") return "0.00σ";
-  return (v > 0 ? "+" : "−") + t.replace("-", "") + "σ";
+  return formatIsoDate(iso) ?? iso;
 }
 
 /** @param {number} v */
@@ -100,16 +90,6 @@ function median(xs) {
   if (!s.length) return 0;
   const mid = Math.floor(s.length / 2);
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
-}
-
-/**
- * @param {string} tag
- * @param {string} [className]
- */
-function el(tag, className) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  return node;
 }
 
 /**
@@ -235,9 +215,10 @@ function axisStyle() {
 
 /**
  * The shared time axis: one label every `everyN` months, same window for all
- * charts so their x-axes line up exactly.
+ * charts so their x-axes line up exactly. `everyN` is read on every redraw,
+ * so the label density follows the chart's current width.
  * @param {{start: number, end: number}} win
- * @param {number} everyN
+ * @param {() => number} everyN
  */
 function monthAxis(win, everyN) {
   return {
@@ -247,13 +228,14 @@ function monthAxis(win, everyN) {
     splits: () => {
       /** @type {number[]} */
       const out = [];
+      const step = everyN();
       const d = new Date(win.start * 1000);
       let y = d.getUTCFullYear();
       let m = d.getUTCMonth();
       for (;;) {
         const t = Date.UTC(y, m, 1) / 1000;
         if (t >= win.end) break;
-        if (m % everyN === 0) out.push(t);
+        if (m % step === 0) out.push(t);
         if (++m > 11) { m = 0; y++; }
       }
       return out;
@@ -261,7 +243,7 @@ function monthAxis(win, everyN) {
     values: (/** @type {unknown} */ _u, /** @type {number[]} */ splits) =>
       splits.map((t) => {
         const d = new Date(t * 1000);
-        const name = MONTHS[d.getUTCMonth()];
+        const name = MONTH_NAMES[d.getUTCMonth()];
         return d.getUTCMonth() === 0 ? `${name} ’${String(d.getUTCFullYear()).slice(2)}` : name;
       }),
   };
@@ -334,7 +316,7 @@ function buildChart(host, scored, win, tenor) {
   const tip = makeTip();
 
   const height = () => (host.clientWidth < 600 ? 240 : 300);
-  const everyN = host.clientWidth < 600 ? 6 : 3; // months between x labels
+  const everyN = () => (host.clientWidth < 600 ? 6 : 3); // months between x labels
 
   const opts = {
     width: Math.max(host.clientWidth, 280),
@@ -393,7 +375,7 @@ function buildChart(host, scored, win, tenor) {
           const v = values[i];
           showTip(u, tip, {
             date: longDate(a.auction_date),
-            val: sigma(v),
+            val: formatSigma(v),
             sub: [
               a.reopening ? "Reopening" : "New issue",
               Math.abs(v) > SCALE_BOUND ? "beyond ±3σ" : "",
@@ -412,7 +394,7 @@ function buildChart(host, scored, win, tenor) {
   host.setAttribute("role", "img");
   host.setAttribute(
     "aria-label",
-    `${tenor} deviation by auction, ${scored.length} scored auctions. Latest ${sigma(values[values.length - 1])}.`,
+    `${tenor} deviation by auction, ${scored.length} scored auctions. Latest ${formatSigma(values[values.length - 1])}.`,
   );
   track(u, host, height);
 }
@@ -504,7 +486,7 @@ function buildSmallChart(host, rows, win, spec, tenor) {
   const { min, max } = spec.range(ys);
   const tip = makeTip();
   const height = () => 130;
-  const everyN = host.clientWidth < 300 ? 6 : 3;
+  const everyN = () => (host.clientWidth < 300 ? 6 : 3);
 
   const opts = {
     width: Math.max(host.clientWidth, 200),
@@ -604,7 +586,8 @@ export function render(auctions, state) {
 
   const q = (/** @type {string} */ id) => /** @type {HTMLElement} */ (host.querySelector(`#${id}`));
   const tenor = state.selectedTenor;
-  const rows = tenorAuctions(auctions, tenor);
+  const win = chartWindow(auctions); // once per render; shared by the rows and every chart
+  const rows = tenorAuctions(auctions, tenor, win);
   const latest = rows[rows.length - 1];
   const scored = rows.filter((a) => a.deviation !== null);
 
@@ -618,10 +601,10 @@ export function render(auctions, state) {
 
   const chip = q("dt-dev");
   if (latest && latest.deviation !== null) {
-    chip.textContent = sigma(latest.deviation);
+    chip.textContent = formatSigma(latest.deviation);
     chip.style.background = deviationColor(latest.deviation);
     // Dark text only once the chip is light enough: it beats --ink from about 2 sigma up.
-    chip.style.color = Math.abs(latest.deviation) / SCALE_BOUND > 2 / 3 ? "#111" : "var(--ink)";
+    chip.style.color = Math.abs(latest.deviation) / SCALE_BOUND > 2 / 3 ? token("--scale-ink") : token("--ink");
   } else {
     chip.textContent = "n/a";
     chip.style.background = "var(--chip)";
@@ -633,7 +616,6 @@ export function render(auctions, state) {
   chartHost.removeAttribute("role");
   chartHost.removeAttribute("aria-label");
   const empty = q("dt-empty");
-  const win = chartWindow(auctions);
   renderSmallCharts(q("detail-small-charts"), rows, win, tenor);
   if (!scored.length) {
     empty.hidden = false;

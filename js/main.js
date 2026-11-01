@@ -9,6 +9,7 @@ import { render as renderUpcoming } from "./upcoming.js";
 import { render as renderMethodology } from "./methodology.js";
 import { render as renderFooter } from "./footer.js";
 import { tenorFromSearch, formatTenor } from "./url-state.js";
+import { el } from "./format.js";
 
 /** @typedef {import("./types.js").Dataset} Dataset */
 /** @typedef {import("./types.js").AppState} AppState */
@@ -53,23 +54,47 @@ function buildSkeleton() {
  * @param {string} reason e.g. "HTTP 404" or "network error"
  */
 function showError(reason) {
-  const box = byId("load-error");
-  const title = document.createElement("h2");
-  title.textContent = "Couldn't load the auction data";
-
-  const message = document.createElement("p");
-  message.textContent =
-    "The dataset didn't load, so no chart is shown rather than a partial or misleading one. This is usually temporary.";
-
-  const detail = document.createElement("code");
-  detail.textContent = `data.json · ${reason}`;
-
-  const retry = document.createElement("button");
+  const retry = /** @type {HTMLButtonElement} */ (el("button", "", "Try again"));
   retry.type = "button";
-  retry.textContent = "Try again";
   retry.addEventListener("click", load);
+  fillError(
+    "Couldn't load the auction data",
+    "The dataset didn't load, so no chart is shown rather than a partial or misleading one. This is usually temporary.",
+    `data.json · ${reason}`,
+    retry,
+  );
+}
 
-  box.replaceChildren(title, message, detail, retry);
+/**
+ * Show the render-failed state: the data arrived but drawing it threw. There
+ * is no retry button, because fetching the same data again would fail the
+ * same way; this is a fault in the page or the data, not the connection.
+ * @param {unknown} err
+ */
+function showRenderError(err) {
+  console.error("Failed to render the page", err);
+  const why = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+  fillError(
+    "Couldn't draw the auction data",
+    "The data loaded, but this page failed while drawing it, so no chart is shown rather than a partial or misleading one. This is a fault in the page or the data, not your connection, and reloading is unlikely to help.",
+    `render · ${why}`,
+  );
+}
+
+/**
+ * Fill the error box and switch the page to the error state.
+ * @param {string} heading
+ * @param {string} message
+ * @param {string} detail  technical reason, set in a code chip
+ * @param {HTMLElement} [action]
+ */
+function fillError(heading, message, detail, action) {
+  byId("load-error").replaceChildren(
+    el("h2", "", heading),
+    el("p", "", message),
+    el("code", "", detail),
+    ...(action ? [action] : []),
+  );
   setPageState("error");
 }
 
@@ -95,15 +120,22 @@ window.addEventListener("popstate", () => {
   renderAll();
 });
 
-/** Call every section's render() with its slice of the dataset. */
+/**
+ * Call every section's render() with its slice of the dataset. A throw here
+ * is a render error, reported as such and never as a failed fetch.
+ */
 function renderAll() {
   if (!dataset) return;
-  renderHeader(dataset.debt);
-  renderHeatmap(dataset.auctions, state, selectTenor);
-  renderDetail(dataset.auctions, state);
-  renderUpcoming(dataset.upcoming);
-  renderMethodology();
-  renderFooter(dataset);
+  try {
+    renderHeader(dataset.debt);
+    renderHeatmap(dataset.auctions, state, selectTenor);
+    renderDetail(dataset.auctions, state);
+    renderUpcoming(dataset.upcoming);
+    renderMethodology();
+    renderFooter(dataset);
+  } catch (err) {
+    showRenderError(err);
+  }
 }
 
 /** Fetch data.json and render, or show the error state. Also used by "Try again". */
@@ -116,12 +148,16 @@ async function load() {
       return;
     }
     dataset = /** @type {Dataset} */ (await response.json());
-    renderAll();
-    setPageState("ready");
   } catch (err) {
     console.error("Failed to load data.json", err);
     showError(err instanceof SyntaxError ? "invalid JSON" : "network error");
+    return;
   }
+  // Show the page before rendering: sections hidden by the loading state have
+  // no layout, so charts and the heatmap scroll would read a width of 0.
+  // Rendering is synchronous, so nothing half-drawn is ever painted.
+  setPageState("ready");
+  renderAll();
 }
 
 buildSkeleton();

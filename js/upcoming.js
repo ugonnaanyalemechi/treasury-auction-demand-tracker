@@ -2,10 +2,11 @@
 // Upcoming auctions list (issue #38). Renders into #upcoming, under the
 // section's existing <h2>. Pure display: no scoring happens here.
 
+import { el, MONTH_NAMES } from "./format.js";
+
 /** @typedef {import("./types.js").UpcomingAuction} UpcomingAuction */
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /**
  * "2026-10-12" -> "Mon 12 Oct 2026". Uses UTC so the local time zone can
@@ -16,7 +17,7 @@ function formatDate(iso) {
   const [y, m, d] = iso.split("-").map(Number);
   if (!y || !m || !d) return iso;
   const weekday = WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
-  return `${weekday} ${d} ${MONTHS[m - 1]} ${y}`;
+  return `${weekday} ${d} ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
 /**
@@ -30,14 +31,6 @@ function formatOffered(amount) {
   const bn = dollars / 1e9;
   const text = Number.isInteger(bn) ? String(bn) : bn.toFixed(1);
   return `$${text}bn offered`;
-}
-
-/** @param {string} className @param {string} text */
-function span(className, text) {
-  const el = document.createElement("span");
-  el.className = className;
-  el.textContent = text;
-  return el;
 }
 
 /** @param {UpcomingAuction[]} upcoming */
@@ -77,7 +70,7 @@ export function render(upcoming) {
     // The tenor can be absent from older data.json files; omit it then.
     const date = formatDate(auction.auction_date);
     const what = auction.tenor ? `${date} · ${auction.tenor}` : date;
-    item.append(span("upcoming-what", what), span("upcoming-amt", formatOffered(auction.offering_amt)));
+    item.append(el("span", "upcoming-what", what), el("span", "upcoming-amt", formatOffered(auction.offering_amt)));
     list.append(item);
   }
   body.replaceChildren(note, list);

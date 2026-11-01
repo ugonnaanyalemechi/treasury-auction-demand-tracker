@@ -77,9 +77,14 @@ function buildItem(item) {
   return box;
 }
 
+/**
+ * The copy is static, so build it once: later calls (every tenor selection
+ * re-renders the page) leave it alone, which keeps an opened section open and
+ * adds no further media-query listener.
+ */
 export function render() {
   const root = document.getElementById("methodology");
-  if (!root) return;
+  if (!root || root.querySelector(".meth-details")) return;
   const heading = document.getElementById("methodology-title");
 
   const body = document.createElement("div");

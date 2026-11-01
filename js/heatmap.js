@@ -3,6 +3,8 @@
 // and a plain table of mean values; #32-#34 add colour, mobile scroll,
 // accessible text and selection. Renders into #heatmap.
 
+import { el, MONTH_NAMES } from "./format.js";
+
 /** @typedef {import("./types.js").Auction} Auction */
 /** @typedef {import("./types.js").AppState} AppState */
 /** @typedef {import("./types.js").Tenor} Tenor */
@@ -24,13 +26,12 @@
 
 /**
  * @typedef {object} Binned
- * @property {Month[]} months  oldest first, length 24
+ * @property {Month[]} months  oldest first, length 24 (empty when there are no auctions)
  * @property {Tenor[]} tenors  rows top to bottom: 30-Year ... 4-Week
  * @property {Map<string, Cell>} cells  keyed by `${tenor}|${month.key}`
  */
 
 const MONTH_COUNT = 24;
-const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /**
  * Row order, long end on top (design/NOTES.md).
@@ -61,6 +62,9 @@ export function binAuctions(auctions) {
   let newest = "";
   for (const a of auctions) if (a.auction_date > newest) newest = a.auction_date;
   const [lastYear, lastMonth] = newest.split("-").map(Number);
+  // No auctions (or no readable date): there is no window to build, and the
+  // arithmetic below would yield NaN months. Callers show an empty state.
+  if (!lastYear || !lastMonth) return { months: [], tenors: TENOR_ROWS, cells: new Map() };
 
   /** @type {Month[]} */
   const months = [];
@@ -187,8 +191,8 @@ function monthLabel(m) {
 }
 
 /**
- * Plain-language description of one cell, shared by the aria-label and the
- * tooltip so they cannot disagree.
+ * Plain-language description of one cell, shared by the cell's hidden text
+ * and the tooltip so they cannot disagree.
  * @param {Tenor} tenor
  * @param {Month} m
  * @param {Cell | undefined} cell
@@ -207,10 +211,13 @@ function describeCell(tenor, m, cell) {
     ? `Beyond the scale: ${mean > 0 ? "weaker than +" : "stronger than −"}${SCALE_BOUND}σ\n`
     : "";
   return {
-    aria: `${tenor}, ${monthLabel(m)}: ${state}`,
+    text: `${tenor}, ${monthLabel(m)}: ${state}`,
     tip: [`${tenor} · ${monthLabel(m)}`, value, beyond + detail],
   };
 }
+
+/** Aborts the previous render's window listeners when the next render starts. */
+let windowListeners = new AbortController();
 
 /**
  * Tooltip and keyboard behaviour for the cells. One shared tooltip is placed
@@ -228,9 +235,14 @@ function describeCell(tenor, m, cell) {
  */
 function attachTooltip(host, table, selected, lastMonth) {
   host.querySelector(".hm-tip")?.remove();
+  // The table is rebuilt on every render; window listeners outlive it, so drop
+  // the previous render's before adding this one's.
+  windowListeners.abort();
+  windowListeners = new AbortController();
+  const { signal } = windowListeners;
   const tip = document.createElement("div");
   tip.className = "hm-tip";
-  tip.setAttribute("aria-hidden", "true"); // each cell's aria-label already says it
+  tip.setAttribute("aria-hidden", "true"); // each cell's own text already says it
   tip.hidden = true;
   const title = document.createElement("div");
   const value = document.createElement("div");
@@ -280,8 +292,8 @@ function attachTooltip(host, table, selected, lastMonth) {
     show(cell);
   });
   table.addEventListener("focusout", hide);
-  window.addEventListener("scroll", hide, { capture: true, passive: true });
-  window.addEventListener("resize", hide);
+  window.addEventListener("scroll", hide, { capture: true, passive: true, signal });
+  window.addEventListener("resize", hide, { signal });
 
   table.addEventListener("keydown", (e) => {
     const cell = e.target;
@@ -376,6 +388,12 @@ export function render(auctions, state, onSelect) {
   if (!host) return;
   const binned = binAuctions(auctions);
   const { months, tenors, cells } = binned;
+  host.querySelector(".hm-empty")?.remove();
+  if (!months.length) {
+    for (const old of host.querySelectorAll(".hm-wrap, .hm-legend, .hm-gloss, .hm-takeaway, .hm-tip")) old.remove();
+    host.append(el("p", "hm-empty", "No auctions to show yet. The heatmap appears once the data holds at least one auction."));
+    return;
+  }
   // Selecting re-renders the whole table, which would drop keyboard focus.
   const active = document.activeElement;
   const refocus = active instanceof HTMLElement && host.contains(active) && active.matches(".hm-cell")
@@ -419,16 +437,13 @@ export function render(auctions, state, onSelect) {
       td.dataset.month = m.key;
       td.dataset.count = String(cell ? cell.count : 0);
       const text = describeCell(tenor, m, cell);
-      td.setAttribute("role", "img");
-      td.setAttribute("aria-label", text.aria);
+      // Keep the native cell semantics (so the row and column <th> still
+      // label it): tenor, month and value are the cell's text, visually hidden.
+      td.append(el("span", "hm-value", text.text));
       td.dataset.tip = JSON.stringify(text.tip);
       td.tabIndex = -1; // focusable for the tooltip; attachTooltip makes one cell a tab stop
       td.addEventListener("click", () => onSelect?.(tenor));
       if (cell && cell.mean !== null) {
-        const value = document.createElement("span");
-        value.className = "hm-value";
-        value.textContent = formatMean(cell.mean);
-        td.append(value);
         td.dataset.mean = String(cell.mean);
         td.style.background = deviationColor(cell.mean);
         if (Math.abs(cell.mean) > SCALE_BOUND) td.classList.add("is-off");
@@ -455,18 +470,9 @@ export function render(auctions, state, onSelect) {
   host.querySelector("h2")?.after(buildTakeaway(computeTakeaway(binned)));
   host.append(buildLegend(), gloss, wrap);
   // First render opens on the newest month (right edge); later re-renders keep
-  // wherever the user had scrolled to. main.js renders while the page is still
-  // hidden (no layout yet), so wait for the wrap's first real size, once.
-  if (keptScroll !== null) {
-    wrap.scrollLeft = keptScroll;
-  } else {
-    const ro = new ResizeObserver(() => {
-      if (!wrap.clientWidth) return;
-      wrap.scrollLeft = wrap.scrollWidth;
-      ro.disconnect();
-    });
-    ro.observe(wrap);
-  }
+  // wherever the user had scrolled to. main.js shows the page before rendering,
+  // so the wrap already has its real size here.
+  wrap.scrollLeft = keptScroll !== null ? keptScroll : wrap.scrollWidth;
   if (refocus) {
     const again = [...table.querySelectorAll(".hm-cell")].find(
       (c) => c instanceof HTMLElement && c.dataset.tenor === refocus.tenor && c.dataset.month === refocus.month,

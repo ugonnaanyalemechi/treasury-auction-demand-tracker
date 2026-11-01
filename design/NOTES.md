@@ -65,9 +65,9 @@ const color = `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${red ? 27 : 256})`;
 Red = weaker demand (positive deviation), blue = stronger, near-background dark
 at 0, lightest at +/-3. Greyscale luminance rises monotonically with |v|
 (0.019, 0.07, 0.17, 0.33 at |v| = 0, 1, 2, 3). Off-scale (|mean| > 3): cell
-keeps the endpoint colour plus a 6px `#111` dot centred in it (legend shows the same swatch, "Beyond ±3σ"). No scored auction:
+keeps the endpoint colour plus a 6px `--scale-ink` (`#111`) dot centred in it (legend shows the same swatch, "Beyond ±3σ"). No scored auction:
 diagonal hatch, `repeating-linear-gradient(135deg, var(--rule) 0 1.5px,
-transparent 1.5px 5px)`. Chip text on a coloured deviation chip is `#111` when |v| > 2 (design uses
+transparent 1.5px 5px)`. Chip text on a coloured deviation chip is `--scale-ink` (`#111`) when |v| > 2 (design uses
 t > .55; at that point `#111` is only 3.2:1 and `--ink` 4.95:1, the two cross at
 about 2 sigma), otherwise `var(--ink)`. Legend: a 10px gradient bar from -3σ to +3σ with
 "Stronger demand" / "Weaker demand" captions.
@@ -89,7 +89,7 @@ about 2 sigma), otherwise `var(--ink)`. Legend: a 10px gradient bar from -3σ to
   "No auction"), sub-line `N auctions · avg takedown 12.3% · click for detail`.
 - **Cell accessible text:** `10-Year, Aug 2026: +1.23σ` plus ` (off-scale)`;
   empty cells say `not yet scored` (auctions held, no deviation) or `no auction`.
-  Cells are `role="img"` with `aria-label` and `title`.
+  Cells keep native table semantics (no `role`): that text is the cell content, visually hidden, so the row and column `th` still label it.
 - **Detail view:** title (`10-Year Note`), `N auctions in 24 months · median
   takedown X%`, URL chip `?tenor=10-year`; stat trio (latest auction date,
   takedown, deviation as a colour chip). Large deviation chart (each dot one
