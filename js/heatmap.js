@@ -19,6 +19,7 @@
  * @property {number | null} mean  mean of non-null deviations; null if none
  * @property {number} count        auctions held in the month (scored or not)
  * @property {number} scored       auctions with a non-null deviation
+ * @property {number} takedown     mean takedown (0 to 1) over every auction in the month
  */
 
 /**
@@ -71,7 +72,7 @@ export function binAuctions(auctions) {
     months.push({ key: `${year}-${String(month).padStart(2, "0")}`, year, month });
   }
 
-  /** @type {Map<string, {sum: number, scored: number, count: number}>} */
+  /** @type {Map<string, {sum: number, scored: number, count: number, tkSum: number}>} */
   const acc = new Map();
   const first = months[0].key;
   for (const a of auctions) {
@@ -79,8 +80,9 @@ export function binAuctions(auctions) {
     if (monthKey < first) continue;
     const key = cellKey(a.tenor, monthKey);
     let slot = acc.get(key);
-    if (!slot) acc.set(key, (slot = { sum: 0, scored: 0, count: 0 }));
+    if (!slot) acc.set(key, (slot = { sum: 0, scored: 0, count: 0, tkSum: 0 }));
     slot.count += 1;
+    slot.tkSum += a.takedown;
     if (a.deviation !== null) {
       slot.sum += a.deviation;
       slot.scored += 1;
@@ -90,7 +92,7 @@ export function binAuctions(auctions) {
   /** @type {Map<string, Cell>} */
   const cells = new Map();
   for (const [key, s] of acc) {
-    cells.set(key, { mean: s.scored ? s.sum / s.scored : null, count: s.count, scored: s.scored });
+    cells.set(key, { mean: s.scored ? s.sum / s.scored : null, count: s.count, scored: s.scored, takedown: s.tkSum / s.count });
   }
   return { months, tenors: TENOR_ROWS, cells };
 }
@@ -121,6 +123,136 @@ export function deviationColor(v) {
 export function formatMean(v) {
   const text = v.toFixed(2);
   return text === "-0.00" ? "0.00" : text;
+}
+
+/**
+ * Signed two-decimal sigma text with a real minus sign: "+1.23σ", "−0.50σ".
+ * @param {number} v
+ */
+export function formatSigma(v) {
+  const text = formatMean(v);
+  const n = Number(text);
+  return `${n > 0 ? "+" : n < 0 ? "−" : ""}${text.replace("-", "")}σ`;
+}
+
+/** @param {Month} m  e.g. "Aug 2026" */
+function monthLabel(m) {
+  return `${MONTH_NAMES[m.month - 1]} ${m.year}`;
+}
+
+/**
+ * Plain-language description of one cell, shared by the aria-label and the
+ * tooltip so they cannot disagree.
+ * @param {Tenor} tenor
+ * @param {Month} m
+ * @param {Cell | undefined} cell
+ */
+function describeCell(tenor, m, cell) {
+  const count = cell ? cell.count : 0;
+  const mean = cell ? cell.mean : null;
+  const off = mean !== null && Math.abs(mean) > SCALE_BOUND;
+  const value = mean !== null ? formatSigma(mean) : count ? "Not yet scored" : "No auction";
+  const state = mean !== null ? value + (off ? " (off-scale)" : "") : value.toLowerCase();
+  const sub = cell && count
+    ? `${count} auction${count > 1 ? "s" : ""} · avg takedown ${(cell.takedown * 100).toFixed(1)}% · click for detail`
+    : "Nothing auctioned this month";
+  return {
+    aria: `${tenor}, ${monthLabel(m)}: ${state}`,
+    tip: [`${tenor} · ${monthLabel(m)}`, value + (off ? " off-scale" : ""), sub],
+  };
+}
+
+/**
+ * Tooltip and keyboard behaviour for the cells. One shared tooltip is placed
+ * with position: fixed from the cell's bounding box, so a scrolling container
+ * around the table cannot clip it.
+ *
+ * Tab order: row-label buttons stay tabbable. The cells add exactly one tab
+ * stop (roving tabindex): the newest month of the selected tenor. Arrow keys
+ * move between cells, Home/End jump along the row, Enter or Space selects the
+ * tenor. This avoids 336 tab stops.
+ * @param {HTMLElement} host
+ * @param {HTMLTableElement} table
+ * @param {Tenor} selected
+ * @param {string} lastMonth
+ */
+function attachTooltip(host, table, selected, lastMonth) {
+  host.querySelector(".hm-tip")?.remove();
+  const tip = document.createElement("div");
+  tip.className = "hm-tip";
+  tip.setAttribute("aria-hidden", "true"); // each cell's aria-label already says it
+  tip.hidden = true;
+  const title = document.createElement("div");
+  const value = document.createElement("div");
+  const sub = document.createElement("div");
+  title.className = "hm-tip-title";
+  value.className = "hm-tip-value";
+  sub.className = "hm-tip-sub";
+  tip.append(title, value, sub);
+  host.append(tip);
+
+  /** @type {HTMLElement[][]} */
+  const grid = [...table.tBodies[0].rows].map((r) =>
+    /** @type {HTMLElement[]} */ ([...r.querySelectorAll(".hm-cell")]));
+  const stop = grid.flat().find((c) => c.dataset.tenor === selected && c.dataset.month === lastMonth);
+  if (stop) stop.tabIndex = 0;
+
+  /** @param {HTMLElement} cell */
+  function show(cell) {
+    const [t, v, s] = JSON.parse(cell.dataset.tip ?? "[]");
+    title.textContent = t;
+    value.textContent = v;
+    sub.textContent = s;
+    tip.hidden = false;
+    const r = cell.getBoundingClientRect();
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    const left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+    const top = r.top - h - 8 >= 0 ? r.top - h - 8 : r.bottom + 8;
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  }
+  const hide = () => { tip.hidden = true; };
+
+  table.addEventListener("pointerover", (e) => {
+    const cell = e.target instanceof Element ? e.target.closest(".hm-cell") : null;
+    if (cell instanceof HTMLElement) show(cell); else hide();
+  });
+  table.addEventListener("pointerleave", () => {
+    const a = document.activeElement;
+    // Keep the tooltip if a cell still has keyboard focus.
+    if (!(a instanceof HTMLElement && a.matches(".hm-cell") && table.contains(a))) hide();
+  });
+  table.addEventListener("focusin", (e) => {
+    const cell = e.target;
+    if (!(cell instanceof HTMLElement) || !cell.matches(".hm-cell")) return;
+    for (const c of grid.flat()) c.tabIndex = c === cell ? 0 : -1;
+    show(cell);
+  });
+  table.addEventListener("focusout", hide);
+  window.addEventListener("scroll", hide, { capture: true, passive: true });
+  window.addEventListener("resize", hide);
+
+  table.addEventListener("keydown", (e) => {
+    const cell = e.target;
+    if (!(cell instanceof HTMLElement) || !cell.matches(".hm-cell")) return;
+    const row = grid.findIndex((r) => r.includes(cell));
+    let r = row;
+    let c = grid[row].indexOf(cell);
+    if (e.key === "ArrowLeft") c -= 1;
+    else if (e.key === "ArrowRight") c += 1;
+    else if (e.key === "ArrowUp") r -= 1;
+    else if (e.key === "ArrowDown") r += 1;
+    else if (e.key === "Home") c = 0;
+    else if (e.key === "End") c = grid[row].length - 1;
+    else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      cell.click();
+      return;
+    } else return;
+    e.preventDefault();
+    grid[Math.max(0, Math.min(grid.length - 1, r))][Math.max(0, Math.min(grid[row].length - 1, c))].focus();
+  });
 }
 
 /** Legend: gradient bar, end captions, and the two non-gradient swatches. */
@@ -162,6 +294,14 @@ function monthHeader(m, isFirst) {
 }
 
 /**
+ * Phone label: "4-Week" -> "4 wk", "10-Year" -> "10 yr".
+ * @param {string} tenor
+ */
+function shortTenor(tenor) {
+  return tenor.replace("-Week", " wk").replace("-Year", " yr");
+}
+
+/**
  * @param {Auction[]} auctions
  * @param {AppState} state
  * @param {(tenor: Tenor) => void} [onSelect]  called when a row label is clicked
@@ -170,6 +310,11 @@ export function render(auctions, state, onSelect) {
   const host = document.getElementById("heatmap");
   if (!host) return;
   const { months, tenors, cells } = binAuctions(auctions);
+  // Selecting re-renders the whole table, which would drop keyboard focus.
+  const active = document.activeElement;
+  const refocus = active instanceof HTMLElement && host.contains(active) && active.matches(".hm-cell")
+    ? { tenor: active.dataset.tenor, month: active.dataset.month }
+    : null;
 
   const table = document.createElement("table");
   table.className = "hm-table";
@@ -191,7 +336,10 @@ export function render(auctions, state, onSelect) {
     const pick = document.createElement("button");
     pick.type = "button";
     pick.className = "hm-pick";
-    pick.textContent = tenor;
+    // Both spellings are in the DOM; CSS shows the short one on phones (#33).
+    pick.setAttribute("aria-label", tenor);
+    pick.append(Object.assign(document.createElement("span"), { className: "hm-long", textContent: tenor }));
+    pick.append(Object.assign(document.createElement("span"), { className: "hm-short", textContent: shortTenor(tenor) }));
     pick.setAttribute("aria-pressed", String(tenor === state.selectedTenor));
     pick.addEventListener("click", () => onSelect?.(tenor));
     label.append(pick);
@@ -204,6 +352,12 @@ export function render(auctions, state, onSelect) {
       td.dataset.tenor = tenor;
       td.dataset.month = m.key;
       td.dataset.count = String(cell ? cell.count : 0);
+      const text = describeCell(tenor, m, cell);
+      td.setAttribute("role", "img");
+      td.setAttribute("aria-label", text.aria);
+      td.dataset.tip = JSON.stringify(text.tip);
+      td.tabIndex = -1; // focusable for the tooltip; attachTooltip makes one cell a tab stop
+      td.addEventListener("click", () => onSelect?.(tenor));
       if (cell && cell.mean !== null) {
         const value = document.createElement("span");
         value.className = "hm-value";
@@ -218,10 +372,34 @@ export function render(auctions, state, onSelect) {
     }
   }
 
-  host.querySelector(".hm-wrap")?.remove();
+  attachTooltip(host, table, state.selectedTenor, months[months.length - 1].key);
+
+  const oldWrap = host.querySelector(".hm-wrap");
+  const keptScroll = oldWrap && oldWrap.clientWidth ? oldWrap.scrollLeft : null;
+  oldWrap?.remove();
   host.querySelector(".hm-legend")?.remove();
   const wrap = document.createElement("div");
   wrap.className = "hm-wrap";
   wrap.append(table);
   host.append(buildLegend(), wrap);
+  // First render opens on the newest month (right edge); later re-renders keep
+  // wherever the user had scrolled to. main.js renders while the page is still
+  // hidden (no layout yet), so wait for the wrap's first real size, once.
+  if (keptScroll !== null) {
+    wrap.scrollLeft = keptScroll;
+  } else {
+    const ro = new ResizeObserver(() => {
+      if (!wrap.clientWidth) return;
+      wrap.scrollLeft = wrap.scrollWidth;
+      ro.disconnect();
+    });
+    ro.observe(wrap);
+  }
+  if (refocus) {
+    const again = [...table.querySelectorAll(".hm-cell")].find(
+      (c) => c instanceof HTMLElement && c.dataset.tenor === refocus.tenor && c.dataset.month === refocus.month,
+    );
+    // preventScroll: keep the user's horizontal scroll position on re-render.
+    if (again instanceof HTMLElement) again.focus({ preventScroll: true });
+  }
 }
