@@ -1,39 +1,7 @@
 {
-  "generated_at": "2026-11-03T03:46:11.743341+00:00",
-  "row_count": 1811,
+  "generated_at": "2026-11-04T02:48:22.998400+00:00",
+  "row_count": 1809,
   "auctions": [
-    {
-      "cusip": "912796P52",
-      "auction_date": "2021-11-04",
-      "security_type": "Bill",
-      "tenor": "4-Week",
-      "reopening": true,
-      "takedown": 0.47089132489366464,
-      "deviation": null,
-      "bid_dispersion": 0.0,
-      "primary_dealer_accepted": "4709020000",
-      "comp_accepted": "9341575600",
-      "noncomp_accepted": "658651100",
-      "allocation_pctage": "79.960000",
-      "bid_to_cover_ratio": "5.480000",
-      "soma_accepted": "1327558100"
-    },
-    {
-      "cusip": "912796Q51",
-      "auction_date": "2021-11-04",
-      "security_type": "Bill",
-      "tenor": "8-Week",
-      "reopening": true,
-      "takedown": 0.5133709899849139,
-      "deviation": null,
-      "bid_dispersion": 0.4999999999999998,
-      "primary_dealer_accepted": "12783120000",
-      "comp_accepted": "24686222000",
-      "noncomp_accepted": "214133200",
-      "allocation_pctage": "27.680000",
-      "bid_to_cover_ratio": "3.530000",
-      "soma_accepted": "3318895100"
-    },
     {
       "cusip": "912796L72",
       "auction_date": "2021-11-08",
@@ -1161,7 +1129,7 @@
       "tenor": "4-Week",
       "reopening": true,
       "takedown": 0.3961250380436579,
-      "deviation": -1.0259336424329033,
+      "deviation": null,
       "bid_dispersion": 1.5000000000000002,
       "primary_dealer_accepted": "19806430000",
       "comp_accepted": "49320123800",
@@ -1177,7 +1145,7 @@
       "tenor": "8-Week",
       "reopening": true,
       "takedown": 0.5283684404956728,
-      "deviation": 0.5963953108264907,
+      "deviation": null,
       "bid_dispersion": 1.5000000000000013,
       "primary_dealer_accepted": "20954650000",
       "comp_accepted": "39512867000",
@@ -29002,7 +28970,7 @@
     }
   ],
   "debt": {
-    "total_public_debt_outstanding": "$40,524,510,013,062.41",
-    "as_of": "2026-10-30"
+    "total_public_debt_outstanding": "$40,502,080,966,097.14",
+    "as_of": "2026-11-02"
   }
 }
